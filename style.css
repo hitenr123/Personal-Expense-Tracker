@@ -1,19 +1,1748 @@
+/* ===========================
+   Google Font & Reset
+=========================== */
+
 *{
-    padding: 0;
-    margin: 0;
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
 }
 
 body{
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    font-family:'Poppins',sans-serif;
+    background:#f5f7fb;
+    color:#222;
 }
 
-h1{
-    position: relative;
-    text-align: center;
-    width: 100%;
-    height: 100px;
-    padding-top: 50px;
-    background: aqua;
+a{
+    text-decoration:none;
+    color:inherit;
 }
+
+ul{
+    list-style:none;
+}
+
+button{
+    border:none;
+    outline:none;
+    cursor:pointer;
+    font-family:'Poppins',sans-serif;
+}
+
+img{
+    max-width:100%;
+    display:block;
+}
+
+/* ===========================
+      Main Layout
+=========================== */
+
+.container{
+    display: flex;
+    min-height:100vh;
+}
+
+.main{
+
+    width:100%;
+
+    padding:30px;
+
+    margin-left:0;
+
+    transition:margin-left .4s ease;
+
+}
+
+.main.shift{
+
+    margin-left:270px;
+
+}
+
+/* ===========================
+        Sidebar
+=========================== */
+
+.sidebar{
+
+    width:270px;
+    height:100vh;
+
+    background:linear-gradient(180deg,#06261b,#03130d);
+
+    color:#fff;
+
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
+
+    padding:25px 18px;
+
+    position:fixed;
+
+    top:0;
+    left:-270px;
+
+    transition:left .4s ease;
+
+    z-index:1000;
+
+}
+
+.sidebar.show{
+
+    left:0;
+
+}
+
+/* ===========================
+         Logo
+=========================== */
+
+.logo{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:15px;
+
+    margin-bottom:40px;
+
+}
+
+.logo img{
+
+    width:60px;
+
+    height:60px;
+
+    object-fit:contain;
+
+}
+
+.logo h2{
+
+    font-size:22px;
+
+    font-weight:700;
+
+    line-height:1.2;
+
+}
+
+.logo span{
+
+    color:#90d9b5;
+
+    font-size:12px;
+
+}
+
+/* ===========================
+         Menu
+=========================== */
+
+.menu{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:8px;
+
+}
+
+.menu li{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:15px;
+
+    padding:16px 18px;
+
+    border-radius:14px;
+
+    transition:.3s;
+
+    cursor:pointer;
+
+    font-size:15px;
+
+    font-weight:500;
+
+}
+
+.menu li i{
+
+    width:22px;
+
+    text-align:center;
+
+    font-size:18px;
+
+}
+
+.menu li:hover{
+
+    background:#0e5d39;
+
+}
+
+.menu .active{
+
+    background:#16a34a;
+
+    color:#fff;
+
+    box-shadow:0 10px 25px rgba(0,0,0,.25);
+
+}
+
+/* ===========================
+      Premium Card
+=========================== */
+
+.premium{
+
+    background:#113326;
+
+    border-radius:18px;
+
+    padding:22px;
+
+    margin-top:30px;
+
+}
+
+.premium h3{
+
+    font-size:20px;
+
+    margin-bottom:12px;
+
+}
+
+.premium p{
+
+    font-size:13px;
+
+    color:#d4d4d4;
+
+    line-height:1.6;
+
+    margin-bottom:20px;
+
+}
+
+.premium button{
+
+    width:100%;
+
+    padding:14px;
+
+    background:#22c55e;
+
+    color:white;
+
+    border-radius:12px;
+
+    font-size:15px;
+
+    font-weight:600;
+
+    transition:.3s;
+
+}
+
+.premium button:hover{
+
+    background:#16a34a;
+
+    transform:translateY(-2px);
+
+}
+
+/* ===========================
+         Top Bar
+=========================== */
+
+.topbar{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-bottom:30px;
+
+}
+
+.menu-icon{
+
+    font-size:25px;
+
+    cursor:pointer;
+
+}
+
+.top-right{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:30px;
+
+}
+
+.top-right .fa-bell{
+
+    font-size:22px;
+
+    cursor:pointer;
+
+}
+
+.profile{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+    cursor:pointer;
+
+}
+
+.avatar{
+
+    width:42px;
+
+    height:42px;
+
+    border-radius:50%;
+
+    background:#16a34a;
+
+    color:#fff;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    font-weight:700;
+
+    font-size:18px;
+
+}
+
+.profile span{
+
+    font-weight:600;
+
+}
+
+/* ===========================
+        Greeting
+=========================== */
+
+.greeting{
+
+    margin-bottom:35px;
+
+}
+
+.greeting h1{
+
+    font-size:38px;
+
+    font-weight:700;
+
+}
+
+.greeting p{
+
+    margin-top:8px;
+
+    color:#666;
+
+    font-size:17px;
+
+}
+
+/* ==========================================
+        Dashboard Cards
+========================================== */
+
+.cards{
+
+    display:grid;
+
+    grid-template-columns:repeat(4,1fr);
+
+    gap:25px;
+
+    margin-bottom:35px;
+
+}
+
+/* ==========================================
+            Card
+========================================== */
+
+.card{
+
+    background:#ffffff;
+
+    border-radius:22px;
+
+    padding:25px;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:18px;
+
+    box-shadow:0 10px 30px rgba(0,0,0,0.06);
+
+    transition:0.35s ease;
+
+    cursor:pointer;
+
+    position:relative;
+
+    overflow:hidden;
+
+}
+
+.card:hover{
+
+    transform:translateY(-8px);
+
+    box-shadow:0 18px 40px rgba(0,0,0,.12);
+
+}
+
+/* Decorative Circle */
+
+.card::before{
+
+    content:"";
+
+    position:absolute;
+
+    width:130px;
+
+    height:130px;
+
+    border-radius:50%;
+
+    top:-50px;
+
+    right:-45px;
+
+    opacity:.12;
+
+}
+
+/* ==========================================
+             Icon
+========================================== */
+
+.card .icon{
+
+    width:68px;
+
+    height:68px;
+
+    border-radius:18px;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    font-size:28px;
+
+    color:#fff;
+
+    flex-shrink:0;
+
+}
+
+/* ==========================================
+           Text
+========================================== */
+
+.card h3{
+
+    font-size:15px;
+
+    color:#777;
+
+    font-weight:500;
+
+    margin-bottom:8px;
+
+}
+
+.card h2{
+
+    font-size:32px;
+
+    font-weight:700;
+
+    margin-bottom:6px;
+
+}
+
+.card span{
+
+    font-size:14px;
+
+    font-weight:500;
+
+}
+
+/* ==========================================
+          Balance Card
+========================================== */
+
+.balance{
+
+    border-left:6px solid #22c55e;
+
+}
+
+.balance::before{
+
+    background:#22c55e;
+
+}
+
+.balance .icon{
+
+    background:#22c55e;
+
+}
+
+.balance span{
+
+    color:#16a34a;
+
+}
+
+/* ==========================================
+          Income Card
+========================================== */
+
+.income{
+
+    border-left:6px solid #0ea5e9;
+
+}
+
+.income::before{
+
+    background:#0ea5e9;
+
+}
+
+.income .icon{
+
+    background:#0ea5e9;
+
+}
+
+.income span{
+
+    color:#0284c7;
+
+}
+
+/* ==========================================
+          Expense Card
+========================================== */
+
+.expense{
+
+    border-left:6px solid #ef4444;
+
+}
+
+.expense::before{
+
+    background:#ef4444;
+
+}
+
+.expense .icon{
+
+    background:#ef4444;
+
+}
+
+.expense span{
+
+    color:#dc2626;
+
+}
+
+/* ==========================================
+          Savings Card
+========================================== */
+
+.saving{
+
+    border-left:6px solid #8b5cf6;
+
+}
+
+.saving::before{
+
+    background:#8b5cf6;
+
+}
+
+.saving .icon{
+
+    background:#8b5cf6;
+
+}
+
+.saving span{
+
+    color:#7c3aed;
+
+}
+
+/* ==========================================
+        Card Hover Effects
+========================================== */
+
+.card:hover .icon{
+
+    transform:rotate(12deg) scale(1.08);
+
+    transition:.35s;
+
+}
+
+.card:hover h2{
+
+    color:#16a34a;
+
+    transition:.35s;
+
+}
+
+.card:hover::before{
+
+    transform:scale(1.25);
+
+    transition:.5s;
+
+}
+
+/* ==========================================
+        Responsive Cards
+========================================== */
+
+@media(max-width:1200px){
+
+.cards{
+
+grid-template-columns:repeat(2,1fr);
+
+}
+
+}
+
+@media(max-width:700px){
+
+.cards{
+
+grid-template-columns:1fr;
+
+}
+
+.card{
+
+padding:22px;
+
+}
+
+.card h2{
+
+font-size:26px;
+
+}
+
+.card .icon{
+
+width:60px;
+
+height:60px;
+
+font-size:24px;
+
+}
+
+}
+
+/* ==========================================
+        Chart Grid Layout
+========================================== */
+
+.chart-grid{
+
+    display:grid;
+
+    grid-template-columns:2fr 1fr;
+
+    gap:25px;
+
+    margin-bottom:35px;
+
+}
+
+/* ==========================================
+            Common Card Style
+========================================== */
+
+.chart-card,
+.transaction-card{
+
+    background:#fff;
+
+    border-radius:22px;
+
+    padding:25px;
+
+    box-shadow:0 10px 30px rgba(0,0,0,.06);
+
+    transition:.3s ease;
+
+}
+
+.chart-card:hover,
+.transaction-card:hover{
+
+    transform:translateY(-5px);
+
+    box-shadow:0 18px 40px rgba(0,0,0,.10);
+
+}
+
+/* ==========================================
+              Card Header
+========================================== */
+
+.title{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-bottom:20px;
+
+}
+
+.title h2{
+
+    font-size:22px;
+
+    font-weight:600;
+
+    color:#222;
+
+}
+
+.title a{
+
+    color:#16a34a;
+
+    font-weight:600;
+
+    font-size:14px;
+
+}
+
+.title a:hover{
+
+    text-decoration:underline;
+
+}
+
+/* ==========================================
+          Monthly Overview Chart
+========================================== */
+
+.chart-card{
+
+    min-height:420px;
+
+}
+
+.chart-card canvas{
+
+    width:100% !important;
+
+    height:320px !important;
+
+}
+
+/* ==========================================
+        Transactions Panel
+========================================== */
+
+.transaction-card{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:18px;
+
+}
+
+/* ==========================================
+          Single Transaction
+========================================== */
+
+.transaction{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    padding:15px;
+
+    border-radius:14px;
+
+    transition:.3s;
+
+    cursor:pointer;
+
+}
+
+.transaction:hover{
+
+    background:#f5f7fb;
+
+}
+
+/* ==========================================
+            Left Side
+========================================== */
+
+.transaction .left{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:15px;
+
+}
+
+.transaction .left i{
+
+    width:48px;
+
+    height:48px;
+
+    border-radius:14px;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    background:#16a34a;
+
+    color:#fff;
+
+    font-size:20px;
+
+}
+
+/* Different Icon Colors */
+
+.transaction:nth-child(2) .left i{
+
+    background:#f97316;
+
+}
+
+.transaction:nth-child(3) .left i{
+
+    background:#3b82f6;
+
+}
+
+.transaction:nth-child(4) .left i{
+
+    background:#8b5cf6;
+
+}
+
+.transaction:nth-child(5) .left i{
+
+    background:#ef4444;
+
+}
+
+/* ==========================================
+            Transaction Text
+========================================== */
+
+.transaction h4{
+
+    font-size:16px;
+
+    margin-bottom:4px;
+
+    font-weight:600;
+
+}
+
+.transaction small{
+
+    color:#888;
+
+    font-size:13px;
+
+}
+
+/* ==========================================
+          Amount Colors
+========================================== */
+
+.red{
+
+    color:#ef4444;
+
+    font-weight:700;
+
+    font-size:17px;
+
+}
+
+.green{
+
+    color:#16a34a;
+
+    font-weight:700;
+
+    font-size:17px;
+
+}
+
+/* ==========================================
+         Scrollable Transaction List
+========================================== */
+
+.transaction-card{
+
+    max-height:420px;
+
+    overflow-y:auto;
+
+}
+
+.transaction-card::-webkit-scrollbar{
+
+    width:8px;
+
+}
+
+.transaction-card::-webkit-scrollbar-thumb{
+
+    background:#d8d8d8;
+
+    border-radius:20px;
+
+}
+
+.transaction-card::-webkit-scrollbar-thumb:hover{
+
+    background:#b8b8b8;
+
+}
+
+/* ==========================================
+         Responsive
+========================================== */
+
+@media(max-width:1100px){
+
+.chart-grid{
+
+    grid-template-columns:1fr;
+
+}
+
+.chart-card{
+
+    min-height:380px;
+
+}
+
+.transaction-card{
+
+    max-height:none;
+
+}
+
+}
+
+@media(max-width:700px){
+
+.chart-card,
+.transaction-card{
+
+    padding:20px;
+
+}
+
+.chart-card canvas{
+
+    height:250px !important;
+
+}
+
+.title h2{
+
+    font-size:18px;
+
+}
+
+.transaction{
+
+    padding:12px;
+
+}
+
+.transaction .left i{
+
+    width:42px;
+
+    height:42px;
+
+    font-size:18px;
+
+}
+
+}
+
+/* ==========================================
+        Bottom Grid
+========================================== */
+
+.bottom-grid{
+
+    display:grid;
+
+    grid-template-columns:1.4fr 1fr;
+
+    gap:25px;
+
+    margin-bottom:35px;
+
+}
+
+/* ==========================================
+      Common Bottom Card
+========================================== */
+
+.category-card,
+.quick-card{
+
+    background:#ffffff;
+
+    border-radius:22px;
+
+    padding:25px;
+
+    box-shadow:0 10px 30px rgba(0,0,0,.06);
+
+    transition:.35s;
+
+}
+
+.category-card:hover,
+.quick-card:hover{
+
+    transform:translateY(-5px);
+
+    box-shadow:0 18px 40px rgba(0,0,0,.10);
+
+}
+
+.category-card h2,
+.quick-card h2{
+
+    font-size:22px;
+
+    font-weight:600;
+
+    margin-bottom:25px;
+
+}
+
+/* ==========================================
+         Doughnut Chart
+========================================== */
+
+.category-card{
+
+    min-height:400px;
+
+}
+
+.category-card canvas{
+
+    width:100% !important;
+
+    height:300px !important;
+
+}
+
+/* ==========================================
+         Quick Actions
+========================================== */
+
+.actions{
+
+    display:grid;
+
+    grid-template-columns:repeat(2,1fr);
+
+    gap:18px;
+
+}
+
+/* ==========================================
+          Action Button
+========================================== */
+
+.actions button{
+
+    background:#f6f8fb;
+
+    border-radius:18px;
+
+    padding:22px;
+
+    display:flex;
+
+    flex-direction:column;
+
+    align-items:center;
+
+    justify-content:center;
+
+    gap:12px;
+
+    font-size:15px;
+
+    font-weight:600;
+
+    transition:.35s;
+
+    color:#333;
+
+}
+
+.actions button i{
+
+    width:58px;
+
+    height:58px;
+
+    border-radius:16px;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    font-size:24px;
+
+    color:white;
+
+    background:#16a34a;
+
+    transition:.35s;
+
+}
+
+/* Different Colors */
+
+.actions button:nth-child(2) i{
+
+    background:#3b82f6;
+
+}
+
+.actions button:nth-child(3) i{
+
+    background:#f97316;
+
+}
+
+.actions button:nth-child(4) i{
+
+    background:#8b5cf6;
+
+}
+
+/* ==========================================
+         Hover Effects
+========================================== */
+
+.actions button:hover{
+
+    background:#16a34a;
+
+    color:white;
+
+    transform:translateY(-8px);
+
+    box-shadow:0 15px 35px rgba(22,163,74,.25);
+
+}
+
+.actions button:hover i{
+
+    background:white;
+
+    color:#16a34a;
+
+    transform:rotate(12deg) scale(1.12);
+
+}
+
+.actions button:nth-child(2):hover i{
+
+    color:#3b82f6;
+
+}
+
+.actions button:nth-child(3):hover i{
+
+    color:#f97316;
+
+}
+
+.actions button:nth-child(4):hover i{
+
+    color:#8b5cf6;
+
+}
+
+/* ==========================================
+      Nice Gradient Border
+========================================== */
+
+.category-card{
+
+    position:relative;
+
+    overflow:hidden;
+
+}
+
+.category-card::before{
+
+    content:"";
+
+    position:absolute;
+
+    top:0;
+
+    left:0;
+
+    width:100%;
+
+    height:5px;
+
+    background:linear-gradient(
+        90deg,
+        #16a34a,
+        #22c55e,
+        #86efac
+    );
+
+}
+
+.quick-card{
+
+    position:relative;
+
+    overflow:hidden;
+
+}
+
+.quick-card::before{
+
+    content:"";
+
+    position:absolute;
+
+    top:0;
+
+    left:0;
+
+    width:100%;
+
+    height:5px;
+
+    background:linear-gradient(
+        90deg,
+        #16a34a,
+        #22c55e,
+        #86efac
+    );
+
+}
+
+/* ==========================================
+          Responsive
+========================================== */
+
+@media(max-width:1100px){
+
+.bottom-grid{
+
+grid-template-columns:1fr;
+
+}
+
+}
+
+@media(max-width:700px){
+
+.actions{
+
+grid-template-columns:1fr;
+
+}
+
+.category-card,
+.quick-card{
+
+padding:20px;
+
+}
+
+.category-card canvas{
+
+height:250px !important;
+
+}
+
+}
+
+/* ==========================================
+        Smooth Scroll
+========================================== */
+
+html{
+    scroll-behavior:smooth;
+}
+
+/* ==========================================
+        Custom Scrollbar
+========================================== */
+
+::-webkit-scrollbar{
+    width:10px;
+    height:10px;
+}
+
+::-webkit-scrollbar-track{
+    background:#edf2f7;
+}
+
+::-webkit-scrollbar-thumb{
+    background:#16a34a;
+    border-radius:20px;
+}
+
+::-webkit-scrollbar-thumb:hover{
+    background:#15803d;
+}
+
+/* Firefox */
+*{
+    scrollbar-width:thin;
+    scrollbar-color:#16a34a #edf2f7;
+}
+
+/* ==========================================
+        Card Entrance Animation
+========================================== */
+
+@keyframes fadeUp{
+
+    from{
+        opacity:0;
+        transform:translateY(30px);
+    }
+
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+
+}
+
+.cards .card{
+    animation:fadeUp .7s ease forwards;
+}
+
+.chart-card{
+    animation:fadeUp .9s ease forwards;
+}
+
+.transaction-card{
+    animation:fadeUp 1s ease forwards;
+}
+
+.category-card{
+    animation:fadeUp 1.1s ease forwards;
+}
+
+.quick-card{
+    animation:fadeUp 1.2s ease forwards;
+}
+
+/* ==========================================
+        Sidebar Hover Animation
+========================================== */
+
+.menu li{
+    position:relative;
+    overflow:hidden;
+}
+
+.menu li::before{
+
+    content:"";
+
+    position:absolute;
+
+    left:-100%;
+
+    top:0;
+
+    width:100%;
+
+    height:100%;
+
+    background:rgba(255,255,255,.08);
+
+    transition:.35s;
+
+}
+
+.menu li:hover::before{
+
+    left:0;
+
+}
+
+/* ==========================================
+        Notification Bell
+========================================== */
+
+.fa-bell{
+
+    position:relative;
+
+    transition:.3s;
+
+}
+
+.fa-bell:hover{
+
+    color:#16a34a;
+
+    transform:rotate(20deg);
+
+}
+
+.fa-bell::after{
+
+    content:"0";
+
+    position:absolute;
+
+    top:-8px;
+
+    right:-8px;
+
+    width:18px;
+
+    height:18px;
+
+    border-radius:50%;
+
+    background:#ef4444;
+
+    color:white;
+
+    font-size:10px;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    font-weight:600;
+
+}
+
+/* ==========================================
+        Profile
+========================================== */
+
+.profile{
+
+    padding:8px 14px;
+
+    border-radius:40px;
+
+    transition:.3s;
+
+}
+
+.profile:hover{
+
+    background:#eef8f1;
+
+}
+
+/* ==========================================
+        Floating Effect
+========================================== */
+
+.card:hover,
+.chart-card:hover,
+.transaction-card:hover,
+.category-card:hover,
+.quick-card:hover{
+
+    transform:translateY(-6px);
+
+}
+
+/* ==========================================
+        Glass Effect
+========================================== */
+
+.card,
+.chart-card,
+.transaction-card,
+.category-card,
+.quick-card{
+
+    backdrop-filter:blur(10px);
+
+}
+
+/* ==========================================
+        Canvas
+========================================== */
+
+canvas{
+
+    user-select:none;
+
+}
+
+/* ==========================================
+        Shadows
+========================================== */
+
+.card,
+.chart-card,
+.transaction-card,
+.category-card,
+.quick-card{
+
+    box-shadow:
+    0 10px 25px rgba(0,0,0,.05),
+    0 2px 6px rgba(0,0,0,.04);
+
+}
+
+/* ==========================================
+        Main Background
+========================================== */
+
+body{
+
+    background:
+    linear-gradient(
+        135deg,
+        #f7fafc,
+        #eef8f1
+    );
+
+}
+
+/* ==========================================
+        Selection
+========================================== */
+
+::selection{
+
+    background:#16a34a;
+
+    color:white;
+
+}
+
+/* ==========================================
+        Focus States
+========================================== */
+
+button:focus,
+input:focus{
+
+    outline:3px solid rgba(22,163,74,.25);
+
+}
+
+/* ==========================================
+        Utility Classes
+========================================== */
+
+.green-text{
+    color:#16a34a;
+}
+
+.red-text{
+    color:#ef4444;
+}
+
+.blue-text{
+    color:#2563eb;
+}
+
+.orange-text{
+    color:#f97316;
+}
+
+.purple-text{
+    color:#8b5cf6;
+}
+
+/* ==========================================
+        Footer (Optional)
+========================================== */
+
+.footer{
+
+    margin-top:40px;
+
+    text-align:center;
+
+    color:#888;
+
+    font-size:14px;
+
+}
+
+/* ==========================================
+        Responsive
+========================================== */
+
+@media(max-width:992px){
+
+    .sidebar{
+        width:90px;
+    }
+
+    .logo div{
+        display:none;
+    }
+
+    .menu li{
+        justify-content:center;
+    }
+
+    .menu li i{
+        margin:0;
+    }
+
+    .menu li{
+        font-size:0;
+    }
+
+    .premium{
+        display:none;
+    }
+
+}
+
+@media(max-width:768px){
+
+    .main{
+        padding:20px;
+    }
+
+    .greeting h1{
+        font-size:28px;
+    }
+
+    .topbar{
+        flex-wrap:wrap;
+        gap:15px;
+    }
+
+}
+
+@media(max-width:480px){
+
+    .main{
+        padding:15px;
+    }
+
+    .greeting h1{
+        font-size:24px;
+    }
+
+    .card{
+        flex-direction:column;
+        text-align:center;
+    }
+
+    .profile span{
+        display:none;
+    }
+
+}
+
