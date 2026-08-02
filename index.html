@@ -1,371 +1,296 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Expense Manager Dashboard</title>
 
     <!-- Google Font -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
 
     <!-- Font Awesome -->
-    <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+    />
 
     <!-- CSS -->
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css" />
 
     <!-- Chart JS -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-</head>
+  </head>
 
-<body>
+  <body>
+    <div class="container">
+      <!-- ================= Sidebar ================= -->
 
-<div class="container">
-
-    <!-- ================= Sidebar ================= -->
-
-    <aside class="sidebar">
-
+      <aside class="sidebar">
         <div class="logo">
+          <img src="image\logo.png" alt="Expense Manager" />
 
-            <img src="image\logo.png" alt="Expense Manager">
-
-            <div>
-                <h2>Expense Manager</h2>
-                <span>Track • Manage • Save</span>
-            </div>
-
+          <div>
+            <h2>Expense Manager</h2>
+            <span>Track • Manage • Save</span>
+          </div>
         </div>
 
         <ul class="menu">
+          <li class="active" onclick="window.location.href = 'index.html'">
+            <i class="fa-solid fa-house"></i>
+            Dashboard
+          </li>
 
-            <li class="active">
-                <i class="fa-solid fa-house"></i>
-                Dashboard
-            </li>
+          <li onclick="window.location.href = 'transactions.html'">
+            <i class="fa-solid fa-arrow-right-arrow-left"></i>
+            Transactions
+          </li>
 
-            <li>
-                <i class="fa-solid fa-arrow-right-arrow-left"></i>
-                Transactions
-            </li>
+          <li onclick="window.location.href = 'add-expense.html'">
+            <i class="fa-solid fa-plus"></i>
+            Add Expense
+          </li>
 
-            <li>
-                <i class="fa-solid fa-plus"></i>
-                Add Expense
-            </li>
+          <li onclick="window.location.href = 'add-income.html'">
+            <i class="fa-solid fa-wallet"></i>
+            Add Income
+          </li>
 
-            <li>
-                <i class="fa-solid fa-wallet"></i>
-                Add Income
-            </li>
+          <li onclick="window.location.href = 'add-categories.html'">
+            <i class="fa-solid fa-layer-group"></i>
+            Categories
+          </li>
 
-            <li>
-                <i class="fa-solid fa-layer-group"></i>
-                Categories
-            </li>
+          <li onclick="window.location.href = 'add-budgets.html'">
+            <i class="fa-solid fa-chart-pie"></i>
+            Budgets
+          </li>
 
-            <li>
-                <i class="fa-solid fa-chart-pie"></i>
-                Budgets
-            </li>
+          <li onclick="window.location.href = 'add-reports.html'">
+            <i class="fa-solid fa-chart-line"></i>
+            Reports
+          </li>
 
-            <li>
-                <i class="fa-solid fa-chart-line"></i>
-                Reports
-            </li>
+          <li onclick="window.location.href = 'add-goals.html'">
+            <i class="fa-solid fa-bullseye"></i>
+            Goals
+          </li>
 
-            <li>
-                <i class="fa-solid fa-bullseye"></i>
-                Goals
-            </li>
-
-            <li>
-                <i class="fa-solid fa-gear"></i>
-                Settings
-            </li>
-
+          <li onclick="window.location.href = 'add-settings.html'">
+            <i class="fa-solid fa-gear"></i>
+            Settings
+          </li>
         </ul>
+      </aside>
 
-    </aside>
+      <!-- ================= Main Content ================= -->
 
-    <!-- ================= Main Content ================= -->
-
-    <main class="main">
-
+      <main class="main">
         <!-- Top Bar -->
 
         <header class="topbar">
+          <div class="menu-icon">
+            <i class="fa-solid fa-bars"></i>
+          </div>
 
-            <div class="menu-icon">
-                <i class="fa-solid fa-bars"></i>
+          <div class="top-right">
+            <i class="fa-regular fa-bell"></i>
+
+            <div class="profile">
+              <div class="avatar">H</div>
+
+              <span>Hiten</span>
+
+              <i class="fa-solid fa-chevron-down"></i>
             </div>
-
-            <div class="top-right">
-
-                <i class="fa-regular fa-bell"></i>
-
-                <div class="profile">
-
-                    <div class="avatar">
-                        H
-                    </div>
-
-                    <span>Hiten</span>
-
-                    <i class="fa-solid fa-chevron-down"></i>
-
-                </div>
-
-            </div>
-
+          </div>
         </header>
 
         <!-- Greeting -->
 
         <section class="greeting">
+          <h1>Good Morning, Hiten 👋</h1>
 
-            <h1>Good Morning, Hiten 👋</h1>
-
-            <p>Thursday, July 30, 2026</p>
-
+          <p>Thursday, July 30, 2026</p>
         </section>
 
         <!-- Cards -->
 
         <section class="cards">
-
-            <div class="card balance">
-
-                <div class="icon">
-                    <i class="fa-solid fa-wallet"></i>
-                </div>
-
-                <div>
-
-                    <h3>Total Balance</h3>
-
-                    <h2 class="counter" data-target="18540">₹0</h2>
-
-                    <span>+₹1250 this month</span>
-
-                </div>
-
+          <div class="card balance">
+            <div class="icon">
+              <i class="fa-solid fa-wallet"></i>
             </div>
 
-            <div class="card income">
+            <div>
+              <h3>Total Balance</h3>
 
-                <div class="icon">
-                    <i class="fa-solid fa-circle-plus"></i>
-                </div>
+              <h2 class="counter" data-target="18540">₹0</h2>
 
-                <div>
+              <span>+₹1250 this month</span>
+            </div>
+          </div>
 
-                    <h3>Total Income</h3>
-
-                    <h2 class="counter" data-target="30000">₹0</h2>
-
-                    <span>+15%</span>
-
-                </div>
-
+          <div class="card income">
+            <div class="icon">
+              <i class="fa-solid fa-circle-plus"></i>
             </div>
 
-            <div class="card expense">
+            <div>
+              <h3>Total Income</h3>
 
-                <div class="icon">
-                    <i class="fa-solid fa-money-bill-wave"></i>
-                </div>
+              <h2 class="counter" data-target="30000">₹0</h2>
 
-                <div>
+              <span>+15%</span>
+            </div>
+          </div>
 
-                    <h3>Total Expenses</h3>
-
-                    <h2 class="counter" data-target="11460">₹0</h2>
-
-                    <span>-8%</span>
-
-                </div>
-
+          <div class="card expense">
+            <div class="icon">
+              <i class="fa-solid fa-money-bill-wave"></i>
             </div>
 
-            <div class="card saving">
+            <div>
+              <h3>Total Expenses</h3>
 
-                <div class="icon">
-                    <i class="fa-solid fa-piggy-bank"></i>
-                </div>
+              <h2 class="counter" data-target="11460">₹0</h2>
 
-                <div>
+              <span>-8%</span>
+            </div>
+          </div>
 
-                    <h3>Savings</h3>
-
-                    <h2 class="counter" data-target="18540">₹0</h2>
-
-                    <span>62% of income</span>
-
-                </div>
-
+          <div class="card saving">
+            <div class="icon">
+              <i class="fa-solid fa-piggy-bank"></i>
             </div>
 
+            <div>
+              <h3>Savings</h3>
+
+              <h2 class="counter" data-target="18540">₹0</h2>
+
+              <span>62% of income</span>
+            </div>
+          </div>
         </section>
 
         <!-- Charts Section -->
 
         <section class="chart-grid">
-
-            <div class="chart-card">
-
-                <div class="title">
-                    <h2>Monthly Overview</h2>
-                </div>
-
-                <canvas id="overviewChart"></canvas>
-
+          <div class="chart-card">
+            <div class="title">
+              <h2>Monthly Overview</h2>
             </div>
 
-            <div class="transaction-card">
+            <canvas id="overviewChart"></canvas>
+          </div>
 
-                <div class="title">
+          <div class="transaction-card">
+            <div class="title">
+              <h2>Recent Transactions</h2>
 
-                    <h2>Recent Transactions</h2>
-
-                    <a href="#">View All</a>
-
-                </div>
-
-                <div class="transaction">
-
-                    <div class="left">
-
-                        <i class="fa-solid fa-burger"></i>
-
-                        <div>
-
-                            <h4>Food</h4>
-
-                            <small>Today 8:30 AM</small>
-
-                        </div>
-
-                    </div>
-
-                    <span class="red">-₹250</span>
-
-                </div>
-
-                <div class="transaction">
-
-                    <div class="left">
-
-                        <i class="fa-solid fa-car"></i>
-
-                        <div>
-
-                            <h4>Transport</h4>
-
-                            <small>Today 7:45 AM</small>
-
-                        </div>
-
-                    </div>
-
-                    <span class="red">-₹120</span>
-
-                </div>
-
-                <div class="transaction">
-
-                    <div class="left">
-
-                        <i class="fa-solid fa-briefcase"></i>
-
-                        <div>
-
-                            <h4>Salary</h4>
-
-                            <small>Yesterday</small>
-
-                        </div>
-
-                    </div>
-
-                    <span class="green">+₹30,000</span>
-
-                </div>
-
-                <div class="transaction">
-
-                    <div class="left">
-
-                        <i class="fa-solid fa-cart-shopping"></i>
-
-                        <div>
-
-                            <h4>Shopping</h4>
-
-                            <small>26 July</small>
-
-                        </div>
-
-                    </div>
-
-                    <span class="red">-₹680</span>
-
-                </div>
-
+              <a href="#">View All</a>
             </div>
 
+            <div class="transaction">
+              <div class="left">
+                <i class="fa-solid fa-burger"></i>
+
+                <div>
+                  <h4>Food</h4>
+
+                  <small>Today 8:30 AM</small>
+                </div>
+              </div>
+
+              <span class="red">-₹250</span>
+            </div>
+
+            <div class="transaction">
+              <div class="left">
+                <i class="fa-solid fa-car"></i>
+
+                <div>
+                  <h4>Transport</h4>
+
+                  <small>Today 7:45 AM</small>
+                </div>
+              </div>
+
+              <span class="red">-₹120</span>
+            </div>
+
+            <div class="transaction">
+              <div class="left">
+                <i class="fa-solid fa-briefcase"></i>
+
+                <div>
+                  <h4>Salary</h4>
+
+                  <small>Yesterday</small>
+                </div>
+              </div>
+
+              <span class="green">+₹30,000</span>
+            </div>
+
+            <div class="transaction">
+              <div class="left">
+                <i class="fa-solid fa-cart-shopping"></i>
+
+                <div>
+                  <h4>Shopping</h4>
+
+                  <small>26 July</small>
+                </div>
+              </div>
+
+              <span class="red">-₹680</span>
+            </div>
+          </div>
         </section>
 
         <!-- Expense Category -->
 
         <section class="bottom-grid">
+          <div class="category-card">
+            <h2>Expenses by Category</h2>
 
-            <div class="category-card">
+            <canvas id="categoryChart"></canvas>
+          </div>
 
-                <h2>Expenses by Category</h2>
+          <div class="quick-card">
+            <h2>Quick Actions</h2>
 
-                <canvas id="categoryChart"></canvas>
+            <div class="actions">
+              <button>
+                <i class="fa-solid fa-plus"></i>
+                Add Expense
+              </button>
 
+              <button>
+                <i class="fa-solid fa-wallet"></i>
+                Add Income
+              </button>
+
+              <button>
+                <i class="fa-solid fa-chart-column"></i>
+                Reports
+              </button>
+
+              <button>
+                <i class="fa-solid fa-bullseye"></i>
+                Budget
+              </button>
             </div>
-
-            <div class="quick-card">
-
-                <h2>Quick Actions</h2>
-
-                <div class="actions">
-
-                    <button>
-                        <i class="fa-solid fa-plus"></i>
-                        Add Expense
-                    </button>
-
-                    <button>
-                        <i class="fa-solid fa-wallet"></i>
-                        Add Income
-                    </button>
-
-                    <button>
-                        <i class="fa-solid fa-chart-column"></i>
-                        Reports
-                    </button>
-
-                    <button>
-                        <i class="fa-solid fa-bullseye"></i>
-                        Budget
-                    </button>
-
-                </div>
-
-            </div>
-
+          </div>
         </section>
+      </main>
+    </div>
 
-    </main>
-
-</div>
-
-<script src="script.js"></script>
-
-</body>
+    <script src="script.js"></script>
+  </body>
 </html>

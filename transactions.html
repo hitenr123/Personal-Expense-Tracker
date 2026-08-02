@@ -1,0 +1,277 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Transactions | Expense Manager</title>
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+    />
+
+    <link rel="stylesheet" href="style.css" />
+
+    <link rel="stylesheet" href="transactions.css" />
+  </head>
+
+  <body>
+    <div class="container">
+      <!-- ================= Sidebar ================= -->
+
+      <aside class="sidebar">
+        <div class="logo">
+          <img src="image\logo.png" alt="Expense Manager" />
+
+          <div>
+            <h2>Expense Manager</h2>
+            <span>Track • Manage • Save</span>
+          </div>
+        </div>
+
+        <ul class="menu">
+          <li onclick="window.location.href = 'index.html'">
+            <i class="fa-solid fa-house"></i>
+            Dashboard
+          </li>
+
+          <li class="active" onclick="window.location.href = 'transactions.html'">
+            <i class="fa-solid fa-arrow-right-arrow-left"></i>
+            Transactions
+          </li>
+
+          <li onclick="window.location.href = 'add-expense.html'">
+            <i class="fa-solid fa-plus"></i>
+            Add Expense
+          </li>
+
+          <li onclick="window.location.href = 'add-income.html'">
+            <i class="fa-solid fa-wallet"></i>
+            Add Income
+          </li>
+
+          <li onclick="window.location.href = 'add-categories.html'">
+            <i class="fa-solid fa-layer-group"></i>
+            Categories
+          </li>
+
+          <li onclick="window.location.href = 'add-budgets.html'">
+            <i class="fa-solid fa-chart-pie"></i>
+            Budgets
+          </li>
+
+          <li onclick="window.location.href = 'add-reports.html'">
+            <i class="fa-solid fa-chart-line"></i>
+            Reports
+          </li>
+
+          <li onclick="window.location.href = 'add-goals.html'">
+            <i class="fa-solid fa-bullseye"></i>
+            Goals
+          </li>
+
+          <li onclick="window.location.href = 'add-settings.html'">
+            <i class="fa-solid fa-gear"></i>
+            Settings
+          </li>
+        </ul>
+      </aside>
+
+      <!-- ================= Main ================= -->
+
+      <main class="main">
+        <header class="topbar">
+          <div class="menu-icon">
+            <i class="fa-solid fa-bars"></i>
+          </div>
+
+          <div class="top-right">
+            <i class="fa-regular fa-bell"></i>
+
+            <div class="profile">
+              <div class="avatar">H</div>
+
+              <span> Hiten </span>
+
+              <i class="fa-solid fa-chevron-down"></i>
+            </div>
+          </div>
+        </header>
+
+        <section class="transaction-header">
+          <h1>Transactions</h1>
+
+          <p>Manage your income and expenses</p>
+        </section>
+
+        <!-- Summary Cards -->
+
+        <section class="transaction-summary">
+          <div class="summary-card income-box">
+            <i class="fa-solid fa-arrow-up"></i>
+
+            <div>
+              <h3>Total Income</h3>
+
+              <h2>₹30,000</h2>
+            </div>
+          </div>
+
+          <div class="summary-card expense-box">
+            <i class="fa-solid fa-arrow-down"></i>
+
+            <div>
+              <h3>Total Expense</h3>
+
+              <h2>₹11,460</h2>
+            </div>
+          </div>
+
+          <div class="summary-card balance-box">
+            <i class="fa-solid fa-wallet"></i>
+
+            <div>
+              <h3>Balance</h3>
+
+              <h2>₹18,540</h2>
+            </div>
+          </div>
+        </section>
+
+        <!-- Search Filter -->
+
+        <section class="transaction-tools">
+          <div class="search">
+            <i class="fa-solid fa-search"></i>
+
+            <input type="text" placeholder="Search transaction..." />
+          </div>
+
+          <select>
+            <option>All Categories</option>
+
+            <option>Food</option>
+
+            <option>Transport</option>
+
+            <option>Shopping</option>
+
+            <option>Bills</option>
+          </select>
+
+          <select>
+            <option>All Types</option>
+
+            <option>Income</option>
+
+            <option>Expense</option>
+          </select>
+        </section>
+
+        <!-- Transaction Table -->
+
+        <section class="transaction-table-card">
+          <h2>All Transactions</h2>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Category</th>
+
+                <th>Description</th>
+
+                <th>Date</th>
+
+                <th>Amount</th>
+
+                <th>Type</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <tr>
+                <td>
+                  <i class="fa-solid fa-burger"></i>
+
+                  Food
+                </td>
+
+                <td>Lunch at restaurant</td>
+
+                <td>02 Aug 2026</td>
+
+                <td class="expense">-₹250</td>
+
+                <td>
+                  <span class="badge red"> Expense </span>
+                </td>
+              </tr>
+
+              <tr>
+                <td>
+                  <i class="fa-solid fa-car"></i>
+
+                  Transport
+                </td>
+
+                <td>Cab payment</td>
+
+                <td>01 Aug 2026</td>
+
+                <td class="expense">-₹120</td>
+
+                <td>
+                  <span class="badge red"> Expense </span>
+                </td>
+              </tr>
+
+              <tr>
+                <td>
+                  <i class="fa-solid fa-briefcase"></i>
+
+                  Salary
+                </td>
+
+                <td>Monthly Salary</td>
+
+                <td>01 Aug 2026</td>
+
+                <td class="income">+₹30,000</td>
+
+                <td>
+                  <span class="badge green"> Income </span>
+                </td>
+              </tr>
+
+              <tr>
+                <td>
+                  <i class="fa-solid fa-cart-shopping"></i>
+
+                  Shopping
+                </td>
+
+                <td>New Clothes</td>
+
+                <td>28 July 2026</td>
+
+                <td class="expense">-₹680</td>
+
+                <td>
+                  <span class="badge red"> Expense </span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+      </main>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
