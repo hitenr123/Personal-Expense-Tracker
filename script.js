@@ -15,6 +15,7 @@ const main = document.querySelector(".main");
 if (menuIcon) {
     menuIcon.addEventListener("click", () => {
         sidebar.classList.toggle("show");
+        main.classList.toggle("shift");
     });
 }
 
