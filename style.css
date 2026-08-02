@@ -1680,6 +1680,345 @@ input:focus{
         Responsive
 ========================================== */
 
+
+/* ==========================================
+        RESPONSIVE DESIGN FIX
+========================================== */
+
+
+/* Large Tablets / Small Laptop */
+@media(max-width:1200px){
+
+    .cards{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .chart-grid{
+        grid-template-columns:1fr;
+    }
+
+    .bottom-grid{
+        grid-template-columns:1fr;
+    }
+
+}
+
+
+/* Tablets */
+@media(max-width:992px){
+
+    .main{
+
+        padding:25px;
+
+        margin-left:0;
+
+    }
+
+
+    /* Sidebar */
+
+    .sidebar{
+
+        width:270px;
+
+        left:-270px;
+
+    }
+
+
+    .sidebar.show{
+
+        left:0;
+
+    }
+
+
+    /* Disable shifting */
+
+    .main.shift{
+
+        margin-left:0;
+
+    }
+
+
+
+    .cards{
+
+        grid-template-columns:repeat(2,1fr);
+
+        gap:20px;
+
+    }
+
+
+    .greeting h1{
+
+        font-size:32px;
+
+    }
+
+
+    .chart-card,
+    .transaction-card,
+    .category-card,
+    .quick-card{
+
+        padding:22px;
+
+    }
+
+}
+
+
+
+/* Mobile Landscape */
+@media(max-width:768px){
+
+
+    .main{
+
+        padding:20px;
+
+    }
+
+
+    .topbar{
+
+        flex-wrap:wrap;
+
+        margin-bottom:25px;
+
+    }
+
+
+    .top-right{
+
+        gap:15px;
+
+    }
+
+
+
+    .greeting h1{
+
+        font-size:26px;
+
+    }
+
+
+    .greeting p{
+
+        font-size:14px;
+
+    }
+
+
+
+    .cards{
+
+        grid-template-columns:1fr;
+
+    }
+
+
+
+    .chart-card canvas{
+
+        height:260px !important;
+
+    }
+
+
+
+    .chart-grid,
+    .bottom-grid{
+
+        grid-template-columns:1fr;
+
+    }
+
+
+
+    .actions{
+
+        grid-template-columns:1fr;
+
+    }
+
+
+    .transaction{
+
+        padding:12px;
+
+    }
+
+
+    .transaction .left i{
+
+        width:42px;
+
+        height:42px;
+
+        font-size:17px;
+
+    }
+
+
+
+    .profile span{
+
+        display:none;
+
+    }
+
+
+}
+
+
+
+/* Small Mobile */
+@media(max-width:480px){
+
+
+    .main{
+
+        padding:15px;
+
+    }
+
+
+    .menu-icon{
+
+        font-size:22px;
+
+    }
+
+
+
+    .top-right{
+
+        gap:12px;
+
+    }
+
+
+    .avatar{
+
+        width:38px;
+
+        height:38px;
+
+    }
+
+
+
+    .greeting h1{
+
+        font-size:22px;
+
+    }
+
+
+
+    .card{
+
+        flex-direction:column;
+
+        text-align:center;
+
+        padding:20px;
+
+    }
+
+
+    .card h2{
+
+        font-size:25px;
+
+    }
+
+
+    .card .icon{
+
+        width:58px;
+
+        height:58px;
+
+        font-size:22px;
+
+    }
+
+
+
+    .title h2{
+
+        font-size:18px;
+
+    }
+
+
+
+    .transaction{
+
+        flex-direction:column;
+
+        align-items:flex-start;
+
+        gap:10px;
+
+    }
+
+
+    .transaction span{
+
+        align-self:flex-end;
+
+    }
+
+
+
+    .actions button{
+
+        padding:18px;
+
+    }
+
+
+}
+
+
+
+/* Extra Small Devices */
+@media(max-width:360px){
+
+
+    .sidebar{
+
+        width:240px;
+
+    }
+
+
+    .logo h2{
+
+        font-size:18px;
+
+    }
+
+
+    .logo img{
+
+        width:45px;
+
+        height:45px;
+
+    }
+
+
+}
+
 @media(max-width:992px){
 
     .sidebar{
