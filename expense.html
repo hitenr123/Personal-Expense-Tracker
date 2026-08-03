@@ -1,0 +1,341 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Add Expense | Expense Manager</title>
+
+    <!-- Google Font -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Font Awesome -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+    />
+
+    <!-- Common CSS -->
+    <link rel="stylesheet" href="style.css" />
+
+    <!-- Expense Page CSS -->
+    <link rel="stylesheet" href="expense.css" />
+  </head>
+
+  <body>
+    <div class="container">
+      <!-- ================= Sidebar ================= -->
+
+      <aside class="sidebar">
+        <div class="logo">
+          <img src="image/logo.png" alt="Expense Manager" />
+
+          <div>
+            <h2>Expense Manager</h2>
+
+            <span>Track • Manage • Save</span>
+          </div>
+        </div>
+
+        <ul class="menu">
+          <li onclick="window.location.href = 'index.html'">
+            <i class="fa-solid fa-house"></i>
+            Dashboard
+          </li>
+
+          <li onclick="window.location.href = 'transactions.html'">
+            <i class="fa-solid fa-arrow-right-arrow-left"></i>
+            Transactions
+          </li>
+
+          <li class="active" onclick="window.location.href = 'expense.html'">
+            <i class="fa-solid fa-plus"></i>
+            Add Expense
+          </li>
+
+          <li>
+            <i class="fa-solid fa-wallet"></i>
+            Add Income
+          </li>
+
+          <li>
+            <i class="fa-solid fa-credit-card"></i>
+            Payment Methods
+          </li>
+
+          <li>
+            <i class="fa-solid fa-layer-group"></i>
+            Categories
+          </li>
+
+          <li>
+            <i class="fa-solid fa-chart-pie"></i>
+            Budgets
+          </li>
+
+          <li>
+            <i class="fa-solid fa-chart-line"></i>
+            Reports
+          </li>
+
+          <li>
+            <i class="fa-solid fa-bullseye"></i>
+            Savings Goals
+          </li>
+
+          <li>
+            <i class="fa-solid fa-gear"></i>
+            Settings
+          </li>
+        </ul>
+      </aside>
+
+      <!-- ================= Main ================= -->
+
+      <main class="main">
+        <header class="topbar">
+          <div class="menu-icon">
+            <i class="fa-solid fa-bars"></i>
+          </div>
+
+          <div class="top-right">
+            <i class="fa-regular fa-bell"></i>
+
+            <div class="profile">
+              <div class="avatar">H</div>
+
+              <span>Hiten</span>
+
+              <i class="fa-solid fa-chevron-down"></i>
+            </div>
+          </div>
+        </header>
+
+        <!-- ================= Page Heading ================= -->
+
+        <section class="expense-header">
+          <h1>Add New Expense</h1>
+
+          <p>Record your daily spending and keep your finances organized.</p>
+        </section>
+
+        <!-- ================= Main Grid ================= -->
+
+        <section class="expense-grid">
+          <!-- ================= Expense Form ================= -->
+
+          <div class="expense-card">
+            <div class="card-title">
+              <i class="fa-solid fa-receipt"></i>
+
+              <h2>Expense Details</h2>
+            </div>
+
+            <form>
+              <!-- Amount -->
+
+              <div class="form-group amount-box">
+                <label> Expense Amount </label>
+
+                <div class="amount-input">
+                  <span>₹</span>
+
+                  <input type="number" placeholder="0.00" id="amount" />
+                </div>
+              </div>
+
+              <!-- Category + Payment -->
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label> Category </label>
+
+                  <select id="category">
+                    <option>Food</option>
+
+                    <option>Transport</option>
+
+                    <option>Shopping</option>
+
+                    <option>Bills</option>
+
+                    <option>Health</option>
+
+                    <option>Education</option>
+
+                    <option>Entertainment</option>
+
+                    <option>Rent</option>
+
+                    <option>Travel</option>
+
+                    <option>Others</option>
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <label> Payment Method </label>
+
+                  <select id="payment">
+                    <option>Cash</option>
+
+                    <option>UPI</option>
+
+                    <option>Debit Card</option>
+
+                    <option>Credit Card</option>
+
+                    <option>Bank Transfer</option>
+
+                    <option>Wallet</option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- Account + Date -->
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label> Account </label>
+
+                  <select id="account">
+                    <option>Cash Wallet</option>
+
+                    <option>SBI Bank</option>
+
+                    <option>HDFC Bank</option>
+
+                    <option>ICICI Bank</option>
+
+                    <option>Axis Bank</option>
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <label> Date </label>
+
+                  <input type="date" id="date" />
+                </div>
+              </div>
+
+              <!-- Time + Priority -->
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label> Time </label>
+
+                  <input type="time" id="time" />
+                </div>
+
+                <div class="form-group">
+                  <label> Priority </label>
+
+                  <select>
+                    <option>Low</option>
+
+                    <option selected>Medium</option>
+
+                    <option>High</option>
+                  </select>
+                </div>
+              </div>
+              <!-- ================= Notes ================= -->
+
+              <div class="form-group">
+                <label for="notes">Notes</label>
+
+                <textarea
+                  id="notes"
+                  rows="5"
+                  placeholder="Add a short note about this expense..."
+                ></textarea>
+              </div>
+
+              <!-- ================= Receipt ================= -->
+
+              <div class="form-group">
+                <label for="receipt">Upload Receipt</label>
+
+                <input type="file" id="receipt" accept="image/*,.pdf" />
+              </div>
+
+              <!-- ================= Recurring Expense ================= -->
+
+              <div class="checkbox-group">
+                <input type="checkbox" id="recurring" />
+
+                <label for="recurring"> This is a recurring expense </label>
+              </div>
+
+              <!-- ================= Buttons ================= -->
+
+              <div class="button-group">
+                <button type="submit" class="save-btn">
+                  <i class="fa-solid fa-floppy-disk"></i>
+
+                  Save Expense
+                </button>
+
+                <button type="reset" class="reset-btn">
+                  <i class="fa-solid fa-rotate-left"></i>
+
+                  Reset
+                </button>
+              </div>
+            </form>
+          </div>
+          <!-- ================= Summary Card ================= -->
+
+          <div class="summary-card">
+            <div class="card-title">
+              <i class="fa-solid fa-chart-simple"></i>
+
+              <h2>Expense Summary</h2>
+            </div>
+
+            <div class="summary-item">
+              <span>Today's Expense</span>
+
+              <h3 id="todayExpense">₹2,350</h3>
+            </div>
+
+            <div class="summary-item">
+              <span>This Month</span>
+
+              <h3 id="monthExpense">₹11,460</h3>
+            </div>
+
+            <div class="summary-item">
+              <span>Remaining Budget</span>
+
+              <h3 class="green-text">₹8,540</h3>
+            </div>
+
+            <div class="summary-item">
+              <span>Selected Category</span>
+
+              <h3 id="selectedCategory">Food</h3>
+            </div>
+
+            <div class="summary-item">
+              <span>Payment Method</span>
+
+              <h3 id="selectedPayment">Cash</h3>
+            </div>
+
+            <div class="summary-item">
+              <span>Expense Amount</span>
+
+              <h2 id="previewAmount">₹0</h2>
+            </div>
+          </div>
+        </section>
+        <script src="script.js"></script>
+        <script src="expense.js"></script>
+      </main>
+    </div>
+  </body>
+</html>
