@@ -1,0 +1,416 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Add Income | Expense Manager</title>
+
+    <!-- Google Font -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Font Awesome -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+    />
+
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="income.css" />
+  </head>
+
+  <body>
+    <div class="container">
+      <!-- ================= Sidebar ================= -->
+
+      <aside class="sidebar">
+        <div class="logo">
+          <img src="image/logo.png" alt="Expense Manager" />
+
+          <div>
+            <h2>Expense Manager</h2>
+
+            <span>Track • Manage • Save</span>
+          </div>
+        </div>
+
+        <ul class="menu">
+          <li onclick="location.href = 'index.html'">
+            <i class="fa-solid fa-house"></i>
+
+            Dashboard
+          </li>
+
+          <li onclick="location.href = 'transactions.html'">
+            <i class="fa-solid fa-arrow-right-arrow-left"></i>
+
+            Transactions
+          </li>
+
+          <li onclick="location.href = 'expense.html'">
+            <i class="fa-solid fa-plus"></i>
+
+            Add Expense
+          </li>
+
+          <li class="active">
+            <i class="fa-solid fa-wallet"></i>
+
+            Add Income
+          </li>
+
+          <li>
+            <i class="fa-solid fa-credit-card"></i>
+
+            Payment Methods
+          </li>
+
+          <li>
+            <i class="fa-solid fa-layer-group"></i>
+
+            Categories
+          </li>
+
+          <li>
+            <i class="fa-solid fa-chart-pie"></i>
+
+            Budgets
+          </li>
+
+          <li>
+            <i class="fa-solid fa-chart-line"></i>
+
+            Reports
+          </li>
+
+          <li>
+            <i class="fa-solid fa-bullseye"></i>
+
+            Savings Goals
+          </li>
+
+          <li>
+            <i class="fa-solid fa-gear"></i>
+
+            Settings
+          </li>
+        </ul>
+      </aside>
+
+      <!-- ================= Main ================= -->
+
+      <main class="main">
+        <header class="topbar">
+          <div class="menu-icon">
+            <i class="fa-solid fa-bars"></i>
+          </div>
+
+          <div class="top-right">
+            <i class="fa-regular fa-bell"></i>
+
+            <div class="profile">
+              <div class="avatar">H</div>
+
+              <span>Hiten</span>
+
+              <i class="fa-solid fa-chevron-down"></i>
+            </div>
+          </div>
+        </header>
+
+        <!-- ================= Heading ================= -->
+
+        <section class="income-header">
+          <div>
+            <h1>Add New Income</h1>
+
+            <p>Keep track of every earning and grow your savings.</p>
+          </div>
+
+          <button class="history-btn">
+            <i class="fa-solid fa-clock-rotate-left"></i>
+
+            Income History
+          </button>
+        </section>
+
+        <!-- ================= Main Layout ================= -->
+
+        <section class="income-layout">
+          <!-- LEFT -->
+
+          <div class="income-left">
+            <div class="illustration-card">
+              <img src="image/income.png" alt="Income" />
+
+              <h2>Earn. Save. Grow.</h2>
+
+              <p>
+                Track every income source including salary, business, freelance
+                work and investments.
+              </p>
+            </div>
+
+            <div class="quick-stats">
+              <div class="stat">
+                <i class="fa-solid fa-sack-dollar"></i>
+
+                <div>
+                  <h3>₹85,000</h3>
+
+                  <span>This Month</span>
+                </div>
+              </div>
+
+              <div class="stat">
+                <i class="fa-solid fa-arrow-trend-up"></i>
+
+                <div>
+                  <h3>+18%</h3>
+
+                  <span>Growth</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- RIGHT -->
+
+          <div class="income-right">
+            <div class="income-card">
+              <div class="card-title">
+                <i class="fa-solid fa-wallet"></i>
+
+                <h2>Income Details</h2>
+              </div>
+
+              <form id="incomeForm">
+                <!-- Amount -->
+
+                <div class="form-group amount-box">
+                  <label>
+                    Amount
+
+                    <span class="required">*</span>
+                  </label>
+
+                  <div class="amount-input">
+                    <span>₹</span>
+
+                    <input
+                      type="number"
+                      id="amount"
+                      placeholder="Enter Amount"
+                      required
+                    />
+                  </div>
+                </div>
+
+                <!-- Row -->
+
+                <div class="form-row">
+                  <div class="form-group">
+                    <label>Income Source</label>
+
+                    <select id="source">
+                      <option selected disabled>Select Source</option>
+
+                      <option>Salary</option>
+
+                      <option>Business</option>
+
+                      <option>Freelancing</option>
+
+                      <option>Bonus</option>
+
+                      <option>Investment</option>
+
+                      <option>Interest</option>
+
+                      <option>Rental Income</option>
+
+                      <option>Gift</option>
+
+                      <option>Refund</option>
+
+                      <option>Other</option>
+                    </select>
+                  </div>
+
+                  <div class="form-group">
+                    <label>Payment Method</label>
+
+                    <select id="payment">
+                      <option selected disabled>Select Method</option>
+
+                      <option>Cash</option>
+
+                      <option>UPI</option>
+
+                      <option>Bank Transfer</option>
+
+                      <option>Cheque</option>
+
+                      <option>Wallet</option>
+                    </select>
+                  </div>
+                </div>
+
+                <!-- Row -->
+
+                <div class="form-row">
+                  <div class="form-group">
+                    <label>Account</label>
+
+                    <select>
+                      <option>Cash Wallet</option>
+
+                      <option>SBI Bank</option>
+
+                      <option>HDFC Bank</option>
+
+                      <option>ICICI Bank</option>
+
+                      <option>Axis Bank</option>
+                    </select>
+                  </div>
+
+                  <div class="form-group">
+                    <label>Date</label>
+
+                    <input type="date" />
+                  </div>
+                </div>
+
+                <!-- Row -->
+
+                <div class="form-row">
+                  <div class="form-group">
+                    <label>Time</label>
+
+                    <input type="time" />
+                  </div>
+
+                  <div class="form-group">
+                    <label>Received From</label>
+
+                    <input type="text" placeholder="Employer / Client" />
+                  </div>
+                </div>
+                <!-- Notes -->
+
+                <div class="form-group">
+                  <label>Notes</label>
+
+                  <textarea
+                    id="notes"
+                    rows="4"
+                    placeholder="Write something about this income..."
+                  ></textarea>
+                </div>
+
+                <!-- Upload Proof -->
+
+                <div class="form-group">
+                  <label>Attachment</label>
+
+                  <input type="file" id="attachment" accept="image/*,.pdf" />
+                </div>
+
+                <!-- Tags -->
+
+                <div class="form-group">
+                  <label>Tags</label>
+
+                  <input type="text" placeholder="Salary, August, Bonus" />
+                </div>
+
+                <!-- Recurring -->
+
+                <div class="checkbox-group">
+                  <input type="checkbox" id="recurringIncome" />
+
+                  <label for="recurringIncome">
+                    This is a recurring income
+                  </label>
+                </div>
+
+                <!-- Buttons -->
+
+                <div class="button-group">
+                  <button type="reset" class="reset-btn">
+                    <i class="fa-solid fa-rotate-left"></i>
+
+                    Reset
+                  </button>
+
+                  <button type="submit" class="save-btn">
+                    <i class="fa-solid fa-floppy-disk"></i>
+
+                    Save Income
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+          <!-- ================= Summary ================= -->
+
+          <div class="income-summary">
+            <div class="summary-card">
+              <div class="summary-icon">
+                <i class="fa-solid fa-calendar-day"></i>
+              </div>
+
+              <div>
+                <span>Today's Income</span>
+
+                <h2>₹12,500</h2>
+              </div>
+            </div>
+
+            <div class="summary-card">
+              <div class="summary-icon">
+                <i class="fa-solid fa-calendar"></i>
+              </div>
+
+              <div>
+                <span>This Month</span>
+
+                <h2>₹85,000</h2>
+              </div>
+            </div>
+
+            <div class="summary-card">
+              <div class="summary-icon">
+                <i class="fa-solid fa-chart-line"></i>
+              </div>
+
+              <div>
+                <span>Total Income</span>
+
+                <h2>₹6,42,000</h2>
+              </div>
+            </div>
+
+            <div class="summary-card">
+              <div class="summary-icon">
+                <i class="fa-solid fa-trophy"></i>
+              </div>
+
+              <div>
+                <span>Highest Income</span>
+
+                <h2>₹55,000</h2>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+    <script src="script.js"></script>
+    <script src="income.js"></script>
+  </body>
+</html>
