@@ -152,9 +152,7 @@ function displayTransactions(transactions) {
             </td>
 
             <td class="${amountClass}">
-                ${sign}₹${Math.abs(
-                    Number(transaction.amount)
-                ).toLocaleString("en-IN")}
+                ${formatCurrency(Math.abs(transaction.amount))}
             </td>
 
             <td>

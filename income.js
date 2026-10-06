@@ -116,16 +116,16 @@ function updateIncomeSummary() {
             : 0;
 
     todayIncome.textContent =
-        "₹" + todayTotal.toLocaleString("en-IN");
+        formatCurrency(todayTotal);
 
     monthIncome.textContent =
-        "₹" + monthTotal.toLocaleString("en-IN");
+        formatCurrency(monthTotal);
 
     totalIncomeElement.textContent =
-        "₹" + total.toLocaleString("en-IN");
+        formatCurrency(total);
 
     highestIncome.textContent =
-        "₹" + highest.toLocaleString("en-IN");
+        formatCurrency(highest);
 }
 
 // ==========================================

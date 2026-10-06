@@ -2,6 +2,14 @@
 // Expense Manager Dashboard Script
 // ==========================================
 
+function getCurrency() {
+    return localStorage.getItem("currency") || "₹";
+}
+
+function formatCurrency(amount) {
+    return getCurrency() + Number(amount || 0).toLocaleString("en-IN");
+}
+
 // -------------------------------
 // Sidebar Toggle
 // -------------------------------
@@ -384,19 +392,19 @@ function updateDashboardSummary() {
   const savingsElement = document.getElementById("dashboardSavings");
 
   if (incomeElement) {
-    incomeElement.textContent = "₹" + totalIncome.toLocaleString("en-IN");
+    incomeElement.textContent = formatCurrency(totalIncome);
   }
 
   if (expenseElement) {
-    expenseElement.textContent = "₹" + totalExpense.toLocaleString("en-IN");
+    expenseElement.textContent = formatCurrency(totalExpense);
   }
 
   if (balanceElement) {
-    balanceElement.textContent = "₹" + balance.toLocaleString("en-IN");
+    balanceElement.textContent = formatCurrency(balance);
   }
 
   if (savingsElement) {
-    savingsElement.textContent = "₹" + savings.toLocaleString("en-IN");
+    savingsElement.textContent = formatCurrency(savings);
   }
 }
 

@@ -2,145 +2,83 @@
 // Budget Page
 // ==========================================
 
-const budgetForm =
-    document.getElementById("budgetForm");
+const budgetForm = document.getElementById("budgetForm");
 
-const budgetInput =
-    document.getElementById("budgetAmount");
+const budgetInput = document.getElementById("budgetAmount");
 
-const monthlyBudget =
-    document.getElementById("monthlyBudget");
+const monthlyBudget = document.getElementById("monthlyBudget");
 
-const budgetSpent =
-    document.getElementById("budgetSpent");
+const budgetSpent = document.getElementById("budgetSpent");
 
-const budgetRemaining =
-    document.getElementById("budgetRemaining");
-
+const budgetRemaining = document.getElementById("budgetRemaining");
 
 // ==========================================
 // Get Expenses
 // ==========================================
 
 function getBudgetExpenses() {
-
-    return JSON.parse(
-        localStorage.getItem("expenses")
-    ) || [];
-
+  return JSON.parse(localStorage.getItem("expenses")) || [];
 }
-
 
 // ==========================================
 // Calculate Monthly Expense
 // ==========================================
 
 function getCurrentMonthExpense() {
+  const expenses = getBudgetExpenses();
 
-    const expenses =
-        getBudgetExpenses();
+  const now = new Date();
 
-    const now = new Date();
+  const month = now.getMonth();
 
-    const month =
-        now.getMonth();
+  const year = now.getFullYear();
 
-    const year =
-        now.getFullYear();
+  return expenses
+    .filter((expense) => {
+      const date = new Date(expense.date);
 
-    return expenses
-        .filter(expense => {
-
-            const date =
-                new Date(expense.date);
-
-            return (
-                date.getMonth() === month &&
-                date.getFullYear() === year
-            );
-
-        })
-        .reduce(
-            (total, expense) =>
-                total + Number(expense.amount),
-            0
-        );
-
+      return date.getMonth() === month && date.getFullYear() === year;
+    })
+    .reduce((total, expense) => total + Number(expense.amount), 0);
 }
-
 
 // ==========================================
 // Update Budget
 // ==========================================
 
 function updateBudget() {
+  const budget = Number(localStorage.getItem("monthlyBudget")) || 0;
 
-    const budget =
-        Number(
-            localStorage.getItem("monthlyBudget")
-        ) || 0;
+  const spent = getCurrentMonthExpense();
 
-    const spent =
-        getCurrentMonthExpense();
+  const remaining = budget - spent;
 
-    const remaining =
-        budget - spent;
-
-
-    monthlyBudget.textContent =
-        "₹" +
-        budget.toLocaleString("en-IN");
-
-    budgetSpent.textContent =
-        "₹" +
-        spent.toLocaleString("en-IN");
-
-    budgetRemaining.textContent =
-        "₹" +
-        Math.max(
-            remaining,
-            0
-        ).toLocaleString("en-IN");
-
+  monthlyBudget.textContent = formatCurrency(budget);
+  budgetSpent.textContent = formatCurrency(spent);
+  budgetRemaining.textContent = formatCurrency(Math.max(remaining, 0));
 }
-
 
 // ==========================================
 // Save Budget
 // ==========================================
 
-budgetForm.addEventListener(
-    "submit",
-    function(event) {
+budgetForm.addEventListener("submit", function (event) {
+  event.preventDefault();
 
-        event.preventDefault();
+  const budget = Number(budgetInput.value);
 
-        const budget =
-            Number(budgetInput.value);
+  if (budget <= 0) {
+    alert("Please enter a valid budget.");
 
-        if (budget <= 0) {
+    return;
+  }
 
-            alert(
-                "Please enter a valid budget."
-            );
+  localStorage.setItem("monthlyBudget", budget);
 
-            return;
-        }
+  updateBudget();
 
-        localStorage.setItem(
-            "monthlyBudget",
-            budget
-        );
-
-        updateBudget();
-
-        alert(
-            "Monthly budget saved successfully!"
-        );
-
-    }
-);
-
+  alert("Monthly budget saved successfully!");
+});
 
 // ==========================================
 // Initial Load

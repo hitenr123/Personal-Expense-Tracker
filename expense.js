@@ -47,7 +47,7 @@ function updateLiveSummary() {
   // Amount
   const amount = Number(amountInput.value) || 0;
 
-  previewAmount.innerHTML = "₹" + amount.toLocaleString("en-IN");
+  previewAmount.innerHTML = formatCurrency(todayTotal);
 
   // Category
   if (categorySelect.value && categorySelect.value !== "Select Category") {
@@ -189,10 +189,10 @@ function updateExpenseSummary() {
   // Display
   todayExpense.textContent = "₹" + todayTotal.toLocaleString("en-IN");
 
-  monthExpense.textContent = "₹" + monthTotal.toLocaleString("en-IN");
+  monthExpense.textContent = formatCurrency(todayTotal);
 
   remainingBudget.textContent =
-    "₹" + Math.max(remaining, 0).toLocaleString("en-IN");
+    formatCurrency(todayTotal);
 }
 
 // Run when page loads

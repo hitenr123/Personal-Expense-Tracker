@@ -53,7 +53,7 @@ function updateGoalSummary() {
     goalTarget.textContent = "₹0";
 
     goalSavings.textContent =
-      "₹" + Math.max(savings, 0).toLocaleString("en-IN");
+      formatCurrency(Math.max(savings, 0));
 
     goalProgress.textContent = "0%";
 
@@ -75,10 +75,10 @@ function updateGoalSummary() {
 
 
   goalTarget.textContent =
-    "₹" + totalTarget.toLocaleString("en-IN");
+    formatCurrency(totalTarget);
 
   goalSavings.textContent =
-    "₹" + Math.max(savings, 0).toLocaleString("en-IN");
+    formatCurrency(Math.max(savings, 0));
 
   goalProgress.textContent =
     progress.toFixed(1) + "%";

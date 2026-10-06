@@ -21,41 +21,27 @@ function updateReports() {
 
   const totalIncome = incomes.reduce(
     (total, income) => total + Number(income.amount || 0),
-    0
+    0,
   );
 
   const totalExpense = expenses.reduce(
     (total, expense) => total + Number(expense.amount || 0),
-    0
+    0,
   );
 
   const balance = totalIncome - totalExpense;
 
-  const savingsRate =
-    totalIncome > 0
-      ? ((balance / totalIncome) * 100)
-      : 0;
+  const savingsRate = totalIncome > 0 ? (balance / totalIncome) * 100 : 0;
 
-  reportIncome.textContent =
-    "₹" + totalIncome.toLocaleString("en-IN");
+  reportIncome.textContent = formatCurrency(totalIncome);
+  reportExpense.textContent = formatCurrency(totalExpense);
+  reportBalance.textContent = formatCurrency(balance);
 
-  reportExpense.textContent =
-    "₹" + totalExpense.toLocaleString("en-IN");
+  reportSavings.textContent = savingsRate.toFixed(1) + "%";
 
-  reportBalance.textContent =
-    "₹" + balance.toLocaleString("en-IN");
-
-  reportSavings.textContent =
-    savingsRate.toFixed(1) + "%";
-
-  summaryIncome.textContent =
-    "₹" + totalIncome.toLocaleString("en-IN");
-
-  summaryExpense.textContent =
-    "₹" + totalExpense.toLocaleString("en-IN");
-
-  summaryBalance.textContent =
-    "₹" + balance.toLocaleString("en-IN");
+  summaryIncome.textContent = formatCurrency(totalIncome);
+  summaryExpense.textContent = formatCurrency(totalExpense);
+  summaryBalance.textContent = formatCurrency(balance);
 }
 
 updateReports();
@@ -71,7 +57,7 @@ if (reportCanvas) {
 
   const currentYear = new Date().getFullYear();
 
-  incomes.forEach(income => {
+  incomes.forEach((income) => {
     const date = new Date(income.date);
 
     if (date.getFullYear() === currentYear) {
@@ -79,7 +65,7 @@ if (reportCanvas) {
     }
   });
 
-  expenses.forEach(expense => {
+  expenses.forEach((expense) => {
     const date = new Date(expense.date);
 
     if (date.getFullYear() === currentYear) {
@@ -92,22 +78,31 @@ if (reportCanvas) {
 
     data: {
       labels: [
-        "Jan", "Feb", "Mar", "Apr",
-        "May", "Jun", "Jul", "Aug",
-        "Sep", "Oct", "Nov", "Dec"
+        "Jan",
+        "Feb",
+        "Mar",
+        "Apr",
+        "May",
+        "Jun",
+        "Jul",
+        "Aug",
+        "Sep",
+        "Oct",
+        "Nov",
+        "Dec",
       ],
 
       datasets: [
         {
           label: "Income",
-          data: monthlyIncome
+          data: monthlyIncome,
         },
 
         {
           label: "Expenses",
-          data: monthlyExpense
-        }
-      ]
+          data: monthlyExpense,
+        },
+      ],
     },
 
     options: {
@@ -116,9 +111,9 @@ if (reportCanvas) {
 
       scales: {
         y: {
-          beginAtZero: true
-        }
-      }
-    }
+          beginAtZero: true,
+        },
+      },
+    },
   });
 }
