@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Budget | Expense Manager</title>
+
+    <link
+        rel="stylesheet"
+        href="style.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="income.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+    >
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- Sidebar -->
+
+    <aside class="sidebar">
+
+        <div class="logo">
+
+            <img
+                src="image/logo.png"
+                alt="Expense Manager"
+            >
+
+            <div>
+                <h2>Expense Manager</h2>
+                <span>Track • Manage • Save</span>
+            </div>
+
+        </div>
+
+
+        <ul class="menu">
+
+            <li onclick="location.href='index.html'">
+                <i class="fa-solid fa-house"></i>
+                Dashboard
+            </li>
+
+            <li onclick="location.href='transactions.html'">
+                <i class="fa-solid fa-arrow-right-arrow-left"></i>
+                Transactions
+            </li>
+
+            <li onclick="location.href='expense.html'">
+                <i class="fa-solid fa-plus"></i>
+                Add Expense
+            </li>
+
+            <li onclick="location.href='income.html'">
+                <i class="fa-solid fa-wallet"></i>
+                Add Income
+            </li>
+
+            <li onclick="location.href='add-categories.html'">
+                <i class="fa-solid fa-layer-group"></i>
+                Categories
+            </li>
+
+            <li class="active">
+                <i class="fa-solid fa-chart-pie"></i>
+                Budgets
+            </li>
+
+            <li onclick="location.href='add-reports.html'">
+                <i class="fa-solid fa-chart-line"></i>
+                Reports
+            </li>
+
+            <li onclick="location.href='add-goals.html'">
+                <i class="fa-solid fa-bullseye"></i>
+                Goals
+            </li>
+
+            <li onclick="location.href='add-settings.html'">
+                <i class="fa-solid fa-gear"></i>
+                Settings
+            </li>
+
+        </ul>
+
+    </aside>
+
+
+    <!-- Main -->
+
+    <main class="main">
+
+        <header class="topbar">
+
+            <div class="menu-icon">
+                <i class="fa-solid fa-bars"></i>
+            </div>
+
+            <div class="top-right">
+
+                <i class="fa-regular fa-bell"></i>
+
+                <div class="profile">
+
+                    <div class="avatar">H</div>
+
+                    <span>Hiten</span>
+
+                    <i class="fa-solid fa-chevron-down"></i>
+
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <section class="income-header">
+
+            <div>
+
+                <h1>Monthly Budget</h1>
+
+                <p>
+                    Set your monthly spending limit and track your progress.
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- Budget Form -->
+
+        <section class="income-layout">
+
+            <div class="income-right">
+
+                <div class="income-card">
+
+                    <div class="card-title">
+
+                        <i class="fa-solid fa-chart-pie"></i>
+
+                        <h2>Set Budget</h2>
+
+                    </div>
+
+
+                    <form id="budgetForm">
+
+                        <div class="form-group amount-box">
+
+                            <label>
+                                Monthly Budget
+                                <span class="required">*</span>
+                            </label>
+
+                            <div class="amount-input">
+
+                                <span>₹</span>
+
+                                <input
+                                    type="number"
+                                    id="budgetAmount"
+                                    placeholder="Enter monthly budget"
+                                    min="0"
+                                    required
+                                >
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="button-group">
+
+                            <button
+                                type="reset"
+                                class="reset-btn"
+                            >
+                                <i class="fa-solid fa-rotate-left"></i>
+                                Reset
+                            </button>
+
+                            <button
+                                type="submit"
+                                class="save-btn"
+                            >
+                                <i class="fa-solid fa-floppy-disk"></i>
+                                Save Budget
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+
+            <!-- Budget Summary -->
+
+            <div class="income-summary">
+
+                <div class="summary-card">
+
+                    <div class="summary-icon">
+                        <i class="fa-solid fa-wallet"></i>
+                    </div>
+
+                    <div>
+
+                        <span>Monthly Budget</span>
+
+                        <h2 id="monthlyBudget">₹0</h2>
+
+                    </div>
+
+                </div>
+
+
+                <div class="summary-card">
+
+                    <div class="summary-icon">
+                        <i class="fa-solid fa-money-bill-wave"></i>
+                    </div>
+
+                    <div>
+
+                        <span>Spent This Month</span>
+
+                        <h2 id="budgetSpent">₹0</h2>
+
+                    </div>
+
+                </div>
+
+
+                <div class="summary-card">
+
+                    <div class="summary-icon">
+                        <i class="fa-solid fa-piggy-bank"></i>
+                    </div>
+
+                    <div>
+
+                        <span>Remaining</span>
+
+                        <h2 id="budgetRemaining">₹0</h2>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+
+<script src="script.js"></script>
+<script src="budget.js"></script>
+
+</body>
+
+</html>
