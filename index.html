@@ -128,7 +128,7 @@
             <div>
               <h3>Total Balance</h3>
 
-              <h2 class="counter" data-target="18540">₹0</h2>
+              <h2 id="dashboardBalance" class="counter">₹0</h2>
 
               <span>+₹1250 this month</span>
             </div>
@@ -142,7 +142,7 @@
             <div>
               <h3>Total Income</h3>
 
-              <h2 class="counter" data-target="30000">₹0</h2>
+              <h2 id="dashboardIncome" class="counter">₹0</h2>
 
               <span>+15%</span>
             </div>
@@ -156,7 +156,7 @@
             <div>
               <h3>Total Expenses</h3>
 
-              <h2 class="counter" data-target="11460">₹0</h2>
+              <h2 id="dashboardExpense" class="counter">₹0</h2>
 
               <span>-8%</span>
             </div>
@@ -170,7 +170,7 @@
             <div>
               <h3>Savings</h3>
 
-              <h2 class="counter" data-target="18540">₹0</h2>
+              <h2 id="dashboardSavings" class="counter">₹0</h2>
 
               <span>62% of income</span>
             </div>
@@ -192,63 +192,10 @@
             <div class="title">
               <h2>Recent Transactions</h2>
 
-              <a href="#">View All</a>
+              <a href="transactions.html">View All</a>
             </div>
-
-            <div class="transaction">
-              <div class="left">
-                <i class="fa-solid fa-burger"></i>
-
-                <div>
-                  <h4>Food</h4>
-
-                  <small>Today 8:30 AM</small>
-                </div>
-              </div>
-
-              <span class="red">-₹250</span>
-            </div>
-
-            <div class="transaction">
-              <div class="left">
-                <i class="fa-solid fa-car"></i>
-
-                <div>
-                  <h4>Transport</h4>
-
-                  <small>Today 7:45 AM</small>
-                </div>
-              </div>
-
-              <span class="red">-₹120</span>
-            </div>
-
-            <div class="transaction">
-              <div class="left">
-                <i class="fa-solid fa-briefcase"></i>
-
-                <div>
-                  <h4>Salary</h4>
-
-                  <small>Yesterday</small>
-                </div>
-              </div>
-
-              <span class="green">+₹30,000</span>
-            </div>
-
-            <div class="transaction">
-              <div class="left">
-                <i class="fa-solid fa-cart-shopping"></i>
-
-                <div>
-                  <h4>Shopping</h4>
-
-                  <small>26 July</small>
-                </div>
-              </div>
-
-              <span class="red">-₹680</span>
+            <div id="recentTransactions">
+              <!-- Transactions will be added by JavaScript -->
             </div>
           </div>
         </section>
@@ -266,22 +213,22 @@
             <h2>Quick Actions</h2>
 
             <div class="actions">
-              <button>
+              <button onclick="window.location.href = 'expense.html'">
                 <i class="fa-solid fa-plus"></i>
                 Add Expense
               </button>
 
-              <button>
+              <button onclick="window.location.href = 'income.html'">
                 <i class="fa-solid fa-wallet"></i>
                 Add Income
               </button>
 
-              <button>
+              <button onclick="window.location.href = 'add-reports.html'">
                 <i class="fa-solid fa-chart-column"></i>
                 Reports
               </button>
 
-              <button>
+              <button onclick="window.location.href = 'add-budgets.html'">
                 <i class="fa-solid fa-bullseye"></i>
                 Budget
               </button>

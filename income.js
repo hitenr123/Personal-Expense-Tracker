@@ -1,196 +1,224 @@
 // ==========================================
-// Income Page Script
+// Income Page
 // ==========================================
 
-// ---------- Sidebar ----------
+const incomeForm = document.getElementById("incomeForm");
 
-const menuIcon = document.querySelector(".menu-icon");
-const sidebar = document.querySelector(".sidebar");
-const main = document.querySelector(".main");
-
-if (menuIcon) {
-    menuIcon.addEventListener("click", () => {
-        sidebar.classList.toggle("show");
-        main.classList.toggle("shift");
-    });
-}
-
-// ---------- Today's Date ----------
-
+const amountInput = document.getElementById("amount");
+const sourceSelect = document.getElementById("source");
+const paymentSelect = document.getElementById("payment");
+const accountSelect = document.getElementById("account");
 const dateInput = document.getElementById("date");
-
-if (dateInput) {
-    dateInput.value = new Date().toISOString().split("T")[0];
-}
-
-// ---------- Current Time ----------
-
 const timeInput = document.getElementById("time");
+const receivedFromInput = document.getElementById("receivedFrom");
+const notesInput = document.getElementById("notes");
+const attachmentInput = document.getElementById("attachment");
+const tagsInput = document.getElementById("tags");
+const recurringInput = document.getElementById("recurringIncome");
 
-if (timeInput) {
+// Summary
+const todayIncome = document.getElementById("todayIncome");
+const monthIncome = document.getElementById("monthIncome");
+const totalIncomeElement = document.getElementById("totalIncome");
+const highestIncome = document.getElementById("highestIncome");
 
-    const now = new Date();
+// ==========================================
+// Default Date and Time
+// ==========================================
 
-    const hours = String(now.getHours()).padStart(2, "0");
-    const minutes = String(now.getMinutes()).padStart(2, "0");
+const now = new Date();
 
-    timeInput.value = `${hours}:${minutes}`;
-}
+dateInput.value = now.toISOString().split("T")[0];
 
-// ---------- Live Preview ----------
+timeInput.value =
+    now.toTimeString().slice(0, 5);
 
-const amount = document.getElementById("amount");
-const source = document.getElementById("source");
-const payment = document.getElementById("payment");
+// ==========================================
+// Get Incomes
+// ==========================================
 
-const previewAmount = document.getElementById("previewAmount");
-const previewSource = document.getElementById("selectedSource");
-const previewPayment = document.getElementById("selectedPayment");
+function getIncomes() {
 
-if (amount) {
-
-    amount.addEventListener("input", () => {
-
-        const value = amount.value || 0;
-
-        previewAmount.innerHTML =
-            "₹" + Number(value).toLocaleString("en-IN");
-
-    });
-
-}
-
-if (source) {
-
-    source.addEventListener("change", () => {
-
-        previewSource.innerHTML = source.value;
-
-    });
+    return JSON.parse(
+        localStorage.getItem("incomes")
+    ) || [];
 
 }
 
-if (payment) {
+// ==========================================
+// Update Income Summary
+// ==========================================
 
-    payment.addEventListener("change", () => {
+function updateIncomeSummary() {
 
-        previewPayment.innerHTML = payment.value;
+    const incomes = getIncomes();
 
-    });
+    const currentDate =
+        new Date();
 
-}
+    const today =
+        currentDate.toISOString().split("T")[0];
 
-// ---------- Save Form ----------
+    const currentMonth =
+        currentDate.getMonth();
 
-const form = document.querySelector("form");
+    const currentYear =
+        currentDate.getFullYear();
 
-if (form) {
+    // Today's income
+    const todayTotal =
+        incomes
+            .filter(income =>
+                income.date === today
+            )
+            .reduce(
+                (total, income) =>
+                    total + Number(income.amount),
+                0
+            );
 
-    form.addEventListener("submit", function (e) {
+    // This month's income
+    const monthTotal =
+        incomes
+            .filter(income => {
 
-        e.preventDefault();
+                const date =
+                    new Date(income.date);
 
-        if (amount.value.trim() === "") {
+                return (
+                    date.getMonth() === currentMonth &&
+                    date.getFullYear() === currentYear
+                );
 
-            alert("Please enter income amount.");
+            })
+            .reduce(
+                (total, income) =>
+                    total + Number(income.amount),
+                0
+            );
 
-            amount.focus();
-
-            return;
-
-        }
-
-        const income = {
-
-            amount: amount.value,
-            source: source.value,
-            payment: payment.value,
-            account: document.getElementById("account").value,
-            date: dateInput.value,
-            time: timeInput.value,
-            notes: document.getElementById("notes").value
-
-        };
-
-        let incomes =
-            JSON.parse(localStorage.getItem("incomeList")) || [];
-
-        incomes.push(income);
-
-        localStorage.setItem(
-            "incomeList",
-            JSON.stringify(incomes)
+    // Total income
+    const total =
+        incomes.reduce(
+            (total, income) =>
+                total + Number(income.amount),
+            0
         );
 
-        alert("Income Added Successfully!");
+    // Highest income
+    const highest =
+        incomes.length > 0
+            ? Math.max(
+                ...incomes.map(
+                    income => Number(income.amount)
+                )
+            )
+            : 0;
 
-        form.reset();
+    todayIncome.textContent =
+        "₹" + todayTotal.toLocaleString("en-IN");
 
-        dateInput.value =
-            new Date().toISOString().split("T")[0];
+    monthIncome.textContent =
+        "₹" + monthTotal.toLocaleString("en-IN");
 
-        previewAmount.innerHTML = "₹0";
-        previewSource.innerHTML = "-";
-        previewPayment.innerHTML = "-";
+    totalIncomeElement.textContent =
+        "₹" + total.toLocaleString("en-IN");
 
-    });
-
+    highestIncome.textContent =
+        "₹" + highest.toLocaleString("en-IN");
 }
 
-// ---------- Reset ----------
+// ==========================================
+// Save Income
+// ==========================================
 
-const resetBtn = document.querySelector(".reset-btn");
+incomeForm.addEventListener("submit", function (event) {
 
-if (resetBtn) {
+    event.preventDefault();
 
-    resetBtn.addEventListener("click", () => {
+    const amount =
+        Number(amountInput.value);
 
-        previewAmount.innerHTML = "₹0";
-        previewSource.innerHTML = "-";
-        previewPayment.innerHTML = "-";
+    if (!amount || amount <= 0) {
+        alert("Please enter a valid amount.");
+        return;
+    }
 
-    });
+    if (
+        !sourceSelect.value ||
+        sourceSelect.value === "Select Source"
+    ) {
+        alert("Please select an income source.");
+        return;
+    }
 
-}
+    const income = {
 
-// ---------- Notification ----------
+        id: Date.now(),
 
-const bell = document.querySelector(".fa-bell");
+        amount: amount,
 
-if (bell) {
+        source:
+            sourceSelect.value,
 
-    bell.addEventListener("click", () => {
+        payment:
+            paymentSelect.value,
 
-        alert("No new notifications.");
+        account:
+            accountSelect.value,
 
-    });
+        date:
+            dateInput.value,
 
-}
+        time:
+            timeInput.value,
 
-// ---------- Profile ----------
+        receivedFrom:
+            receivedFromInput.value,
 
-const profile = document.querySelector(".profile");
+        notes:
+            notesInput.value,
 
-if (profile) {
+        tags:
+            tagsInput.value,
 
-    profile.addEventListener("click", () => {
+        recurring:
+            recurringInput.checked,
 
-        alert("Profile section coming soon.");
+        attachment:
+            attachmentInput.files.length
+                ? attachmentInput.files[0].name
+                : ""
 
-    });
+    };
 
-}
+    const incomes =
+        getIncomes();
 
-// ---------- History Button ----------
+    incomes.push(income);
 
-const historyBtn = document.querySelector(".history-btn");
+    localStorage.setItem(
+        "incomes",
+        JSON.stringify(incomes)
+    );
 
-if (historyBtn) {
+    updateIncomeSummary();
 
-    historyBtn.addEventListener("click", () => {
+    alert("Income saved successfully!");
 
-        alert("Income History page will be added next.");
+    incomeForm.reset();
 
-    });
+    // Set today's date/time again
+    dateInput.value =
+        new Date().toISOString().split("T")[0];
 
-}
+    timeInput.value =
+        new Date().toTimeString().slice(0, 5);
+
+});
+
+// ==========================================
+// Initial Load
+// ==========================================
+
+updateIncomeSummary();

@@ -2,30 +2,75 @@
 // Transactions Page
 // ==========================================
 
-// Elements
-const transactionBody =
-    document.querySelector("table tbody");
+const transactionBody = document.querySelector("table tbody");
 
-const searchInput =
-    document.querySelector(".search input");
+const searchInput = document.querySelector(".search input");
 
-const filters =
-    document.querySelectorAll(".transaction-tools select");
+const filters = document.querySelectorAll(
+    ".transaction-tools select"
+);
 
 const categoryFilter = filters[0];
 const typeFilter = filters[1];
 
 
 // ==========================================
-// Get Expenses
+// Get Data
 // ==========================================
 
 function getExpenses() {
-
     return JSON.parse(
         localStorage.getItem("expenses")
     ) || [];
+}
 
+function getIncomes() {
+    return JSON.parse(
+        localStorage.getItem("incomes")
+    ) || [];
+}
+
+
+// ==========================================
+// Combine Transactions
+// ==========================================
+
+function getTransactions() {
+
+    const expenses = getExpenses();
+    const incomes = getIncomes();
+
+    const expenseTransactions =
+        expenses.map(expense => ({
+            id: expense.id,
+            category: expense.category,
+            description: expense.notes || "Expense",
+            date: expense.date,
+            amount: -Number(expense.amount),
+            type: "Expense"
+        }));
+
+    const incomeTransactions =
+        incomes.map(income => ({
+            id: income.id,
+            category: income.source,
+            description:
+                income.receivedFrom ||
+                income.notes ||
+                "Income",
+            date: income.date,
+            amount: Number(income.amount),
+            type: "Income"
+        }));
+
+    return [
+        ...incomeTransactions,
+        ...expenseTransactions
+    ].sort(
+        (a, b) =>
+            new Date(b.date) -
+            new Date(a.date)
+    );
 }
 
 
@@ -39,14 +84,17 @@ function formatDate(dateString) {
         return "-";
     }
 
-    const date = new Date(dateString);
+    const date =
+        new Date(dateString);
 
-    return date.toLocaleDateString("en-IN", {
-        day: "2-digit",
-        month: "short",
-        year: "numeric"
-    });
-
+    return date.toLocaleDateString(
+        "en-IN",
+        {
+            day: "2-digit",
+            month: "short",
+            year: "numeric"
+        }
+    );
 }
 
 
@@ -54,15 +102,16 @@ function formatDate(dateString) {
 // Display Transactions
 // ==========================================
 
-function displayTransactions(expenses) {
+function displayTransactions(transactions) {
 
     transactionBody.innerHTML = "";
 
-    if (expenses.length === 0) {
+    if (transactions.length === 0) {
 
         transactionBody.innerHTML = `
             <tr>
-                <td colspan="5" style="text-align:center;">
+                <td colspan="5"
+                    style="text-align:center;">
                     No transactions found
                 </td>
             </tr>
@@ -71,42 +120,52 @@ function displayTransactions(expenses) {
         return;
     }
 
-
-    expenses.forEach(expense => {
+    transactions.forEach(transaction => {
 
         const row =
             document.createElement("tr");
 
+        const isIncome =
+            transaction.type === "Income";
+
+        const sign =
+            isIncome ? "+" : "-";
+
+        const amountClass =
+            isIncome ? "income" : "expense";
+
+        const badgeClass =
+            isIncome ? "green" : "red";
+
         row.innerHTML = `
             <td>
                 <i class="fa-solid fa-receipt"></i>
-                ${expense.category}
+                ${transaction.category}
             </td>
 
             <td>
-                ${expense.notes || "Expense"}
+                ${transaction.description}
             </td>
 
             <td>
-                ${formatDate(expense.date)}
+                ${formatDate(transaction.date)}
             </td>
 
-            <td class="expense">
-                -₹${Number(expense.amount)
-                    .toLocaleString("en-IN")}
+            <td class="${amountClass}">
+                ${sign}₹${Math.abs(
+                    Number(transaction.amount)
+                ).toLocaleString("en-IN")}
             </td>
 
             <td>
-                <span class="badge red">
-                    Expense
+                <span class="badge ${badgeClass}">
+                    ${transaction.type}
                 </span>
             </td>
         `;
 
         transactionBody.appendChild(row);
-
     });
-
 }
 
 
@@ -117,6 +176,7 @@ function displayTransactions(expenses) {
 function updateSummary() {
 
     const expenses = getExpenses();
+    const incomes = getIncomes();
 
     const totalExpense =
         expenses.reduce(
@@ -125,13 +185,12 @@ function updateSummary() {
             0
         );
 
-
-    // Income will be connected later
     const totalIncome =
-        Number(
-            localStorage.getItem("totalIncome")
-        ) || 0;
-
+        incomes.reduce(
+            (total, income) =>
+                total + Number(income.amount),
+            0
+        );
 
     const balance =
         totalIncome - totalExpense;
@@ -139,28 +198,29 @@ function updateSummary() {
 
     document.getElementById("totalIncome")
         .textContent =
-        "₹" + totalIncome.toLocaleString("en-IN");
-
+        "₹" +
+        totalIncome.toLocaleString("en-IN");
 
     document.getElementById("totalExpense")
         .textContent =
-        "₹" + totalExpense.toLocaleString("en-IN");
-
+        "₹" +
+        totalExpense.toLocaleString("en-IN");
 
     document.getElementById("totalBalance")
         .textContent =
-        "₹" + balance.toLocaleString("en-IN");
-
+        "₹" +
+        balance.toLocaleString("en-IN");
 }
 
 
 // ==========================================
-// Filter
+// Filter Transactions
 // ==========================================
 
 function filterTransactions() {
 
-    const expenses = getExpenses();
+    const transactions =
+        getTransactions();
 
     const search =
         searchInput.value.toLowerCase();
@@ -173,42 +233,37 @@ function filterTransactions() {
 
 
     const filtered =
-        expenses.filter(expense => {
+        transactions.filter(transaction => {
 
             const categoryText =
-                expense.category.toLowerCase();
-
-            const notesText =
-                (expense.notes || "")
+                transaction.category
                     .toLowerCase();
 
+            const descriptionText =
+                transaction.description
+                    .toLowerCase();
 
             const searchMatch =
                 categoryText.includes(search) ||
-                notesText.includes(search);
-
+                descriptionText.includes(search);
 
             const categoryMatch =
                 category === "All Categories" ||
-                expense.category === category;
-
+                transaction.category === category;
 
             const typeMatch =
                 type === "All Types" ||
-                type === "Expense";
-
+                transaction.type === type;
 
             return (
                 searchMatch &&
                 categoryMatch &&
                 typeMatch
             );
-
         });
 
 
     displayTransactions(filtered);
-
 }
 
 
@@ -236,6 +291,8 @@ typeFilter.addEventListener(
 // Initial Load
 // ==========================================
 
-displayTransactions(getExpenses());
+displayTransactions(
+    getTransactions()
+);
 
 updateSummary();

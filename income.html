@@ -265,7 +265,7 @@
                   <div class="form-group">
                     <label>Account</label>
 
-                    <select>
+                    <select id="account">
                       <option>Cash Wallet</option>
 
                       <option>SBI Bank</option>
@@ -281,7 +281,7 @@
                   <div class="form-group">
                     <label>Date</label>
 
-                    <input type="date" />
+                    <input type="date" id="date"/>
                   </div>
                 </div>
 
@@ -291,13 +291,13 @@
                   <div class="form-group">
                     <label>Time</label>
 
-                    <input type="time" />
+                    <input type="time" id="time"/>
                   </div>
 
                   <div class="form-group">
                     <label>Received From</label>
 
-                    <input type="text" placeholder="Employer / Client" />
+                    <input type="text" id="receivedFrom" placeholder="Employer / Client" />
                   </div>
                 </div>
                 <!-- Notes -->
@@ -325,7 +325,7 @@
                 <div class="form-group">
                   <label>Tags</label>
 
-                  <input type="text" placeholder="Salary, August, Bonus" />
+                  <input type="text" id="tags" placeholder="Salary, August, Bonus" />
                 </div>
 
                 <!-- Recurring -->
@@ -367,7 +367,7 @@
               <div>
                 <span>Today's Income</span>
 
-                <h2>₹12,500</h2>
+                <h2 id="todayIncome">₹0</h2>
               </div>
             </div>
 
@@ -379,7 +379,7 @@
               <div>
                 <span>This Month</span>
 
-                <h2>₹85,000</h2>
+                <h2 id="monthIncome">₹0</h2>
               </div>
             </div>
 
@@ -391,7 +391,7 @@
               <div>
                 <span>Total Income</span>
 
-                <h2>₹6,42,000</h2>
+                <h2 id="totalIncome">₹0</h2>
               </div>
             </div>
 
@@ -403,7 +403,7 @@
               <div>
                 <span>Highest Income</span>
 
-                <h2>₹55,000</h2>
+                <h2 id="highestIncome">₹0</h2>
               </div>
             </div>
           </div>
