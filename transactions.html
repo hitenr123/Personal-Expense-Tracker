@@ -41,7 +41,10 @@
             Dashboard
           </li>
 
-          <li class="active" onclick="window.location.href = 'transactions.html'">
+          <li
+            class="active"
+            onclick="window.location.href = 'transactions.html'"
+          >
             <i class="fa-solid fa-arrow-right-arrow-left"></i>
             Transactions
           </li>
@@ -119,7 +122,7 @@
             <div>
               <h3>Total Income</h3>
 
-              <h2>₹30,000</h2>
+              <h2 id="totalIncome">₹0</h2>
             </div>
           </div>
 
@@ -129,7 +132,7 @@
             <div>
               <h3>Total Expense</h3>
 
-              <h2>₹11,460</h2>
+              <h2 id="totalExpense">₹0</h2>
             </div>
           </div>
 
@@ -139,7 +142,7 @@
             <div>
               <h3>Balance</h3>
 
-              <h2>₹18,540</h2>
+              <h2 id="totalBalance">₹0</h2>
             </div>
           </div>
         </section>
@@ -194,84 +197,13 @@
               </tr>
             </thead>
 
-            <tbody>
-              <tr>
-                <td>
-                  <i class="fa-solid fa-burger"></i>
-
-                  Food
-                </td>
-
-                <td>Lunch at restaurant</td>
-
-                <td>02 Aug 2026</td>
-
-                <td class="expense">-₹250</td>
-
-                <td>
-                  <span class="badge red"> Expense </span>
-                </td>
-              </tr>
-
-              <tr>
-                <td>
-                  <i class="fa-solid fa-car"></i>
-
-                  Transport
-                </td>
-
-                <td>Cab payment</td>
-
-                <td>01 Aug 2026</td>
-
-                <td class="expense">-₹120</td>
-
-                <td>
-                  <span class="badge red"> Expense </span>
-                </td>
-              </tr>
-
-              <tr>
-                <td>
-                  <i class="fa-solid fa-briefcase"></i>
-
-                  Salary
-                </td>
-
-                <td>Monthly Salary</td>
-
-                <td>01 Aug 2026</td>
-
-                <td class="income">+₹30,000</td>
-
-                <td>
-                  <span class="badge green"> Income </span>
-                </td>
-              </tr>
-
-              <tr>
-                <td>
-                  <i class="fa-solid fa-cart-shopping"></i>
-
-                  Shopping
-                </td>
-
-                <td>New Clothes</td>
-
-                <td>28 July 2026</td>
-
-                <td class="expense">-₹680</td>
-
-                <td>
-                  <span class="badge red"> Expense </span>
-                </td>
-              </tr>
-            </tbody>
+            <tbody></tbody>
           </table>
         </section>
       </main>
     </div>
 
     <script src="script.js"></script>
+    <script src="transactions.js"></script>
   </body>
 </html>

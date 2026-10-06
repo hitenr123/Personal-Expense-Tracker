@@ -29,189 +29,171 @@ const form = document.querySelector("form");
 const now = new Date();
 
 if (dateInput) {
-    dateInput.value = now.toISOString().split("T")[0];
+  dateInput.value = now.toISOString().split("T")[0];
 }
 
 if (timeInput) {
+  const hours = String(now.getHours()).padStart(2, "0");
+  const minutes = String(now.getMinutes()).padStart(2, "0");
 
-    const hours = String(now.getHours()).padStart(2, "0");
-    const minutes = String(now.getMinutes()).padStart(2, "0");
-
-    timeInput.value = `${hours}:${minutes}`;
+  timeInput.value = `${hours}:${minutes}`;
 }
 
 // -----------------------------
-// Live Amount Preview
+// Live Expense Summary
 // -----------------------------
 
-amountInput.addEventListener("input", () => {
+function updateLiveSummary() {
+  // Amount
+  const amount = Number(amountInput.value) || 0;
 
-    const value = Number(amountInput.value) || 0;
+  previewAmount.innerHTML = "₹" + amount.toLocaleString("en-IN");
 
-    previewAmount.innerHTML =
-        "₹" + value.toLocaleString("en-IN");
+  // Category
+  if (categorySelect.value && categorySelect.value !== "Select Category") {
+    selectedCategory.innerHTML = categorySelect.value;
+  } else {
+    selectedCategory.innerHTML = "Not Selected";
+  }
 
-});
+  // Payment
+  if (paymentSelect.value && paymentSelect.value !== "Select Method") {
+    selectedPayment.innerHTML = paymentSelect.value;
+  } else {
+    selectedPayment.innerHTML = "Not Selected";
+  }
+}
 
-// -----------------------------
-// Live Category
-// -----------------------------
+// Amount changes
+amountInput.addEventListener("input", updateLiveSummary);
 
-categorySelect.addEventListener("change", () => {
+// Category changes
+categorySelect.addEventListener("change", updateLiveSummary);
 
-    selectedCategory.innerHTML =
-        categorySelect.value;
-
-});
-
-// -----------------------------
-// Live Payment Method
-// -----------------------------
-
-paymentSelect.addEventListener("change", () => {
-
-    selectedPayment.innerHTML =
-        paymentSelect.value;
-
-});
+// Payment method changes
+paymentSelect.addEventListener("change", updateLiveSummary);
 
 // -----------------------------
 // Save Expense
 // -----------------------------
 
-form.addEventListener("submit", function(e){
+form.addEventListener("submit", function (e) {
+  e.preventDefault();
 
-    e.preventDefault();
+  if (amountInput.value === "") {
+    alert("Please enter expense amount.");
 
-    if(amountInput.value===""){
+    amountInput.focus();
 
-        alert("Please enter expense amount.");
+    return;
+  }
 
-        amountInput.focus();
+  const expense = {
+    id: Date.now(),
 
-        return;
+    amount: Number(amountInput.value),
 
-    }
+    category: categorySelect.value,
 
-    const expense={
+    payment: paymentSelect.value,
 
-        id:Date.now(),
+    account: accountSelect.value,
 
-        amount:Number(amountInput.value),
+    date: dateInput.value,
 
-        category:categorySelect.value,
+    time: timeInput.value,
 
-        payment:paymentSelect.value,
+    notes: notesInput.value,
 
-        account:accountSelect.value,
+    recurring: recurringInput.checked,
 
-        date:dateInput.value,
+    receipt: receiptInput.files.length ? receiptInput.files[0].name : "",
+  };
 
-        time:timeInput.value,
+  const expenses = JSON.parse(localStorage.getItem("expenses")) || [];
 
-        notes:notesInput.value,
+  expenses.push(expense);
 
-        recurring:recurringInput.checked,
+  localStorage.setItem("expenses", JSON.stringify(expenses));
 
-        receipt:
-            receiptInput.files.length
-            ? receiptInput.files[0].name
-            : ""
+  updateExpenseSummary();
 
-    };
+  alert("Expense Saved Successfully!");
 
-    const expenses=
-        JSON.parse(localStorage.getItem("expenses")) || [];
+  form.reset();
 
-    expenses.push(expense);
+  previewAmount.innerHTML = "₹0";
 
-    localStorage.setItem(
-        "expenses",
-        JSON.stringify(expenses)
-    );
+  selectedCategory.innerHTML = "Not Selected";
+  selectedPayment.innerHTML = "Not Selected";
 
-    alert("Expense Saved Successfully!");
+  dateInput.value = now.toISOString().split("T")[0];
 
-    form.reset();
+  const h = String(now.getHours()).padStart(2, "0");
+  const m = String(now.getMinutes()).padStart(2, "0");
 
-    previewAmount.innerHTML="₹0";
-
-    selectedCategory.innerHTML="Food";
-
-    selectedPayment.innerHTML="Cash";
-
-    dateInput.value=now.toISOString().split("T")[0];
-
-    const h=String(now.getHours()).padStart(2,"0");
-    const m=String(now.getMinutes()).padStart(2,"0");
-
-    timeInput.value=`${h}:${m}`;
-
+  timeInput.value = `${h}:${m}`;
 });
 
 // -----------------------------
 // Reset Button
 // -----------------------------
 
-document.querySelector(".reset-btn")
-.addEventListener("click",()=>{
+document.querySelector(".reset-btn").addEventListener("click", () => {
+  previewAmount.innerHTML = "₹0";
 
-    previewAmount.innerHTML="₹0";
+  selectedCategory.innerHTML = "Food";
 
-    selectedCategory.innerHTML="Food";
-
-    selectedPayment.innerHTML="Cash";
-
+  selectedPayment.innerHTML = "Cash";
 });
 
 // -----------------------------
-// Sidebar Toggle
+// Dynamic Expense Summary
 // -----------------------------
 
-const menuIcon=document.querySelector(".menu-icon");
-const sidebar=document.querySelector(".sidebar");
-const main=document.querySelector(".main");
+const todayExpense = document.getElementById("todayExpense");
+const monthExpense = document.getElementById("monthExpense");
+const remainingBudget = document.getElementById("remainingBudget");
 
-if(menuIcon){
+function updateExpenseSummary() {
+  const expenses = JSON.parse(localStorage.getItem("expenses")) || [];
 
-    menuIcon.addEventListener("click",()=>{
+  const now = new Date();
 
-        sidebar.classList.toggle("show");
+  const today = now.toISOString().split("T")[0];
 
-        main.classList.toggle("shift");
+  const currentMonth = now.getMonth();
+  const currentYear = now.getFullYear();
 
-    });
+  // Today's expense
+  const todayTotal = expenses
+    .filter((expense) => expense.date === today)
+    .reduce((total, expense) => total + Number(expense.amount), 0);
 
+  // Current month's expense
+  const monthTotal = expenses
+    .filter((expense) => {
+      const date = new Date(expense.date);
+
+      return (
+        date.getMonth() === currentMonth && date.getFullYear() === currentYear
+      );
+    })
+    .reduce((total, expense) => total + Number(expense.amount), 0);
+
+  // Budget
+  const budget = Number(localStorage.getItem("monthlyBudget")) || 0;
+
+  const remaining = budget - monthTotal;
+
+  // Display
+  todayExpense.textContent = "₹" + todayTotal.toLocaleString("en-IN");
+
+  monthExpense.textContent = "₹" + monthTotal.toLocaleString("en-IN");
+
+  remainingBudget.textContent =
+    "₹" + Math.max(remaining, 0).toLocaleString("en-IN");
 }
 
-// -----------------------------
-// Profile
-// -----------------------------
-
-const profile=document.querySelector(".profile");
-
-if(profile){
-
-    profile.addEventListener("click",()=>{
-
-        alert("Profile section coming soon.");
-
-    });
-
-}
-
-// -----------------------------
-// Bell
-// -----------------------------
-
-const bell=document.querySelector(".fa-bell");
-
-if(bell){
-
-    bell.addEventListener("click",()=>{
-
-        alert("No new notifications.");
-
-    });
-
-}
+// Run when page loads
+updateExpenseSummary();
