@@ -28,73 +28,52 @@
 
       <aside class="sidebar">
         <div class="logo">
-          <img src="image/logo.png" alt="Expense Manager" />
+          <img src="image\logo.png" alt="Expense Manager" />
 
           <div>
             <h2>Expense Manager</h2>
-
             <span>Track • Manage • Save</span>
           </div>
         </div>
 
         <ul class="menu">
-          <li onclick="location.href = 'index.html'">
+          <li onclick="window.location.href = 'index.html'">
             <i class="fa-solid fa-house"></i>
-
             Dashboard
           </li>
 
-          <li onclick="location.href = 'transactions.html'">
+          <li onclick="window.location.href = 'transactions.html'">
             <i class="fa-solid fa-arrow-right-arrow-left"></i>
-
             Transactions
           </li>
 
-          <li onclick="location.href = 'expense.html'">
+          <li onclick="window.location.href = 'expense.html'">
             <i class="fa-solid fa-plus"></i>
-
             Add Expense
           </li>
 
-          <li class="active">
+          <li class="active" onclick="window.location.href = 'income.html'">
             <i class="fa-solid fa-wallet"></i>
-
             Add Income
           </li>
 
-          <li>
-            <i class="fa-solid fa-credit-card"></i>
-
-            Payment Methods
-          </li>
-
-          <li>
-            <i class="fa-solid fa-layer-group"></i>
-
-            Categories
-          </li>
-
-          <li>
+          <li onclick="window.location.href = 'budgets.html'">
             <i class="fa-solid fa-chart-pie"></i>
-
             Budgets
           </li>
 
-          <li>
+          <li onclick="window.location.href = 'reports.html'">
             <i class="fa-solid fa-chart-line"></i>
-
             Reports
           </li>
 
-          <li>
+          <li onclick="window.location.href = 'goals.html'">
             <i class="fa-solid fa-bullseye"></i>
-
-            Savings Goals
+            Goals
           </li>
 
-          <li>
+          <li onclick="window.location.href = 'settings.html'">
             <i class="fa-solid fa-gear"></i>
-
             Settings
           </li>
         </ul>
@@ -281,7 +260,7 @@
                   <div class="form-group">
                     <label>Date</label>
 
-                    <input type="date" id="date"/>
+                    <input type="date" id="date" />
                   </div>
                 </div>
 
@@ -291,13 +270,17 @@
                   <div class="form-group">
                     <label>Time</label>
 
-                    <input type="time" id="time"/>
+                    <input type="time" id="time" />
                   </div>
 
                   <div class="form-group">
                     <label>Received From</label>
 
-                    <input type="text" id="receivedFrom" placeholder="Employer / Client" />
+                    <input
+                      type="text"
+                      id="receivedFrom"
+                      placeholder="Employer / Client"
+                    />
                   </div>
                 </div>
                 <!-- Notes -->
@@ -325,7 +308,11 @@
                 <div class="form-group">
                   <label>Tags</label>
 
-                  <input type="text" id="tags" placeholder="Salary, August, Bonus" />
+                  <input
+                    type="text"
+                    id="tags"
+                    placeholder="Salary, August, Bonus"
+                  />
                 </div>
 
                 <!-- Recurring -->

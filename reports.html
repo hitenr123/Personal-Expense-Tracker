@@ -1,266 +1,212 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <title>Expense Manager - Reports</title>
+    <title>Expense Manager - Reports</title>
 
-  <link
-    href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
-    rel="stylesheet"
-  >
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
 
-  <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
-  >
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+    />
 
-  <link rel="stylesheet" href="style.css">
-  <link rel="stylesheet" href="income.css">
-</head>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="income.css" />
+  </head>
 
-<body>
+  <body>
+    <div class="container">
+      <!-- Sidebar -->
+      <aside class="sidebar">
+        <div class="logo">
+          <img src="image\logo.png" alt="Expense Manager" />
 
-<div class="container">
+          <div>
+            <h2>Expense Manager</h2>
+            <span>Track • Manage • Save</span>
+          </div>
+        </div>
 
-  <!-- Sidebar -->
-  <aside class="sidebar">
+        <ul class="menu">
+          <li onclick="window.location.href = 'index.html'">
+            <i class="fa-solid fa-house"></i>
+            Dashboard
+          </li>
 
-    <div class="logo">
-      <img src="image\logo.png" alt="Expense Manager">
+          <li onclick="window.location.href = 'transactions.html'">
+            <i class="fa-solid fa-arrow-right-arrow-left"></i>
+            Transactions
+          </li>
 
-      <div>
-        <h2>Expense Manager</h2>
-        <span>Track • Manage • Save</span>
-      </div>
+          <li onclick="window.location.href = 'expense.html'">
+            <i class="fa-solid fa-plus"></i>
+            Add Expense
+          </li>
+
+          <li onclick="window.location.href = 'income.html'">
+            <i class="fa-solid fa-wallet"></i>
+            Add Income
+          </li>
+
+          <li onclick="window.location.href = 'budgets.html'">
+            <i class="fa-solid fa-chart-pie"></i>
+            Budgets
+          </li>
+
+          <li class="active" onclick="window.location.href = 'reports.html'">
+            <i class="fa-solid fa-chart-line"></i>
+            Reports
+          </li>
+
+          <li onclick="window.location.href = 'goals.html'">
+            <i class="fa-solid fa-bullseye"></i>
+            Goals
+          </li>
+
+          <li onclick="window.location.href = 'settings.html'">
+            <i class="fa-solid fa-gear"></i>
+            Settings
+          </li>
+        </ul>
+      </aside>
+
+      <!-- Main -->
+      <main class="main">
+        <header class="topbar">
+          <div class="menu-icon">
+            <i class="fa-solid fa-bars"></i>
+          </div>
+
+          <div class="top-right">
+            <i class="fa-regular fa-bell"></i>
+
+            <div class="profile">
+              <div class="avatar">H</div>
+              <span>Hiten</span>
+              <i class="fa-solid fa-chevron-down"></i>
+            </div>
+          </div>
+        </header>
+
+        <section class="greeting">
+          <h1>Financial Reports 📊</h1>
+
+          <p>Analyze your income and expenses</p>
+        </section>
+
+        <!-- Summary Cards -->
+        <section class="cards">
+          <div class="card income">
+            <div class="icon">
+              <i class="fa-solid fa-arrow-trend-up"></i>
+            </div>
+
+            <div>
+              <h3>Total Income</h3>
+              <h2 id="reportIncome">₹0</h2>
+            </div>
+          </div>
+
+          <div class="card expense">
+            <div class="icon">
+              <i class="fa-solid fa-arrow-trend-down"></i>
+            </div>
+
+            <div>
+              <h3>Total Expenses</h3>
+              <h2 id="reportExpense">₹0</h2>
+            </div>
+          </div>
+
+          <div class="card balance">
+            <div class="icon">
+              <i class="fa-solid fa-wallet"></i>
+            </div>
+
+            <div>
+              <h3>Balance</h3>
+              <h2 id="reportBalance">₹0</h2>
+            </div>
+          </div>
+
+          <div class="card saving">
+            <div class="icon">
+              <i class="fa-solid fa-piggy-bank"></i>
+            </div>
+
+            <div>
+              <h3>Savings Rate</h3>
+              <h2 id="reportSavings">0%</h2>
+            </div>
+          </div>
+        </section>
+
+        <!-- Report Chart -->
+        <section class="chart-grid">
+          <div class="chart-card">
+            <div class="title">
+              <h2>Income vs Expenses</h2>
+            </div>
+
+            <canvas id="reportChart"></canvas>
+          </div>
+
+          <div class="transaction-card">
+            <div class="title">
+              <h2>Report Summary</h2>
+            </div>
+
+            <div class="transaction">
+              <div class="left">
+                <i class="fa-solid fa-arrow-trend-up"></i>
+
+                <div>
+                  <h4>Total Income</h4>
+                  <small>All recorded income</small>
+                </div>
+              </div>
+
+              <span id="summaryIncome">₹0</span>
+            </div>
+
+            <div class="transaction">
+              <div class="left">
+                <i class="fa-solid fa-arrow-trend-down"></i>
+
+                <div>
+                  <h4>Total Expenses</h4>
+                  <small>All recorded expenses</small>
+                </div>
+              </div>
+
+              <span id="summaryExpense">₹0</span>
+            </div>
+
+            <div class="transaction">
+              <div class="left">
+                <i class="fa-solid fa-wallet"></i>
+
+                <div>
+                  <h4>Current Balance</h4>
+                  <small>Income minus expenses</small>
+                </div>
+              </div>
+
+              <span id="summaryBalance">₹0</span>
+            </div>
+          </div>
+        </section>
+      </main>
     </div>
 
-    <ul class="menu">
-
-      <li onclick="window.location.href='index.html'">
-        <i class="fa-solid fa-house"></i>
-        Dashboard
-      </li>
-
-      <li onclick="window.location.href='transactions.html'">
-        <i class="fa-solid fa-arrow-right-arrow-left"></i>
-        Transactions
-      </li>
-
-      <li onclick="window.location.href='expense.html'">
-        <i class="fa-solid fa-plus"></i>
-        Add Expense
-      </li>
-
-      <li onclick="window.location.href='income.html'">
-        <i class="fa-solid fa-wallet"></i>
-        Add Income
-      </li>
-
-      <li onclick="window.location.href='add-budgets.html'">
-        <i class="fa-solid fa-chart-pie"></i>
-        Budgets
-      </li>
-
-      <li class="active" onclick="window.location.href='add-reports.html'">
-        <i class="fa-solid fa-chart-line"></i>
-        Reports
-      </li>
-
-      <li onclick="window.location.href='add-goals.html'">
-        <i class="fa-solid fa-bullseye"></i>
-        Goals
-      </li>
-
-      <li onclick="window.location.href='add-settings.html'">
-        <i class="fa-solid fa-gear"></i>
-        Settings
-      </li>
-
-    </ul>
-  </aside>
-
-
-  <!-- Main -->
-  <main class="main">
-
-    <header class="topbar">
-
-      <div class="menu-icon">
-        <i class="fa-solid fa-bars"></i>
-      </div>
-
-      <div class="top-right">
-
-        <i class="fa-regular fa-bell"></i>
-
-        <div class="profile">
-          <div class="avatar">H</div>
-          <span>Hiten</span>
-          <i class="fa-solid fa-chevron-down"></i>
-        </div>
-
-      </div>
-
-    </header>
-
-
-    <section class="greeting">
-
-      <h1>Financial Reports 📊</h1>
-
-      <p>Analyze your income and expenses</p>
-
-    </section>
-
-
-    <!-- Summary Cards -->
-    <section class="cards">
-
-      <div class="card income">
-
-        <div class="icon">
-          <i class="fa-solid fa-arrow-trend-up"></i>
-        </div>
-
-        <div>
-          <h3>Total Income</h3>
-          <h2 id="reportIncome">₹0</h2>
-        </div>
-
-      </div>
-
-
-      <div class="card expense">
-
-        <div class="icon">
-          <i class="fa-solid fa-arrow-trend-down"></i>
-        </div>
-
-        <div>
-          <h3>Total Expenses</h3>
-          <h2 id="reportExpense">₹0</h2>
-        </div>
-
-      </div>
-
-
-      <div class="card balance">
-
-        <div class="icon">
-          <i class="fa-solid fa-wallet"></i>
-        </div>
-
-        <div>
-          <h3>Balance</h3>
-          <h2 id="reportBalance">₹0</h2>
-        </div>
-
-      </div>
-
-
-      <div class="card saving">
-
-        <div class="icon">
-          <i class="fa-solid fa-piggy-bank"></i>
-        </div>
-
-        <div>
-          <h3>Savings Rate</h3>
-          <h2 id="reportSavings">0%</h2>
-        </div>
-
-      </div>
-
-    </section>
-
-
-    <!-- Report Chart -->
-    <section class="chart-grid">
-
-      <div class="chart-card">
-
-        <div class="title">
-          <h2>Income vs Expenses</h2>
-        </div>
-
-        <canvas id="reportChart"></canvas>
-
-      </div>
-
-
-      <div class="transaction-card">
-
-        <div class="title">
-          <h2>Report Summary</h2>
-        </div>
-
-        <div class="transaction">
-
-          <div class="left">
-
-            <i class="fa-solid fa-arrow-trend-up"></i>
-
-            <div>
-              <h4>Total Income</h4>
-              <small>All recorded income</small>
-            </div>
-
-          </div>
-
-          <span id="summaryIncome">₹0</span>
-
-        </div>
-
-
-        <div class="transaction">
-
-          <div class="left">
-
-            <i class="fa-solid fa-arrow-trend-down"></i>
-
-            <div>
-              <h4>Total Expenses</h4>
-              <small>All recorded expenses</small>
-            </div>
-
-          </div>
-
-          <span id="summaryExpense">₹0</span>
-
-        </div>
-
-
-        <div class="transaction">
-
-          <div class="left">
-
-            <i class="fa-solid fa-wallet"></i>
-
-            <div>
-              <h4>Current Balance</h4>
-              <small>Income minus expenses</small>
-            </div>
-
-          </div>
-
-          <span id="summaryBalance">₹0</span>
-
-        </div>
-
-      </div>
-
-    </section>
-
-  </main>
-
-</div>
-
-
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="script.js"></script>
-<script src="reports.js"></script>
-
-</body>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="script.js"></script>
+    <script src="reports.js"></script>
+  </body>
 </html>
