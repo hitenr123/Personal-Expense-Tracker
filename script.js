@@ -1,5 +1,20 @@
+
 // ==========================================
 // Expense Manager Dashboard Script
+// Supabase Integration
+// ==========================================
+
+const EXPENSE_API = "http://127.0.0.1:5000/api/expenses";
+const INCOME_API = "http://127.0.0.1:5000/api/income";
+
+let dashboardExpenses = [];
+let dashboardIncomes = [];
+
+let overviewChartInstance = null;
+let categoryChartInstance = null;
+
+// ==========================================
+// Currency
 // ==========================================
 
 function getCurrency() {
@@ -7,245 +22,283 @@ function getCurrency() {
 }
 
 function formatCurrency(amount) {
-    return getCurrency() + Number(amount || 0).toLocaleString("en-IN");
+    return getCurrency() +
+        Number(amount || 0).toLocaleString("en-IN");
 }
 
-// -------------------------------
+// ==========================================
 // Sidebar Toggle
-// -------------------------------
+// ==========================================
 
 const menuIcon = document.querySelector(".menu-icon");
 const sidebar = document.querySelector(".sidebar");
 const main = document.querySelector(".main");
 
-if (menuIcon) {
-  menuIcon.addEventListener("click", () => {
-    sidebar.classList.toggle("show");
-    main.classList.toggle("shift");
-  });
+if (menuIcon && sidebar && main) {
+    menuIcon.addEventListener("click", () => {
+        sidebar.classList.toggle("show");
+        main.classList.toggle("shift");
+    });
 }
 
-// -------------------------------
+// ==========================================
 // Active Sidebar Menu
-// -------------------------------
+// ==========================================
 
 const menuItems = document.querySelectorAll(".menu li");
 
-menuItems.forEach((item) => {
-  item.addEventListener("click", () => {
-    menuItems.forEach((i) => i.classList.remove("active"));
-
-    item.classList.add("active");
-  });
+menuItems.forEach(item => {
+    item.addEventListener("click", () => {
+        menuItems.forEach(i => i.classList.remove("active"));
+        item.classList.add("active");
+    });
 });
 
-// -------------------------------
+// ==========================================
 // Greeting Date
-// -------------------------------
+// ==========================================
 
 const dateElement = document.querySelector(".greeting p");
-
-const options = {
-  weekday: "long",
-  year: "numeric",
-  month: "long",
-  day: "numeric",
-};
 
 const today = new Date();
 
 if (dateElement) {
-  dateElement.innerHTML = today.toLocaleDateString("en-IN", options);
+    dateElement.textContent = today.toLocaleDateString(
+        "en-IN",
+        {
+            weekday: "long",
+            year: "numeric",
+            month: "long",
+            day: "numeric"
+        }
+    );
 }
 
 // ==========================================
-// Dynamic Monthly Overview Chart
+// Fetch Dashboard Data from Supabase
 // ==========================================
 
-const overviewCanvas = document.getElementById("overviewChart");
+async function fetchDashboardData() {
 
-if (overviewCanvas) {
-  const expenses = getDashboardExpenses();
+    try {
 
-  const incomes = getDashboardIncomes();
+        const [expenseResponse, incomeResponse] =
+            await Promise.all([
+                fetch(EXPENSE_API),
+                fetch(INCOME_API)
+            ]);
 
-  const monthlyIncome = new Array(12).fill(0);
+        if (!expenseResponse.ok || !incomeResponse.ok) {
+            throw new Error("Unable to fetch dashboard data.");
+        }
 
-  const monthlyExpense = new Array(12).fill(0);
+        const expenseResult = await expenseResponse.json();
+        const incomeResult = await incomeResponse.json();
 
-  const currentYear = new Date().getFullYear();
+        // Convert database records into dashboard format
+        dashboardExpenses = (expenseResult.data || []).map(expense => ({
+            id: expense.id,
+            category: expense.category || "Other",
+            amount: Number(expense.amount),
+            date: expense.transaction_date,
+            time: expense.transaction_time || "",
+            notes: expense.notes || ""
+        }));
 
-  // -------------------------------
-  // Calculate Income by Month
-  // -------------------------------
+        dashboardIncomes = (incomeResult.data || []).map(income => ({
+            id: income.id,
+            source: income.category || "Income",
+            amount: Number(income.amount),
+            date: income.transaction_date,
+            time: income.transaction_time || "",
+            receivedFrom: income.received_from || "",
+            notes: income.notes || ""
+        }));
 
-  incomes.forEach((income) => {
-    const date = new Date(income.date);
+        // Update all dashboard sections
+        updateDashboardSummary();
+        updateOverviewChart();
+        updateCategoryChart();
+        updateRecentTransactions();
 
-    if (date.getFullYear() === currentYear) {
-      const month = date.getMonth();
+    } catch (error) {
 
-      monthlyIncome[month] += Number(income.amount);
+        console.error("Dashboard loading error:", error);
+
+        alert(
+            "Unable to load dashboard data. Please check whether Flask is running."
+        );
     }
-  });
-
-  // -------------------------------
-  // Calculate Expenses by Month
-  // -------------------------------
-
-  expenses.forEach((expense) => {
-    const date = new Date(expense.date);
-
-    if (date.getFullYear() === currentYear) {
-      const month = date.getMonth();
-
-      monthlyExpense[month] += Number(expense.amount);
-    }
-  });
-
-  // -------------------------------
-  // Create Chart
-  // -------------------------------
-
-  new Chart(overviewCanvas, {
-    type: "line",
-
-    data: {
-      labels: [
-        "Jan",
-        "Feb",
-        "Mar",
-        "Apr",
-        "May",
-        "Jun",
-        "Jul",
-        "Aug",
-        "Sep",
-        "Oct",
-        "Nov",
-        "Dec",
-      ],
-
-      datasets: [
-        {
-          label: "Income",
-
-          data: monthlyIncome,
-
-          borderColor: "#16a34a",
-
-          backgroundColor: "rgba(22,163,74,.15)",
-
-          fill: true,
-
-          tension: 0.4,
-
-          pointRadius: 5,
-
-          pointBackgroundColor: "#16a34a",
-        },
-
-        {
-          label: "Expenses",
-
-          data: monthlyExpense,
-
-          borderColor: "#ef4444",
-
-          backgroundColor: "rgba(239,68,68,.12)",
-
-          fill: true,
-
-          tension: 0.4,
-
-          pointRadius: 5,
-
-          pointBackgroundColor: "#ef4444",
-        },
-      ],
-    },
-
-    options: {
-      responsive: true,
-
-      maintainAspectRatio: false,
-
-      plugins: {
-        legend: {
-          position: "top",
-        },
-      },
-
-      scales: {
-        y: {
-          beginAtZero: true,
-        },
-      },
-    },
-  });
 }
 
 // ==========================================
-// Dynamic Expense Category Chart
+// Update Dashboard Summary
 // ==========================================
 
-const categoryCanvas =
-    document.getElementById("categoryChart");
+function updateDashboardSummary() {
 
-if (categoryCanvas) {
+    const totalExpense = dashboardExpenses.reduce(
+        (total, expense) => total + expense.amount,
+        0
+    );
 
-    const expenses =
-        getDashboardExpenses();
+    const totalIncome = dashboardIncomes.reduce(
+        (total, income) => total + income.amount,
+        0
+    );
+
+    const balance = totalIncome - totalExpense;
+    const savings = balance;
+
+    const incomeElement = document.getElementById("dashboardIncome");
+    const expenseElement = document.getElementById("dashboardExpense");
+    const balanceElement = document.getElementById("dashboardBalance");
+    const savingsElement = document.getElementById("dashboardSavings");
+
+    if (incomeElement) {
+        incomeElement.textContent = formatCurrency(totalIncome);
+    }
+
+    if (expenseElement) {
+        expenseElement.textContent = formatCurrency(totalExpense);
+    }
+
+    if (balanceElement) {
+        balanceElement.textContent = formatCurrency(balance);
+    }
+
+    if (savingsElement) {
+        savingsElement.textContent = formatCurrency(savings);
+    }
+}
+
+// ==========================================
+// Monthly Overview Chart
+// ==========================================
+
+function updateOverviewChart() {
+
+    const canvas = document.getElementById("overviewChart");
+
+    if (!canvas || typeof Chart === "undefined") return;
+
+    const monthlyIncome = new Array(12).fill(0);
+    const monthlyExpense = new Array(12).fill(0);
+
+    const currentYear = new Date().getFullYear();
+
+    dashboardIncomes.forEach(income => {
+
+        const date = new Date(income.date + "T00:00:00");
+
+        if (date.getFullYear() === currentYear) {
+            monthlyIncome[date.getMonth()] += income.amount;
+        }
+    });
+
+    dashboardExpenses.forEach(expense => {
+
+        const date = new Date(expense.date + "T00:00:00");
+
+        if (date.getFullYear() === currentYear) {
+            monthlyExpense[date.getMonth()] += expense.amount;
+        }
+    });
+
+    if (overviewChartInstance) {
+        overviewChartInstance.destroy();
+    }
+
+    overviewChartInstance = new Chart(canvas, {
+
+        type: "line",
+
+        data: {
+
+            labels: [
+                "Jan", "Feb", "Mar", "Apr",
+                "May", "Jun", "Jul", "Aug",
+                "Sep", "Oct", "Nov", "Dec"
+            ],
+
+            datasets: [
+                {
+                    label: "Income",
+                    data: monthlyIncome,
+                    borderColor: "#16a34a",
+                    backgroundColor: "rgba(22,163,74,.15)",
+                    fill: true,
+                    tension: 0.4,
+                    pointRadius: 5,
+                    pointBackgroundColor: "#16a34a"
+                },
+
+                {
+                    label: "Expenses",
+                    data: monthlyExpense,
+                    borderColor: "#ef4444",
+                    backgroundColor: "rgba(239,68,68,.12)",
+                    fill: true,
+                    tension: 0.4,
+                    pointRadius: 5,
+                    pointBackgroundColor: "#ef4444"
+                }
+            ]
+        },
+
+        options: {
+
+            responsive: true,
+            maintainAspectRatio: false,
+
+            plugins: {
+                legend: {
+                    position: "top"
+                }
+            },
+
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+}
+
+// ==========================================
+// Expense Category Chart
+// ==========================================
+
+function updateCategoryChart() {
+
+    const canvas = document.getElementById("categoryChart");
+
+    if (!canvas || typeof Chart === "undefined") return;
 
     const categoryTotals = {};
 
+    dashboardExpenses.forEach(expense => {
 
-    // -------------------------------
-    // Calculate Category Totals
-    // -------------------------------
+        const category = expense.category || "Others";
 
-    expenses.forEach(expense => {
-
-        const category =
-            expense.category || "Others";
-
-        const amount =
-            Number(expense.amount) || 0;
-
-        if (!categoryTotals[category]) {
-            categoryTotals[category] = 0;
-        }
-
-        categoryTotals[category] += amount;
-
+        categoryTotals[category] =
+            (categoryTotals[category] || 0) + expense.amount;
     });
 
+    const categories = Object.keys(categoryTotals);
+    const amounts = Object.values(categoryTotals);
 
-    // -------------------------------
-    // Prepare Chart Data
-    // -------------------------------
-
-    const categories =
-        Object.keys(categoryTotals);
-
-    const amounts =
-        Object.values(categoryTotals);
-
-
-    // If no expenses exist
     if (categories.length === 0) {
-
         categories.push("No Expenses");
         amounts.push(0);
-
     }
 
+    if (categoryChartInstance) {
+        categoryChartInstance.destroy();
+    }
 
-    // -------------------------------
-    // Create Doughnut Chart
-    // -------------------------------
-
-    new Chart(categoryCanvas, {
+    categoryChartInstance = new Chart(canvas, {
 
         type: "doughnut",
 
@@ -254,7 +307,6 @@ if (categoryCanvas) {
             labels: categories,
 
             datasets: [{
-
                 data: amounts,
 
                 backgroundColor: [
@@ -271,41 +323,166 @@ if (categoryCanvas) {
                 ],
 
                 borderWidth: 0
-
             }]
-
         },
 
         options: {
 
             responsive: true,
-
             maintainAspectRatio: false,
-
             cutout: "70%",
 
             animation: {
-
                 animateRotate: true,
-
                 duration: 1500
-
             },
 
             plugins: {
-
                 legend: {
-
                     position: "right"
-
                 }
-
             }
-
         }
+    });
+}
 
+// ==========================================
+// Recent Transactions
+// ==========================================
+
+function updateRecentTransactions() {
+
+    const container = document.getElementById("recentTransactions");
+
+    if (!container) return;
+
+    const transactions = [
+
+        ...dashboardIncomes.map(income => ({
+            category: income.source,
+            description:
+                income.receivedFrom ||
+                income.notes ||
+                "Income",
+            date: income.date,
+            time: income.time,
+            amount: income.amount,
+            type: "Income"
+        })),
+
+        ...dashboardExpenses.map(expense => ({
+            category: expense.category,
+            description: expense.notes || "Expense",
+            date: expense.date,
+            time: expense.time,
+            amount: expense.amount,
+            type: "Expense"
+        }))
+    ];
+
+    // Newest transactions first
+    transactions.sort((a, b) => {
+
+        const dateA = new Date(
+            `${a.date}T${a.time || "00:00"}`
+        );
+
+        const dateB = new Date(
+            `${b.date}T${b.time || "00:00"}`
+        );
+
+        return dateB - dateA;
     });
 
+    // Display latest four transactions
+    const recent = transactions.slice(0, 4);
+
+    container.innerHTML = "";
+
+    if (recent.length === 0) {
+
+        container.innerHTML = `
+            <div class="transaction">
+                <div class="left">
+                    <i class="fa-solid fa-receipt"></i>
+                    <div>
+                        <h4>No transactions</h4>
+                        <small>Add an income or expense</small>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        return;
+    }
+
+    recent.forEach(transaction => {
+
+        const isIncome = transaction.type === "Income";
+
+        const sign = isIncome ? "+" : "-";
+        const amountClass = isIncome ? "green" : "red";
+
+        let icon = "fa-solid fa-receipt";
+
+        if (isIncome) {
+            icon = "fa-solid fa-briefcase";
+        } else if (transaction.category === "Food") {
+            icon = "fa-solid fa-burger";
+        } else if (transaction.category === "Transport") {
+            icon = "fa-solid fa-car";
+        } else if (transaction.category === "Shopping") {
+            icon = "fa-solid fa-cart-shopping";
+        }
+
+        const date = new Date(
+            transaction.date + "T00:00:00"
+        );
+
+        const dateText = date.toLocaleDateString(
+            "en-IN",
+            {
+                day: "2-digit",
+                month: "short",
+                year: "numeric"
+            }
+        );
+
+        const timeText = transaction.time
+            ? " • " + transaction.time
+            : "";
+
+        const transactionElement = document.createElement("div");
+
+        transactionElement.className = "transaction";
+
+        const left = document.createElement("div");
+        left.className = "left";
+
+        const iconElement = document.createElement("i");
+        iconElement.className = icon;
+
+        const details = document.createElement("div");
+
+        const heading = document.createElement("h4");
+        heading.textContent = transaction.category || "Other";
+
+        const description = document.createElement("small");
+        description.textContent =
+            `${transaction.description} • ${dateText}${timeText}`;
+
+        details.append(heading, description);
+        left.append(iconElement, details);
+
+        const amountElement = document.createElement("span");
+        amountElement.className = amountClass;
+        amountElement.textContent =
+            sign + formatCurrency(Math.abs(transaction.amount));
+
+        transactionElement.append(left, amountElement);
+
+        container.appendChild(transactionElement);
+    });
 }
 
 // ==========================================
@@ -314,14 +491,15 @@ if (categoryCanvas) {
 
 const cards = document.querySelectorAll(".card");
 
-cards.forEach((card) => {
-  card.addEventListener("mouseenter", () => {
-    card.style.transform = "translateY(-8px)";
-  });
+cards.forEach(card => {
 
-  card.addEventListener("mouseleave", () => {
-    card.style.transform = "translateY(0px)";
-  });
+    card.addEventListener("mouseenter", () => {
+        card.style.transform = "translateY(-8px)";
+    });
+
+    card.addEventListener("mouseleave", () => {
+        card.style.transform = "translateY(0px)";
+    });
 });
 
 // ==========================================
@@ -331,9 +509,9 @@ cards.forEach((card) => {
 const bell = document.querySelector(".fa-bell");
 
 if (bell) {
-  bell.addEventListener("click", () => {
-    alert("No new notifications.");
-  });
+    bell.addEventListener("click", () => {
+        alert("No new notifications.");
+    });
 }
 
 // ==========================================
@@ -343,201 +521,13 @@ if (bell) {
 const profile = document.querySelector(".profile");
 
 if (profile) {
-  profile.addEventListener("click", () => {
-    alert("Profile menu coming soon.");
-  });
-}
-
-// ==========================================
-// Dynamic Dashboard Data
-// ==========================================
-
-function getDashboardExpenses() {
-  return JSON.parse(localStorage.getItem("expenses")) || [];
-}
-
-function getDashboardIncomes() {
-  return JSON.parse(localStorage.getItem("incomes")) || [];
-}
-
-// ==========================================
-// Update Dashboard Summary
-// ==========================================
-
-function updateDashboardSummary() {
-  const expenses = getDashboardExpenses();
-
-  const incomes = getDashboardIncomes();
-
-  const totalExpense = expenses.reduce(
-    (total, expense) => total + Number(expense.amount),
-    0,
-  );
-
-  const totalIncome = incomes.reduce(
-    (total, income) => total + Number(income.amount),
-    0,
-  );
-
-  const balance = totalIncome - totalExpense;
-
-  const savings = balance;
-
-  const incomeElement = document.getElementById("dashboardIncome");
-
-  const expenseElement = document.getElementById("dashboardExpense");
-
-  const balanceElement = document.getElementById("dashboardBalance");
-
-  const savingsElement = document.getElementById("dashboardSavings");
-
-  if (incomeElement) {
-    incomeElement.textContent = formatCurrency(totalIncome);
-  }
-
-  if (expenseElement) {
-    expenseElement.textContent = formatCurrency(totalExpense);
-  }
-
-  if (balanceElement) {
-    balanceElement.textContent = formatCurrency(balance);
-  }
-
-  if (savingsElement) {
-    savingsElement.textContent = formatCurrency(savings);
-  }
-}
-
-// ==========================================
-// Run Dashboard Update
-// ==========================================
-
-updateDashboardSummary();
-
-// ==========================================
-// Dynamic Recent Transactions
-// ==========================================
-
-function updateRecentTransactions() {
-  const container = document.getElementById("recentTransactions");
-
-  if (!container) {
-    return;
-  }
-
-  const expenses = getDashboardExpenses();
-
-  const incomes = getDashboardIncomes();
-
-  const transactions = [
-    ...incomes.map((income) => ({
-      category: income.source,
-      description: income.receivedFrom || income.notes || "Income",
-      date: income.date,
-      time: income.time || "",
-      amount: Number(income.amount),
-      type: "Income",
-    })),
-
-    ...expenses.map((expense) => ({
-      category: expense.category,
-      description: expense.notes || "Expense",
-      date: expense.date,
-      time: expense.time || "",
-      amount: Number(expense.amount),
-      type: "Expense",
-    })),
-  ];
-
-  // Newest first
-  transactions.sort((a, b) => {
-    const dateA = new Date(`${a.date}T${a.time || "00:00"}`);
-
-    const dateB = new Date(`${b.date}T${b.time || "00:00"}`);
-
-    return dateB - dateA;
-  });
-
-  // Show latest 4
-  const recent = transactions.slice(0, 4);
-
-  container.innerHTML = "";
-
-  if (recent.length === 0) {
-    container.innerHTML = `
-            <div class="transaction">
-                <div class="left">
-                    <i class="fa-solid fa-receipt"></i>
-
-                    <div>
-                        <h4>No transactions</h4>
-                        <small>Add an income or expense</small>
-                    </div>
-                </div>
-            </div>
-        `;
-
-    return;
-  }
-
-  recent.forEach((transaction) => {
-    const isIncome = transaction.type === "Income";
-
-    const sign = isIncome ? "+" : "-";
-
-    const amountClass = isIncome ? "green" : "red";
-
-    let icon = "fa-solid fa-receipt";
-
-    if (transaction.type === "Income") {
-      icon = "fa-solid fa-briefcase";
-    } else if (transaction.category === "Food") {
-      icon = "fa-solid fa-burger";
-    } else if (transaction.category === "Transport") {
-      icon = "fa-solid fa-car";
-    } else if (transaction.category === "Shopping") {
-      icon = "fa-solid fa-cart-shopping";
-    }
-
-    const date = new Date(transaction.date);
-
-    const dateText = date.toLocaleDateString("en-IN", {
-      day: "2-digit",
-      month: "short",
-      year: "numeric",
+    profile.addEventListener("click", () => {
+        alert("Profile menu coming soon.");
     });
-
-    const timeText = transaction.time ? " • " + transaction.time : "";
-
-    const transactionElement = document.createElement("div");
-
-    transactionElement.className = "transaction";
-
-    transactionElement.innerHTML = `
-            <div class="left">
-
-                <i class="${icon}"></i>
-
-                <div>
-                    <h4>
-                        ${transaction.category}
-                    </h4>
-
-                    <small>
-                        ${transaction.description}
-                        • ${dateText}${timeText}
-                    </small>
-                </div>
-
-            </div>
-
-            <span class="${amountClass}">
-                ${sign}₹${Math.abs(transaction.amount).toLocaleString("en-IN")}
-            </span>
-        `;
-
-    container.appendChild(transactionElement);
-  });
 }
 
-updateRecentTransactions();
+// ==========================================
+// Initial Dashboard Load
+// ==========================================
+
+fetchDashboardData();

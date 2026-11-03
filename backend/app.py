@@ -200,5 +200,180 @@ def get_income():
         }), 500
 
 
+# ==========================================
+# Save Financial Goal
+# ==========================================
+
+@app.route("/api/goals", methods=["POST"])
+def add_goal():
+    try:
+        data = request.get_json()
+
+        if not data:
+            return jsonify({"error": "No goal data provided"}), 400
+
+        name = str(data.get("name", "")).strip()
+        amount = float(data.get("amount", 0))
+
+        if not name:
+            return jsonify({"error": "Goal name is required"}), 400
+
+        if amount <= 0:
+            return jsonify({
+                "error": "Target amount must be greater than zero"
+            }), 400
+
+        goal = {
+            "goal_name": name,
+            "target_amount": amount,
+            "current_saving": float(data.get("current_saving", 0)),
+            "target_date": data.get("date") or None
+        }
+
+        response = (
+            supabase.table("financial_goals")
+            .insert(goal)
+            .execute()
+        )
+
+        return jsonify({
+            "status": "success",
+            "message": "Goal added successfully!",
+            "data": response.data
+        }), 201
+
+    except Exception as e:
+        return jsonify({
+            "status": "error",
+            "message": str(e)
+        }), 500
+
+
+# ==========================================
+# Get Financial Goals
+# ==========================================
+
+@app.route("/api/goals", methods=["GET"])
+def get_goals():
+    try:
+        response = (
+            supabase.table("financial_goals")
+            .select("*")
+            .order("created_at", desc=True)
+            .execute()
+        )
+
+        return jsonify({
+            "status": "success",
+            "data": response.data
+        })
+
+    except Exception as e:
+        return jsonify({
+            "status": "error",
+            "message": str(e)
+        }), 500
+
+
+# ==========================================
+# Edit Financial Goal
+# ==========================================
+
+@app.route("/api/goals/<goal_id>", methods=["PUT"])
+def update_goal(goal_id):
+    try:
+        data = request.get_json()
+
+        if not data:
+            return jsonify({"error": "No update data provided"}), 400
+
+        updates = {}
+
+        if "name" in data:
+            name = str(data["name"]).strip()
+
+            if not name:
+                return jsonify({"error": "Goal name is required"}), 400
+
+            updates["goal_name"] = name
+
+        if "amount" in data:
+            amount = float(data["amount"])
+
+            if amount <= 0:
+                return jsonify({
+                    "error": "Target amount must be greater than zero"
+                }), 400
+
+            updates["target_amount"] = amount
+
+        if "date" in data:
+            updates["target_date"] = data["date"] or None
+
+        if "current_saving" in data:
+            saving = float(data["current_saving"])
+
+            if saving < 0:
+                return jsonify({
+                    "error": "Current saving cannot be negative"
+                }), 400
+
+            updates["current_saving"] = saving
+
+        if not updates:
+            return jsonify({"error": "No valid fields to update"}), 400
+
+        response = (
+            supabase.table("financial_goals")
+            .update(updates)
+            .eq("id", goal_id)
+            .execute()
+        )
+
+        if not response.data:
+            return jsonify({"error": "Goal not found"}), 404
+
+        return jsonify({
+            "status": "success",
+            "message": "Goal updated successfully!",
+            "data": response.data
+        })
+
+    except Exception as e:
+        return jsonify({
+            "status": "error",
+            "message": str(e)
+        }), 500
+
+
+# ==========================================
+# Delete Financial Goal
+# ==========================================
+
+@app.route("/api/goals/<goal_id>", methods=["DELETE"])
+def delete_goal(goal_id):
+    try:
+        response = (
+            supabase.table("financial_goals")
+            .delete()
+            .eq("id", goal_id)
+            .execute()
+        )
+
+        if not response.data:
+            return jsonify({"error": "Goal not found"}), 404
+
+        return jsonify({
+            "status": "success",
+            "message": "Goal deleted successfully!"
+        })
+
+    except Exception as e:
+        return jsonify({
+            "status": "error",
+            "message": str(e)
+        }), 500
+
+
 if __name__ == "__main__":
     app.run(debug=True)
