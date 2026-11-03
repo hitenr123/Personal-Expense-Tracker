@@ -1,9 +1,10 @@
 
 // ==========================================
-// Transactions Page
+// Transactions Page - Supabase Integration
 // ==========================================
 
-const API_URL = "http://127.0.0.1:5000/api/expenses";
+const EXPENSE_API = "http://127.0.0.1:5000/api/expenses";
+const INCOME_API = "http://127.0.0.1:5000/api/income";
 
 const transactionBody = document.querySelector("table tbody");
 const searchInput = document.querySelector(".search input");
@@ -19,42 +20,36 @@ let allTransactions = [];
 
 
 // ==========================================
-// Get Income from Local Storage
-// ==========================================
-
-function getIncomes() {
-    return JSON.parse(
-        localStorage.getItem("incomes") || "[]"
-    );
-}
-
-
-// ==========================================
 // Fetch Expenses from Supabase
 // ==========================================
 
 async function getExpenses() {
+    const response = await fetch(EXPENSE_API);
 
-    try {
-
-        const response = await fetch(API_URL);
-
-        if (!response.ok) {
-            throw new Error("Unable to fetch expenses");
-        }
-
-        const result = await response.json();
-
-        return result.data || [];
-
-    } catch (error) {
-
-        console.error("Expense loading error:", error);
-
-        alert("Unable to load expenses. Check whether Flask is running.");
-
-        return [];
+    if (!response.ok) {
+        throw new Error("Unable to fetch expenses");
     }
+
+    const result = await response.json();
+
+    return result.data || [];
+}
+
+
+// ==========================================
+// Fetch Income from Supabase
+// ==========================================
+
+async function getIncomes() {
+    const response = await fetch(INCOME_API);
+
+    if (!response.ok) {
+        throw new Error("Unable to fetch income");
+    }
+
+    const result = await response.json();
+
+    return result.data || [];
 }
 
 
@@ -64,39 +59,53 @@ async function getExpenses() {
 
 async function loadTransactions() {
 
-    const expenses = await getExpenses();
-    const incomes = getIncomes();
+    try {
 
-    const expenseTransactions = expenses.map(expense => ({
-        id: expense.id,
-        category: expense.category || "Other",
-        description: expense.notes || "Expense",
-        date: expense.transaction_date,
-        amount: Number(expense.amount),
-        type: "Expense"
-    }));
+        const [expenses, incomes] = await Promise.all([
+            getExpenses(),
+            getIncomes()
+        ]);
 
-    const incomeTransactions = incomes.map(income => ({
-        id: income.id,
-        category: income.source || "Income",
-        description:
-            income.receivedFrom ||
-            income.notes ||
-            "Income",
-        date: income.date,
-        amount: Number(income.amount),
-        type: "Income"
-    }));
+        const expenseTransactions = expenses.map(expense => ({
+            id: expense.id,
+            category: expense.category || "Other",
+            description: expense.notes || "Expense",
+            date: expense.transaction_date,
+            amount: Number(expense.amount),
+            type: "Expense"
+        }));
 
-    allTransactions = [
-        ...incomeTransactions,
-        ...expenseTransactions
-    ].sort((a, b) =>
-        new Date(b.date) - new Date(a.date)
-    );
+        const incomeTransactions = incomes.map(income => ({
+            id: income.id,
+            category: income.category || "Income",
+            description:
+                income.received_from ||
+                income.notes ||
+                "Income",
+            date: income.transaction_date,
+            amount: Number(income.amount),
+            type: "Income"
+        }));
 
-    updateSummary();
-    filterTransactions();
+        allTransactions = [
+            ...incomeTransactions,
+            ...expenseTransactions
+        ].sort((a, b) =>
+            new Date(b.date) - new Date(a.date)
+        );
+
+        updateSummary();
+        filterTransactions();
+
+    } catch (error) {
+
+        console.error("Transaction loading error:", error);
+
+        alert(
+            "Unable to load transactions. Please check whether Flask is running."
+        );
+
+    }
 }
 
 
@@ -108,7 +117,7 @@ function formatDate(dateString) {
 
     if (!dateString) return "-";
 
-    return new Date(dateString).toLocaleDateString(
+    return new Date(dateString + "T00:00:00").toLocaleDateString(
         "en-IN",
         {
             day: "2-digit",
@@ -246,9 +255,7 @@ function filterTransactions() {
 // ==========================================
 
 searchInput.addEventListener("input", filterTransactions);
-
 categoryFilter.addEventListener("change", filterTransactions);
-
 typeFilter.addEventListener("change", filterTransactions);
 
 
