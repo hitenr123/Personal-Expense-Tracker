@@ -1,0 +1,56 @@
+Python/h1.py
+Python/h4.py
+Python/h3.py
+Python/h2.py
+Java Tutorial/arrays.class
+Java Tutorial/arrays.java
+Java Tutorial/conditions.class
+Java Tutorial/conditions.java
+Java Tutorial/first.class
+Java Tutorial/first.java
+Java Tutorial/functions.class
+Java Tutorial/functions.java
+Java Tutorial/loops.class
+Java Tutorial/loops.java
+Java Tutorial/Main.class
+Java Tutorial/Main.java
+Java Tutorial/pattern.class
+Java Tutorial/pattern.java
+Java Tutorial/tempCodeRunnerFile.java
+.vscode/settings.json
+.vscode/tasks.json
+Python/h5.py
+Python/h6.py
+C codes/selection_sort.c
+C codes/new.c
+C codes/new2.c
+C codes/a.exe
+C codes/new.exe
+C codes/new2.exe
+C codes
+HTML CSS JS
+Python/h7.py
+Python/tempCodeRunnerFile.py
+Python/h8.py
+C++/first.cpp
+C++/input.txt
+C++/output.txt
+C++/first.exe
+.vscode/c_cpp_properties.json
+C++/pattern.cpp
+C++/tempCodeRunnerFile.cpp
+C++/pattern.exe
+C++/functions.cpp
+C++/functions.exe
+C++/test.cpp
+C++/test.exe
+# Environment variables
+.env
+.env.*
+!.env.example
+
+# Python
+__pycache__/
+*.pyc
+venv/
+.venv/
