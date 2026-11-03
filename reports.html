@@ -18,6 +18,7 @@
 
     <link rel="stylesheet" href="style.css" />
     <link rel="stylesheet" href="income.css" />
+    <link rel="stylesheet" href="reports.css" />
   </head>
 
   <body>
@@ -147,6 +148,54 @@
           </div>
         </section>
 
+        <!-- Report Period Filter -->
+        <section class="transaction-card report-filters">
+          <div class="title">
+            <h2>Filter Reports</h2>
+          </div>
+
+          <div class="report-filter-controls">
+            <div>
+              <label for="reportPeriod">Report Period</label>
+              <select id="reportPeriod">
+                <option value="daily">Daily</option>
+                <option value="weekly">Weekly</option>
+                <option value="monthly" selected>Monthly</option>
+                <option value="yearly">Yearly</option>
+                <option value="custom">Custom Date Range</option>
+              </select>
+            </div>
+
+            <div id="customDateFields" style="display: none">
+              <label for="reportStartDate">Start Date</label>
+              <input type="date" id="reportStartDate" />
+
+              <label for="reportEndDate">End Date</label>
+              <input type="date" id="reportEndDate" />
+            </div>
+
+            <button type="button" id="applyReportFilter">Apply Filter</button>
+          </div>
+        </section>
+
+        <!-- Download PDF Report -->
+        <div class="report-download">
+          <button type="button" id="downloadReportPDF">
+            <i class="fas fa-file-pdf"></i>
+            Download PDF
+          </button>
+
+          <button type="button" id="downloadReportCSV">
+            <i class="fas fa-file-csv"></i>
+            Download CSV
+          </button>
+
+          <button type="button" id="downloadReportExcel">
+            <i class="fas fa-file-excel"></i>
+            Download Excel
+          </button>
+        </div>
+
         <!-- Report Chart -->
         <section class="chart-grid">
           <div class="chart-card">
@@ -202,10 +251,24 @@
             </div>
           </div>
         </section>
+
+        <!-- Expense Category Pie Chart -->
+        <section class="transaction-card">
+          <div class="title">
+            <h2>Expense Breakdown by Category</h2>
+          </div>
+
+          <div class="chart-container">
+            <canvas id="expensePieChart"></canvas>
+          </div>
+        </section>
       </main>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
     <script src="script.js"></script>
     <script src="reports.js"></script>
   </body>

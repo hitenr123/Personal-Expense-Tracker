@@ -1,0 +1,181 @@
+
+/* ==========================================
+   Reports Filter Section
+========================================== */
+
+.report-filters {
+    padding: 25px;
+    margin-bottom: 25px;
+}
+
+.report-filters .title {
+    margin-bottom: 20px;
+}
+
+.report-filter-controls {
+    display: flex;
+    align-items: flex-end;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.report-filter-controls > div {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.report-filter-controls label {
+    font-size: 14px;
+    font-weight: 500;
+    color: #475569;
+}
+
+.report-filter-controls select,
+.report-filter-controls input {
+    min-width: 200px;
+    padding: 12px 14px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    background: #fff;
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+    outline: none;
+    transition: 0.3s;
+}
+
+.report-filter-controls select:focus,
+.report-filter-controls input:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+#customDateFields {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 12px;
+}
+
+#customDateFields[style*="display: none"] {
+    display: none !important;
+}
+
+#applyReportFilter {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    background: #2563eb;
+    color: white;
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+#applyReportFilter:hover {
+    background: #1d4ed8;
+    transform: translateY(-2px);
+}
+
+/* Responsive */
+
+@media (max-width: 768px) {
+    .report-filter-controls {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .report-filter-controls > div,
+    .report-filter-controls select,
+    .report-filter-controls input {
+        width: 100%;
+    }
+
+    #applyReportFilter {
+        width: 100%;
+    }
+}
+
+.report-download {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+#downloadReportPDF {
+    padding: 12px 22px;
+    border: none;
+    border-radius: 8px;
+    background: #dc2626;
+    color: white;
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+#downloadReportPDF:hover {
+    background: #b91c1c;
+    transform: translateY(-2px);
+}
+
+/* Report Export Buttons */
+.report-download {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin: 20px 0;
+}
+
+.report-download button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+    padding: 12px 22px;
+    border: none;
+    border-radius: 8px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: white;
+}
+
+#downloadReportPDF {
+    background: #dc3545;
+}
+
+#downloadReportCSV {
+    background: #198754;
+}
+
+#downloadReportExcel {
+    background: #217346;
+}
+
+.report-download button:hover {
+    transform: translateY(-3px);
+    filter: brightness(0.9);
+    box-shadow: 0 5px 12px rgba(0, 0, 0, 0.15);
+}
+
+.report-download button i {
+    font-size: 16px;
+}
+
+/* Mobile Responsive */
+@media (max-width: 600px) {
+    .report-download {
+        flex-direction: column;
+    }
+
+    .report-download button {
+        width: 100%;
+    }
+}
