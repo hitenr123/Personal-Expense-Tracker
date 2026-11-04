@@ -25,6 +25,11 @@ const editForm = document.getElementById("editTransactionForm");
 
 let allTransactions = [];
 
+// Refresh shared dashboard and budget data
+function refreshTransactionData() {
+    localStorage.setItem("transactionsUpdated", Date.now().toString());
+}
+
 
 // ==========================================
 // API Helper
@@ -470,6 +475,8 @@ editForm.addEventListener("submit", async function (e) {
 
         await loadTransactions();
 
+        refreshTransactionData();
+
     }
 
     catch (error) {
@@ -514,6 +521,8 @@ async function deleteTransaction(transaction) {
         alert(result.message || "Transaction deleted successfully!");
 
         await loadTransactions();
+
+        refreshTransactionData();
 
     }
 

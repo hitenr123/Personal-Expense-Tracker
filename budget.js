@@ -1,87 +1,171 @@
+
 // ==========================================
-// Budget Page
+// Budget Page - Supabase Integration
 // ==========================================
+
+const API_URL = "https://personal-expense-tracker-7qhy.onrender.com/api/budget";
 
 const budgetForm = document.getElementById("budgetForm");
-
 const budgetInput = document.getElementById("budgetAmount");
 
 const monthlyBudget = document.getElementById("monthlyBudget");
-
 const budgetSpent = document.getElementById("budgetSpent");
-
 const budgetRemaining = document.getElementById("budgetRemaining");
 
+const budgetPercentage = document.getElementById("budgetPercentage");
+const budgetProgressBar = document.getElementById("budgetProgressBar");
+
 // ==========================================
-// Get Expenses
+// Currency Formatter
 // ==========================================
 
-function getBudgetExpenses() {
-  return JSON.parse(localStorage.getItem("expenses")) || [];
+function formatBudgetCurrency(amount) {
+    if (typeof window.formatCurrency === "function") {
+        return window.formatCurrency(amount);
+    }
+
+    return "₹" + Number(amount || 0).toLocaleString("en-IN");
 }
 
 // ==========================================
-// Calculate Monthly Expense
+// Get Current Month
 // ==========================================
 
-function getCurrentMonthExpense() {
-  const expenses = getBudgetExpenses();
+function getBudgetMonth() {
+    const now = new Date();
 
-  const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, "0");
 
-  const month = now.getMonth();
-
-  const year = now.getFullYear();
-
-  return expenses
-    .filter((expense) => {
-      const date = new Date(expense.date);
-
-      return date.getMonth() === month && date.getFullYear() === year;
-    })
-    .reduce((total, expense) => total + Number(expense.amount), 0);
+    return `${year}-${month}`;
 }
 
 // ==========================================
-// Update Budget
+// Load Budget From Database
 // ==========================================
 
-function updateBudget() {
-  const budget = Number(localStorage.getItem("monthlyBudget")) || 0;
+async function loadBudget() {
+    try {
+        const response = await fetch(
+            `${API_URL}?month=${getBudgetMonth()}`
+        );
 
-  const spent = getCurrentMonthExpense();
+        if (!response.ok) {
+            throw new Error("Failed to load budget");
+        }
 
-  const remaining = budget - spent;
+        const result = await response.json();
 
-  monthlyBudget.textContent = formatCurrency(budget);
-  budgetSpent.textContent = formatCurrency(spent);
-  budgetRemaining.textContent = formatCurrency(Math.max(remaining, 0));
+        if (result.status !== "success") {
+            throw new Error(result.message || "Could not load budget");
+        }
+
+        const data = result.data;
+
+        // Update summary cards
+        monthlyBudget.textContent = formatBudgetCurrency(data.budget);
+        budgetSpent.textContent = formatBudgetCurrency(data.spent);
+        budgetRemaining.textContent = formatBudgetCurrency(data.remaining);
+
+        // Update input
+        budgetInput.value = data.budget > 0 ? data.budget : "";
+
+        // Update progress
+        const percentage = Number(data.percentage || 0);
+
+        budgetPercentage.textContent = percentage + "%";
+
+        budgetProgressBar.style.width =
+            Math.min(percentage, 100) + "%";
+
+        // Change progress color when budget is exceeded
+        if (percentage >= 100) {
+            budgetProgressBar.style.background = "#ef4444";
+        } else if (percentage >= 80) {
+            budgetProgressBar.style.background = "#f59e0b";
+        } else {
+            budgetProgressBar.style.background = "#16a34a";
+        }
+
+    } catch (error) {
+        console.error("Budget loading error:", error);
+        alert("Unable to load budget. Please try again.");
+    }
 }
 
 // ==========================================
-// Save Budget
+// Save Budget To Supabase
 // ==========================================
 
-budgetForm.addEventListener("submit", function (event) {
-  event.preventDefault();
+budgetForm.addEventListener("submit", async function(event) {
+    event.preventDefault();
 
-  const budget = Number(budgetInput.value);
+    const budget = Number(budgetInput.value);
 
-  if (budget <= 0) {
-    alert("Please enter a valid budget.");
+    if (!Number.isFinite(budget) || budget <= 0) {
+        alert("Please enter a valid budget.");
+        return;
+    }
 
-    return;
-  }
+    const saveButton = budgetForm.querySelector(".save-btn");
 
-  localStorage.setItem("monthlyBudget", budget);
+    saveButton.disabled = true;
+    saveButton.innerHTML =
+        '<i class="fa-solid fa-spinner fa-spin"></i> Saving...';
 
-  updateBudget();
+    try {
+        const response = await fetch(API_URL, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                amount: budget,
+                month: getBudgetMonth()
+            })
+        });
 
-  alert("Monthly budget saved successfully!");
+        const result = await response.json();
+
+        if (!response.ok || result.status !== "success") {
+            throw new Error(result.error || result.message || "Failed to save budget");
+        }
+
+        alert("Monthly budget saved successfully!");
+
+        // Reload latest database values
+        await loadBudget();
+
+    } catch (error) {
+        console.error("Budget saving error:", error);
+        alert(error.message || "Unable to save budget.");
+    } finally {
+        saveButton.disabled = false;
+        saveButton.innerHTML =
+            '<i class="fa-solid fa-floppy-disk"></i> Save Budget';
+    }
+});
+
+// ==========================================
+// Reset Input
+// ==========================================
+
+budgetForm.addEventListener("reset", function() {
+    setTimeout(() => {
+        loadBudget();
+    }, 0);
 });
 
 // ==========================================
 // Initial Load
 // ==========================================
 
-updateBudget();
+document.addEventListener("DOMContentLoaded", loadBudget);
+
+// Refresh budget when transaction data changes
+window.addEventListener("storage", function (event) {
+    if (event.key === "transactionsUpdated") {
+        loadBudget();
+    }
+});
+

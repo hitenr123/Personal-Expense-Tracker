@@ -1,9 +1,11 @@
-
 // ==========================================
 // Expense Page - Supabase Integration
 // ==========================================
 
-const API_URL = "https://personal-expense-tracker-7qhy.onrender.com/api/expenses";
+const API_URL =
+  "https://personal-expense-tracker-7qhy.onrender.com/api/expenses";
+const BUDGET_API_URL =
+  "https://personal-expense-tracker-7qhy.onrender.com/api/budget";
 
 // Form elements
 const amountInput = document.getElementById("amount");
@@ -29,51 +31,49 @@ const remainingBudget = document.getElementById("remainingBudget");
 
 // Local date (avoids UTC date mismatch)
 function getLocalDate() {
-    const now = new Date();
-    const year = now.getFullYear();
-    const month = String(now.getMonth() + 1).padStart(2, "0");
-    const day = String(now.getDate()).padStart(2, "0");
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, "0");
+  const day = String(now.getDate()).padStart(2, "0");
 
-    return `${year}-${month}-${day}`;
+  return `${year}-${month}-${day}`;
 }
 
 function formatMoney(amount) {
-    if (typeof formatCurrency === "function") {
-        return formatCurrency(amount);
-    }
+  if (typeof formatCurrency === "function") {
+    return formatCurrency(amount);
+  }
 
-    return "₹" + Number(amount || 0).toLocaleString("en-IN");
+  return "₹" + Number(amount || 0).toLocaleString("en-IN");
 }
 
 // Set default date and time
 function setDefaultDateTime() {
-    const now = new Date();
+  const now = new Date();
 
-    if (dateInput) {
-        dateInput.value = getLocalDate();
-    }
+  if (dateInput) {
+    dateInput.value = getLocalDate();
+  }
 
-    if (timeInput) {
-        timeInput.value =
-            String(now.getHours()).padStart(2, "0") +
-            ":" +
-            String(now.getMinutes()).padStart(2, "0");
-    }
+  if (timeInput) {
+    timeInput.value =
+      String(now.getHours()).padStart(2, "0") +
+      ":" +
+      String(now.getMinutes()).padStart(2, "0");
+  }
 }
 
 setDefaultDateTime();
 
 // Live summary
 function updateLiveSummary() {
-    const amount = Number(amountInput.value) || 0;
+  const amount = Number(amountInput.value) || 0;
 
-    previewAmount.textContent = formatMoney(amount);
+  previewAmount.textContent = formatMoney(amount);
 
-    selectedCategory.textContent =
-        categorySelect.value || "Not Selected";
+  selectedCategory.textContent = categorySelect.value || "Not Selected";
 
-    selectedPayment.textContent =
-        paymentSelect.value || "Not Selected";
+  selectedPayment.textContent = paymentSelect.value || "Not Selected";
 }
 
 amountInput.addEventListener("input", updateLiveSummary);
@@ -82,131 +82,133 @@ paymentSelect.addEventListener("change", updateLiveSummary);
 
 // Fetch expenses from Supabase through Flask
 async function updateExpenseSummary() {
-    try {
-        const response = await fetch(API_URL);
+  try {
+    const response = await fetch(API_URL);
 
-        if (!response.ok) {
-            throw new Error("Could not fetch expenses");
-        }
-
-        const result = await response.json();
-        const expenses = result.data || [];
-
-        const today = getLocalDate();
-        const now = new Date();
-        const currentMonth = now.getMonth();
-        const currentYear = now.getFullYear();
-
-        const todayTotal = expenses
-            .filter(expense => expense.transaction_date === today)
-            .reduce((sum, expense) => sum + Number(expense.amount), 0);
-
-        const monthTotal = expenses
-            .filter(expense => {
-                const date = new Date(
-                    expense.transaction_date + "T00:00:00"
-                );
-
-                return (
-                    date.getMonth() === currentMonth &&
-                    date.getFullYear() === currentYear
-                );
-            })
-            .reduce((sum, expense) => sum + Number(expense.amount), 0);
-
-        const budget =
-            Number(localStorage.getItem("monthlyBudget")) || 0;
-
-        todayExpense.textContent = formatMoney(todayTotal);
-        monthExpense.textContent = formatMoney(monthTotal);
-
-        remainingBudget.textContent =
-            formatMoney(budget - monthTotal);
-
-    } catch (error) {
-        console.error("Summary error:", error);
+    if (!response.ok) {
+      throw new Error("Could not fetch expenses");
     }
+
+    const result = await response.json();
+    const expenses = result.data || [];
+
+    const today = getLocalDate();
+    const now = new Date();
+    const currentMonth = now.getMonth();
+    const currentYear = now.getFullYear();
+
+    const todayTotal = expenses
+      .filter((expense) => expense.transaction_date === today)
+      .reduce((sum, expense) => sum + Number(expense.amount), 0);
+
+    const monthTotal = expenses
+      .filter((expense) => {
+        const date = new Date(expense.transaction_date + "T00:00:00");
+
+        return (
+          date.getMonth() === currentMonth && date.getFullYear() === currentYear
+        );
+      })
+      .reduce((sum, expense) => sum + Number(expense.amount), 0);
+
+    const nowMonth = new Date();
+    const month = `${nowMonth.getFullYear()}-${String(
+      nowMonth.getMonth() + 1,
+    ).padStart(2, "0")}`;
+
+    const budgetResponse = await fetch(`${BUDGET_API_URL}?month=${month}`);
+
+    if (!budgetResponse.ok) {
+      throw new Error("Could not fetch budget");
+    }
+
+    const budgetResult = await budgetResponse.json();
+    const remaining = Number(budgetResult.data.remaining || 0);
+
+    todayExpense.textContent = formatMoney(todayTotal);
+    monthExpense.textContent = formatMoney(monthTotal);
+
+    remainingBudget.textContent = formatMoney(remaining);
+  } catch (error) {
+    console.error("Summary error:", error);
+  }
 }
 
 // Save expense to Supabase
 form.addEventListener("submit", async function (e) {
-    e.preventDefault();
+  e.preventDefault();
 
-    const amount = Number(amountInput.value);
+  const amount = Number(amountInput.value);
 
-    if (!amount || amount <= 0) {
-        alert("Please enter a valid expense amount.");
-        amountInput.focus();
-        return;
+  if (!amount || amount <= 0) {
+    alert("Please enter a valid expense amount.");
+    amountInput.focus();
+    return;
+  }
+
+  if (!categorySelect.value || !paymentSelect.value || !dateInput.value) {
+    alert("Please complete all required fields.");
+    return;
+  }
+
+  const expense = {
+    amount: amount,
+    category: categorySelect.value,
+    payment: paymentSelect.value,
+    account: accountSelect.value || "",
+    date: dateInput.value,
+    time: timeInput.value || "",
+    method: methodSelect.value || "",
+    notes: notesInput.value || "",
+    recurring: recurringInput.checked,
+    receipt: receiptInput.files.length ? receiptInput.files[0].name : "",
+  };
+
+  const saveButton = form.querySelector(".save-btn");
+  saveButton.disabled = true;
+  saveButton.textContent = "Saving...";
+
+  try {
+    const response = await fetch(API_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(expense),
+    });
+
+    const result = await response.json();
+
+    if (!response.ok) {
+      throw new Error(result.message || result.error || "Save failed");
     }
 
-    if (!categorySelect.value || !paymentSelect.value || !dateInput.value) {
-        alert("Please complete all required fields.");
-        return;
-    }
+    alert("Expense saved successfully!");
 
-    const expense = {
-        amount: amount,
-        category: categorySelect.value,
-        payment: paymentSelect.value,
-        account: accountSelect.value || "",
-        date: dateInput.value,
-        time: timeInput.value || "",
-        method: methodSelect.value || "",
-        notes: notesInput.value || "",
-        recurring: recurringInput.checked,
-        receipt: receiptInput.files.length
-            ? receiptInput.files[0].name
-            : ""
-    };
+    form.reset();
+    setDefaultDateTime();
 
-    const saveButton = form.querySelector(".save-btn");
-    saveButton.disabled = true;
-    saveButton.textContent = "Saving...";
+    previewAmount.textContent = formatMoney(0);
+    selectedCategory.textContent = "Not Selected";
+    selectedPayment.textContent = "Not Selected";
 
-    try {
-        const response = await fetch(API_URL, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(expense)
-        });
-
-        const result = await response.json();
-
-        if (!response.ok) {
-            throw new Error(result.message || result.error || "Save failed");
-        }
-
-        alert("Expense saved successfully!");
-
-        form.reset();
-        setDefaultDateTime();
-
-        previewAmount.textContent = formatMoney(0);
-        selectedCategory.textContent = "Not Selected";
-        selectedPayment.textContent = "Not Selected";
-
-        await updateExpenseSummary();
-
-    } catch (error) {
-        console.error("Save error:", error);
-        alert("Could not save expense: " + error.message);
-
-    } finally {
-        saveButton.disabled = false;
-        saveButton.textContent = "Save Expense";
-    }
+    await updateExpenseSummary();
+  } catch (error) {
+    console.error("Save error:", error);
+    alert("Could not save expense: " + error.message);
+  } finally {
+    saveButton.disabled = false;
+    saveButton.textContent = "Save Expense";
+  }
 });
 
 // Reset button
 form.addEventListener("reset", function () {
-    setTimeout(() => {
-        previewAmount.textContent = formatMoney(0);
-        selectedCategory.textContent = "Not Selected";
-        selectedPayment.textContent = "Not Selected";
-    }, 0);
+  setTimeout(() => {
+    previewAmount.textContent = formatMoney(0);
+    selectedCategory.textContent = "Not Selected";
+    selectedPayment.textContent = "Not Selected";
+  }, 0);
 });
 
 // Initial summary

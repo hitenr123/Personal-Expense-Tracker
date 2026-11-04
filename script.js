@@ -588,7 +588,12 @@ if (profile) {
 fetchDashboardData();
 
 
-
+// Refresh dashboard when transactions change
+window.addEventListener("storage", function (event) {
+    if (event.key === "transactionsUpdated") {
+        fetchDashboardData();
+    }
+});
 
 // ==========================================
 // Global Profile Name and Dashboard Greeting
