@@ -764,3 +764,56 @@ table{
         width: 100%;
     }
 }
+
+
+
+/* ==========================================
+   Transaction Action Buttons
+========================================== */
+
+.transaction-table-card td:last-child {
+    white-space: nowrap;
+}
+
+.edit-btn,
+.delete-btn {
+    border: none;
+    padding: 8px 11px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-family: 'Poppins', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    margin: 3px;
+    transition: 0.2s;
+}
+
+.edit-btn {
+    background: #dbeafe;
+    color: #2563eb;
+}
+
+.edit-btn:hover {
+    background: #2563eb;
+    color: white;
+}
+
+.delete-btn {
+    background: #fee2e2;
+    color: #dc2626;
+}
+
+.delete-btn:hover {
+    background: #dc2626;
+    color: white;
+}
+
+@media (max-width: 768px) {
+    .transaction-table-card {
+        overflow-x: auto;
+    }
+
+    .transaction-table-card table {
+        min-width: 750px;
+    }
+}
