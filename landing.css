@@ -662,3 +662,51 @@ html[data-theme="dark"] .login-btn:hover,
 html[data-theme="dark"] .secondary-btn:hover {
     background: #1e293b;
 }
+
+
+
+/* Mobile Navigation */
+.menu-toggle {
+    display: none;
+    background: transparent;
+    border: none;
+    color: #16a34a;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+@media (max-width: 768px) {
+
+    .navbar {
+        position: relative;
+        flex-wrap: wrap;
+    }
+
+    .menu-toggle {
+        display: block;
+    }
+
+    .navbar nav {
+        display: none;
+        width: 100%;
+        flex-direction: column;
+        align-items: center;
+        gap: 18px;
+        padding: 20px 0;
+    }
+
+    .navbar nav.active {
+        display: flex;
+    }
+
+    .navbar .nav-buttons {
+        display: none;
+        width: 100%;
+        justify-content: center;
+        padding-bottom: 15px;
+    }
+
+    .navbar nav.active + .nav-buttons {
+        display: flex;
+    }
+}
