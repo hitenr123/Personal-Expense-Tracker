@@ -3,7 +3,7 @@
 // Expense Page - Supabase Integration
 // ==========================================
 
-const API_URL = "http://127.0.0.1:5000/api/expenses";
+const API_URL = "https://personal-expense-tracker-7qhy.onrender.com/api/expenses";
 
 // Form elements
 const amountInput = document.getElementById("amount");

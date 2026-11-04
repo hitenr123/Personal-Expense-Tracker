@@ -1,4 +1,4 @@
-const API_URL = "http://127.0.0.1:5000/api";
+const API_URL = "https://personal-expense-tracker-7qhy.onrender.com/api";
 
 let reportChart = null;
 let expensePieChart = null;

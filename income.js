@@ -2,7 +2,7 @@
 // Income Page - Supabase Integration
 // ==========================================
 
-const API_URL = "http://127.0.0.1:5000/api/income";
+const API_URL = "https://personal-expense-tracker-7qhy.onrender.com/api/income";
 
 const incomeForm = document.getElementById("incomeForm");
 

@@ -3,8 +3,8 @@
 // Transactions Page - Supabase Integration
 // ==========================================
 
-const TRANSACTIONS_EXPENSE_API = "http://127.0.0.1:5000/api/expenses";
-const TRANSACTIONS_INCOME_API = "http://127.0.0.1:5000/api/income";
+const TRANSACTIONS_EXPENSE_API = "https://personal-expense-tracker-7qhy.onrender.com/api/expenses";
+const TRANSACTIONS_INCOME_API = "https://personal-expense-tracker-7qhy.onrender.com/api/income";
 
 const transactionBody = document.querySelector("table tbody");
 const searchInput = document.querySelector(".search input");

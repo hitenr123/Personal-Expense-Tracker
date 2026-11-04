@@ -4,8 +4,8 @@
 // Supabase Integration
 // ==========================================
 
-const EXPENSE_API = "http://127.0.0.1:5000/api/expenses";
-const INCOME_API = "http://127.0.0.1:5000/api/income";
+const EXPENSE_API = "https://personal-expense-tracker-7qhy.onrender.com/api/expenses";
+const INCOME_API = "https://personal-expense-tracker-7qhy.onrender.com/api/income";
 
 let dashboardExpenses = [];
 let dashboardIncomes = [];
