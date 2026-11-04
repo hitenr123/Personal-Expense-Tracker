@@ -4,8 +4,21 @@ from flask_cors import CORS
 from supabase_client import supabase
 
 app = Flask(__name__)
-CORS(app)
 
+CORS(
+    app,
+    resources={
+        r"/api/*": {
+            "origins": [
+                "http://127.0.0.1:5500",
+                "http://localhost:5500"
+            ],
+            "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+            "allow_headers": ["Content-Type", "Authorization"],
+            "supports_credentials": False
+        }
+    }
+)
 
 @app.route("/")
 def home():

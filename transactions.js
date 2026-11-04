@@ -32,12 +32,17 @@ let allTransactions = [];
 
 async function apiRequest(url, options = {}) {
 
+    const headers = {
+        ...options.headers
+    };
+
+    if (options.body) {
+        headers["Content-Type"] = "application/json";
+    }
+
     const response = await fetch(url, {
         ...options,
-        headers: {
-            "Content-Type": "application/json",
-            ...options.headers
-        }
+        headers
     });
 
     const result = await response.json();
