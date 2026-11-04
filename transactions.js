@@ -28,6 +28,9 @@ let allTransactions = [];
 // Refresh shared dashboard and budget data
 function refreshTransactionData() {
     localStorage.setItem("transactionsUpdated", Date.now().toString());
+
+    // Notify pages open in the same tab
+    window.dispatchEvent(new Event("transactionsUpdated"));
 }
 
 

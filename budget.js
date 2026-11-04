@@ -162,6 +162,17 @@ budgetForm.addEventListener("reset", function() {
 
 document.addEventListener("DOMContentLoaded", loadBudget);
 
+// Refresh budget when transactions are updated
+window.addEventListener("storage", function (event) {
+    if (event.key === "transactionsUpdated") {
+        loadBudget();
+    }
+});
+
+window.addEventListener("transactionsUpdated", function () {
+    loadBudget();
+});
+
 // Refresh budget when transaction data changes
 window.addEventListener("storage", function (event) {
     if (event.key === "transactionsUpdated") {

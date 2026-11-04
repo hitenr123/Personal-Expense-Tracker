@@ -595,6 +595,10 @@ window.addEventListener("storage", function (event) {
     }
 });
 
+window.addEventListener("transactionsUpdated", function () {
+    fetchDashboardData();
+});
+
 // ==========================================
 // Global Profile Name and Dashboard Greeting
 // ==========================================
