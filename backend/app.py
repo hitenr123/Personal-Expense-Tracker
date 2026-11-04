@@ -1,4 +1,4 @@
-
+from datetime import date
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 from supabase_client import supabase
@@ -568,6 +568,172 @@ def delete_goal(goal_id):
             "status": "success",
             "message": "Goal deleted successfully!"
         })
+
+    except Exception as e:
+        return jsonify({
+            "status": "error",
+            "message": str(e)
+        }), 500
+
+
+
+# ==========================================
+# Budget Helpers
+# ==========================================
+
+def get_budget_month_range(month_value=None):
+    if month_value:
+        start = date.fromisoformat(month_value + "-01")
+    else:
+        start = date.today().replace(day=1)
+
+    if start.month == 12:
+        next_month = date(start.year + 1, 1, 1)
+    else:
+        next_month = date(start.year, start.month + 1, 1)
+
+    return start.isoformat(), next_month.isoformat()
+
+
+# ==========================================
+# Get Monthly Budget and Spending
+# ==========================================
+
+@app.route("/api/budget", methods=["GET"])
+def get_budget():
+    try:
+        month = request.args.get("month")
+        month_start, next_month = get_budget_month_range(month)
+
+        # Get saved monthly budget
+        budget_response = (
+            supabase.table("budgets")
+            .select("*")
+            .eq("category", "Overall")
+            .eq("month", month_start)
+            .limit(1)
+            .execute()
+        )
+
+        budget_data = (
+            budget_response.data[0]
+            if budget_response.data
+            else None
+        )
+
+        budget_amount = (
+            float(budget_data["amount"])
+            if budget_data
+            else 0
+        )
+
+        # Get expenses for the selected month
+        expense_response = (
+            supabase.table("transactions")
+            .select("amount")
+            .eq("type", "expense")
+            .gte("transaction_date", month_start)
+            .lt("transaction_date", next_month)
+            .execute()
+        )
+
+        spent = sum(
+            float(expense.get("amount", 0))
+            for expense in expense_response.data
+        )
+
+        remaining = max(budget_amount - spent, 0)
+
+        percentage = (
+            round((spent / budget_amount) * 100, 2)
+            if budget_amount > 0
+            else 0
+        )
+
+        return jsonify({
+            "status": "success",
+            "data": {
+                "budget": budget_amount,
+                "spent": spent,
+                "remaining": remaining,
+                "percentage": percentage,
+                "month": month_start,
+                "budget_id": budget_data["id"] if budget_data else None
+            }
+        })
+
+    except Exception as e:
+        return jsonify({
+            "status": "error",
+            "message": str(e)
+        }), 500
+
+
+# ==========================================
+# Save or Update Monthly Budget
+# ==========================================
+
+@app.route("/api/budget", methods=["POST"])
+def save_budget():
+    try:
+        data = request.get_json()
+
+        if not data:
+            return jsonify({"error": "No budget data provided"}), 400
+
+        amount = float(data.get("amount", 0))
+
+        if amount <= 0:
+            return jsonify({
+                "error": "Budget must be greater than zero"
+            }), 400
+
+        month_start, _ = get_budget_month_range(
+            data.get("month")
+        )
+
+        # Check whether this month's budget already exists
+        existing = (
+            supabase.table("budgets")
+            .select("id")
+            .eq("category", "Overall")
+            .eq("month", month_start)
+            .limit(1)
+            .execute()
+        )
+
+        budget_record = {
+            "category": "Overall",
+            "amount": amount,
+            "month": month_start
+        }
+
+        if existing.data:
+            # Update existing budget
+            response = (
+                supabase.table("budgets")
+                .update(budget_record)
+                .eq("id", existing.data[0]["id"])
+                .execute()
+            )
+        else:
+            # Insert new budget
+            response = (
+                supabase.table("budgets")
+                .insert(budget_record)
+                .execute()
+            )
+
+        return jsonify({
+            "status": "success",
+            "message": "Monthly budget saved successfully!",
+            "data": response.data
+        }), 201
+
+    except ValueError:
+        return jsonify({
+            "error": "Invalid budget amount or month"
+        }), 400
 
     except Exception as e:
         return jsonify({
