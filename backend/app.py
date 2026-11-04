@@ -200,6 +200,194 @@ def get_income():
         }), 500
 
 
+
+# ==========================================
+# Edit Expense
+# ==========================================
+
+@app.route("/api/expenses/<expense_id>", methods=["PUT"])
+def update_expense(expense_id):
+    try:
+        data = request.get_json()
+
+        if not data:
+            return jsonify({"error": "No update data provided"}), 400
+
+        updates = {}
+
+        if "amount" in data:
+            amount = float(data["amount"])
+
+            if amount <= 0:
+                return jsonify({"error": "Amount must be greater than zero"}), 400
+
+            updates["amount"] = amount
+
+        if "category" in data:
+            category = str(data["category"]).strip()
+
+            if not category:
+                return jsonify({"error": "Category is required"}), 400
+
+            updates["category"] = category
+
+        if "description" in data:
+            updates["notes"] = data["description"]
+
+        if "date" in data:
+            if not data["date"]:
+                return jsonify({"error": "Date is required"}), 400
+
+            updates["transaction_date"] = data["date"]
+
+        if not updates:
+            return jsonify({"error": "No valid fields to update"}), 400
+
+        response = (
+            supabase.table("transactions")
+            .update(updates)
+            .eq("id", expense_id)
+            .eq("type", "expense")
+            .execute()
+        )
+
+        if not response.data:
+            return jsonify({"error": "Expense not found"}), 404
+
+        return jsonify({
+            "status": "success",
+            "message": "Expense updated successfully!",
+            "data": response.data
+        })
+
+    except (ValueError, TypeError):
+        return jsonify({"error": "Invalid amount"}), 400
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
+# ==========================================
+# Delete Expense
+# ==========================================
+
+@app.route("/api/expenses/<expense_id>", methods=["DELETE"])
+def delete_expense(expense_id):
+    try:
+        response = (
+            supabase.table("transactions")
+            .delete()
+            .eq("id", expense_id)
+            .eq("type", "expense")
+            .execute()
+        )
+
+        if not response.data:
+            return jsonify({"error": "Expense not found"}), 404
+
+        return jsonify({
+            "status": "success",
+            "message": "Expense deleted successfully!"
+        })
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
+# ==========================================
+# Edit Income
+# ==========================================
+
+@app.route("/api/income/<income_id>", methods=["PUT"])
+def update_income(income_id):
+    try:
+        data = request.get_json()
+
+        if not data:
+            return jsonify({"error": "No update data provided"}), 400
+
+        updates = {}
+
+        if "amount" in data:
+            amount = float(data["amount"])
+
+            if amount <= 0:
+                return jsonify({"error": "Amount must be greater than zero"}), 400
+
+            updates["amount"] = amount
+
+        if "category" in data:
+            category = str(data["category"]).strip()
+
+            if not category:
+                return jsonify({"error": "Category is required"}), 400
+
+            updates["category"] = category
+
+        if "description" in data:
+            updates["received_from"] = data["description"]
+
+        if "date" in data:
+            if not data["date"]:
+                return jsonify({"error": "Date is required"}), 400
+
+            updates["transaction_date"] = data["date"]
+
+        if not updates:
+            return jsonify({"error": "No valid fields to update"}), 400
+
+        response = (
+            supabase.table("transactions")
+            .update(updates)
+            .eq("id", income_id)
+            .eq("type", "income")
+            .execute()
+        )
+
+        if not response.data:
+            return jsonify({"error": "Income not found"}), 404
+
+        return jsonify({
+            "status": "success",
+            "message": "Income updated successfully!",
+            "data": response.data
+        })
+
+    except (ValueError, TypeError):
+        return jsonify({"error": "Invalid amount"}), 400
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
+# ==========================================
+# Delete Income
+# ==========================================
+
+@app.route("/api/income/<income_id>", methods=["DELETE"])
+def delete_income(income_id):
+    try:
+        response = (
+            supabase.table("transactions")
+            .delete()
+            .eq("id", income_id)
+            .eq("type", "income")
+            .execute()
+        )
+
+        if not response.data:
+            return jsonify({"error": "Income not found"}), 404
+
+        return jsonify({
+            "status": "success",
+            "message": "Income deleted successfully!"
+        })
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
+
 # ==========================================
 # Save Financial Goal
 # ==========================================

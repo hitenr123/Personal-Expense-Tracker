@@ -24,7 +24,7 @@ let allTransactions = [];
 // ==========================================
 
 async function getExpenses() {
-    const response = await fetch(EXPENSE_API);
+    const response = await fetch(TRANSACTIONS_EXPENSE_API);
 
     if (!response.ok) {
         throw new Error("Unable to fetch expenses");
@@ -41,7 +41,7 @@ async function getExpenses() {
 // ==========================================
 
 async function getIncomes() {
-    const response = await fetch(INCOME_API);
+    const response = await fetch(TRANSACTIONS_INCOME_API);
 
     if (!response.ok) {
         throw new Error("Unable to fetch income");
