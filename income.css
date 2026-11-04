@@ -828,3 +828,377 @@ textarea::-webkit-scrollbar-thumb{
   }
 
 }
+
+
+/* ==========================================
+   INCOME PAGE - DASHBOARD DARK MODE
+========================================== */
+
+/* Header */
+html[data-theme="dark"] .income-header h1 {
+    color: #f8fafc;
+}
+
+html[data-theme="dark"] .income-header p {
+    color: #94a3b8;
+}
+
+/* History button */
+html[data-theme="dark"] .history-btn {
+    background: #16a34a;
+    color: #ffffff;
+}
+
+html[data-theme="dark"] .history-btn:hover {
+    background: #15803d;
+}
+
+/* Illustration card */
+html[data-theme="dark"] .illustration-card {
+    background: #0f172a;
+    border: 1px solid #1e293b;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+html[data-theme="dark"] .illustration-card h2 {
+    color: #4ade80;
+}
+
+html[data-theme="dark"] .illustration-card p {
+    color: #94a3b8;
+}
+
+/* Quick stats */
+html[data-theme="dark"] .stat {
+    background: #0f172a;
+    border: 1px solid #1e293b;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+html[data-theme="dark"] .stat h3 {
+    color: #f8fafc;
+}
+
+html[data-theme="dark"] .stat span {
+    color: #94a3b8;
+}
+
+html[data-theme="dark"] .stat i {
+    background: #16a34a;
+    color: #ffffff;
+}
+
+/* Income form card */
+html[data-theme="dark"] .income-card {
+    background: #0f172a;
+    border: 1px solid #1e293b;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+/* Card headings */
+html[data-theme="dark"] .card-title h2 {
+    color: #f8fafc;
+}
+
+html[data-theme="dark"] .card-title i {
+    background: #16a34a;
+    color: #ffffff;
+}
+
+/* Form labels */
+html[data-theme="dark"] .form-group label,
+html[data-theme="dark"] .checkbox-group label {
+    color: #cbd5e1;
+}
+
+/* Form inputs */
+html[data-theme="dark"] .form-group input,
+html[data-theme="dark"] .form-group select,
+html[data-theme="dark"] .form-group textarea {
+    background: #1e293b;
+    color: #f8fafc;
+    border-color: #334155;
+}
+
+html[data-theme="dark"] .form-group input::placeholder,
+html[data-theme="dark"] .form-group textarea::placeholder {
+    color: #94a3b8;
+}
+
+html[data-theme="dark"] .form-group select option {
+    background: #1e293b;
+    color: #f8fafc;
+}
+
+/* Input focus */
+html[data-theme="dark"] .form-group input:focus,
+html[data-theme="dark"] .form-group select:focus,
+html[data-theme="dark"] .form-group textarea:focus {
+    border-color: #16a34a;
+    box-shadow: 0 0 0 4px rgba(22, 163, 74, 0.15);
+}
+
+/* Amount input */
+html[data-theme="dark"] .amount-input {
+    background: #1e293b;
+    border-color: #334155;
+}
+
+html[data-theme="dark"] .amount-input span {
+    background: #16a34a;
+    color: #ffffff;
+}
+
+html[data-theme="dark"] .amount-input input {
+    background: #1e293b;
+    color: #f8fafc;
+}
+
+/* Checkbox */
+html[data-theme="dark"] .checkbox-group input {
+    accent-color: #16a34a;
+}
+
+/* Buttons */
+html[data-theme="dark"] .reset-btn {
+    background: #334155;
+    color: #e2e8f0;
+}
+
+html[data-theme="dark"] .reset-btn:hover {
+    background: #475569;
+}
+
+html[data-theme="dark"] .save-btn {
+    background: #16a34a;
+    color: #ffffff;
+}
+
+html[data-theme="dark"] .save-btn:hover {
+    background: #15803d;
+}
+
+/* Income summary card */
+html[data-theme="dark"] .summary-card {
+    background: #0f172a;
+    border: 1px solid #1e293b;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+html[data-theme="dark"] .summary-item {
+    border-bottom-color: #334155;
+}
+
+html[data-theme="dark"] .summary-item span {
+    color: #94a3b8;
+}
+
+html[data-theme="dark"] .summary-item h3 {
+    color: #f8fafc;
+}
+
+html[data-theme="dark"] .summary-item h2 {
+    color: #4ade80;
+}
+
+/* ==========================================
+   FINANCIAL GOALS - DARK MODE
+========================================== */
+
+html[data-theme="dark"] .goal-card {
+    background: #0f172a;
+    border: 1px solid #1e293b;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+}
+
+html[data-theme="dark"] .goal-card:hover {
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+}
+
+/* Goal title */
+html[data-theme="dark"] .goal-title h3 {
+    color: #f8fafc;
+}
+
+html[data-theme="dark"] .goal-title p {
+    color: #94a3b8;
+}
+
+/* Goal icon */
+html[data-theme="dark"] .goal-icon {
+    background: #16a34a;
+    color: #ffffff;
+}
+
+/* Goal statistics */
+html[data-theme="dark"] .goal-stat {
+    background: #1e293b;
+}
+
+html[data-theme="dark"] .goal-stat span {
+    color: #94a3b8;
+}
+
+html[data-theme="dark"] .goal-stat strong {
+    color: #f8fafc;
+}
+
+/* Progress bar */
+html[data-theme="dark"] .progress-track {
+    background: #334155;
+}
+
+html[data-theme="dark"] .progress-fill {
+    background: #16a34a;
+}
+
+html[data-theme="dark"] .goal-progress span {
+    color: #94a3b8;
+}
+
+/* Goal action buttons */
+html[data-theme="dark"] .edit-goal {
+    background: #1e3a5f;
+    color: #60a5fa;
+}
+
+html[data-theme="dark"] .remove-goal {
+    background: #451a1a;
+    color: #f87171;
+}
+
+/* Empty goals */
+html[data-theme="dark"] .no-goals {
+    color: #94a3b8;
+}
+
+html[data-theme="dark"] .no-goals h3 {
+    color: #f8fafc;
+}
+
+html[data-theme="dark"] .no-goals p {
+    color: #94a3b8;
+}
+
+html[data-theme="dark"] .no-goals i {
+    color: #4ade80;
+}
+
+
+
+
+/* ===========================
+   BUDGET PAGE - DARK MODE
+=========================== */
+
+html[data-theme="dark"] .income-header h1 {
+    color: #f8fafc;
+}
+
+html[data-theme="dark"] .income-header p {
+    color: #94a3b8;
+}
+
+html[data-theme="dark"] .income-layout {
+    color: #e2e8f0;
+}
+
+html[data-theme="dark"] .income-right {
+    color: #e2e8f0;
+}
+
+html[data-theme="dark"] .income-summary {
+    color: #e2e8f0;
+}
+
+html[data-theme="dark"] .summary-card h2 {
+    color: #4ade80;
+}
+
+html[data-theme="dark"] .summary-card span {
+    color: #94a3b8;
+}
+
+
+
+/* ===========================
+   BUDGET SUMMARY CARDS
+=========================== */
+
+.income-summary {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.income-summary .summary-card {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 25px;
+    min-height: 115px;
+    background: #ffffff;
+    border: 1px solid #e8edf3;
+    border-radius: 16px;
+    box-shadow: 0 5px 18px rgba(0, 0, 0, 0.04);
+    transition: all 0.25s ease;
+}
+
+.income-summary .summary-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+}
+
+.income-summary .summary-icon {
+    width: 58px;
+    height: 58px;
+    min-width: 58px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 15px;
+    background: #ecfdf5;
+    color: #16a34a;
+    font-size: 23px;
+}
+
+.income-summary .summary-card span {
+    display: block;
+    margin-bottom: 8px;
+    color: #64748b;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.income-summary .summary-card h2 {
+    color: #172033;
+    font-size: 25px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+}
+
+/* DARK MODE */
+
+html[data-theme="dark"] .income-summary .summary-card {
+    background: #0f172a;
+    border-color: #1e293b;
+    box-shadow: 0 5px 18px rgba(0, 0, 0, 0.15);
+}
+
+html[data-theme="dark"] .income-summary .summary-card:hover {
+    border-color: #334155;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+}
+
+html[data-theme="dark"] .income-summary .summary-icon {
+    background: #052e1b;
+    color: #4ade80;
+}
+
+html[data-theme="dark"] .income-summary .summary-card span {
+    color: #94a3b8;
+}
+
+html[data-theme="dark"] .income-summary .summary-card h2 {
+    color: #f8fafc;
+}

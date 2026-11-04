@@ -774,3 +774,156 @@ input[type="file"]::file-selector-button:hover{
     color:white;
 
 }
+
+
+/* ==========================================
+   EXPENSE PAGE - DASHBOARD DARK MODE
+========================================== */
+
+/* Page heading */
+html[data-theme="dark"] .expense-header h1 {
+    color: #f8fafc;
+}
+
+html[data-theme="dark"] .expense-header p {
+    color: #94a3b8;
+}
+
+/* Main cards */
+html[data-theme="dark"] .expense-card,
+html[data-theme="dark"] .summary-card {
+    background: #0f172a;
+    border: 1px solid #1e293b;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+html[data-theme="dark"] .expense-card:hover,
+html[data-theme="dark"] .summary-card:hover {
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.4);
+}
+
+/* Card headings */
+html[data-theme="dark"] .card-title h2 {
+    color: #f8fafc;
+}
+
+html[data-theme="dark"] .card-title i {
+    background: #16a34a;
+    color: #ffffff;
+}
+
+/* Form labels */
+html[data-theme="dark"] .form-group label,
+html[data-theme="dark"] .checkbox-group label {
+    color: #cbd5e1;
+}
+
+/* Amount input */
+html[data-theme="dark"] .amount-input {
+    background: #1e293b;
+    border-color: #334155;
+}
+
+html[data-theme="dark"] .amount-input:focus-within {
+    background: #1e293b;
+    border-color: #16a34a;
+}
+
+html[data-theme="dark"] .amount-input span {
+    color: #4ade80;
+}
+
+html[data-theme="dark"] .amount-input input {
+    background: transparent;
+    color: #f8fafc;
+}
+
+/* All form fields */
+html[data-theme="dark"] .form-group input,
+html[data-theme="dark"] .form-group select,
+html[data-theme="dark"] .form-group textarea {
+    background: #1e293b;
+    color: #f8fafc;
+    border: 1px solid #334155;
+}
+
+html[data-theme="dark"] .form-group input:focus,
+html[data-theme="dark"] .form-group select:focus,
+html[data-theme="dark"] .form-group textarea:focus {
+    background: #1e293b;
+    border-color: #16a34a;
+    box-shadow: 0 0 0 4px rgba(22, 163, 74, 0.15);
+}
+
+/* Dropdown options */
+html[data-theme="dark"] .form-group select option {
+    background: #1e293b;
+    color: #f8fafc;
+}
+
+/* Placeholders */
+html[data-theme="dark"] .form-group input::placeholder,
+html[data-theme="dark"] .form-group textarea::placeholder,
+html[data-theme="dark"] .amount-input input::placeholder {
+    color: #94a3b8;
+}
+
+/* File upload */
+html[data-theme="dark"] input[type="file"] {
+    color: #cbd5e1;
+}
+
+/* Checkbox */
+html[data-theme="dark"] .checkbox-group input {
+    accent-color: #16a34a;
+}
+
+/* Save button */
+html[data-theme="dark"] .save-btn {
+    background: #16a34a;
+    color: #ffffff;
+}
+
+html[data-theme="dark"] .save-btn:hover {
+    background: #15803d;
+}
+
+/* Reset button */
+html[data-theme="dark"] .reset-btn {
+    background: #334155;
+    color: #e2e8f0;
+}
+
+html[data-theme="dark"] .reset-btn:hover {
+    background: #475569;
+}
+
+/* Summary section */
+html[data-theme="dark"] .summary-item {
+    border-bottom-color: #334155;
+}
+
+html[data-theme="dark"] .summary-item span {
+    color: #94a3b8;
+}
+
+html[data-theme="dark"] .summary-item h2 {
+    color: #4ade80;
+}
+
+html[data-theme="dark"] .summary-item h3 {
+    color: #f8fafc;
+}
+
+/* Input hover */
+html[data-theme="dark"] .form-group input:hover,
+html[data-theme="dark"] .form-group select:hover,
+html[data-theme="dark"] .form-group textarea:hover {
+    border-color: #475569;
+}
+
+/* Selection */
+html[data-theme="dark"] ::selection {
+    background: #16a34a;
+    color: #ffffff;
+}

@@ -559,3 +559,191 @@
         width: 100%;
     }
 }
+
+
+
+/* ==========================================
+   TRANSACTIONS - DASHBOARD MATCHING DARK MODE
+========================================== */
+
+/* Page heading */
+html[data-theme="dark"] .transaction-header h1 {
+    color: #f8fafc;
+}
+
+html[data-theme="dark"] .transaction-header p {
+    color: #94a3b8;
+}
+
+/* Summary cards */
+html[data-theme="dark"] .summary-card {
+    background: #0f172a;
+    border: 1px solid #1e293b;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+html[data-theme="dark"] .summary-card h3 {
+    color: #94a3b8;
+}
+
+html[data-theme="dark"] .summary-card h2 {
+    color: #f8fafc;
+}
+
+/* Search and filter container */
+html[data-theme="dark"] .transaction-tools {
+    background: #0f172a;
+    border: 1px solid #1e293b;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+html[data-theme="dark"] .search {
+    background: #1e293b;
+}
+
+html[data-theme="dark"] .search input {
+    color: #f8fafc;
+}
+
+html[data-theme="dark"] .search input::placeholder {
+    color: #94a3b8;
+}
+
+html[data-theme="dark"] .transaction-tools select {
+    background: #1e293b;
+    color: #e2e8f0;
+    border: 1px solid #334155;
+}
+
+/* Transaction table card */
+html[data-theme="dark"] .transaction-table-card {
+    background: #0f172a;
+    border: 1px solid #1e293b;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+html[data-theme="dark"] .transaction-table-card h2 {
+    color: #f8fafc;
+}
+
+/* Table header */
+html[data-theme="dark"] .transaction-table-card thead {
+    background: #1e293b;
+}
+
+html[data-theme="dark"] .transaction-table-card th {
+    color: #cbd5e1;
+}
+
+/* Table body */
+html[data-theme="dark"] .transaction-table-card td {
+    color: #e2e8f0;
+    border-bottom: 1px solid #1e293b;
+}
+
+html[data-theme="dark"] .transaction-table-card tbody tr:hover {
+    background: #1e293b;
+}
+
+/* Category icon */
+html[data-theme="dark"] .transaction-table-card td:first-child i {
+    background: #16a34a;
+    color: #ffffff;
+}
+
+/* Income and expense amounts */
+html[data-theme="dark"] .expense {
+    color: #f87171;
+}
+
+html[data-theme="dark"] .income {
+    color: #4ade80;
+}
+
+/* Badges */
+html[data-theme="dark"] .badge.red {
+    background: rgba(239, 68, 68, 0.15);
+    color: #fca5a5;
+}
+
+html[data-theme="dark"] .badge.green {
+    background: rgba(22, 163, 74, 0.15);
+    color: #4ade80;
+}
+
+/* Edit button */
+html[data-theme="dark"] .edit-btn {
+    background: #1e3a5f;
+    color: #60a5fa;
+    border-color: #1d4ed8;
+}
+
+html[data-theme="dark"] .edit-btn:hover {
+    background: #2563eb;
+    color: #ffffff;
+}
+
+/* Delete button */
+html[data-theme="dark"] .delete-btn {
+    background: #451a1a;
+    color: #f87171;
+    border-color: #7f1d1d;
+}
+
+html[data-theme="dark"] .delete-btn:hover {
+    background: #dc2626;
+    color: #ffffff;
+}
+
+/* Edit modal */
+html[data-theme="dark"] .edit-modal-content {
+    background: #0f172a;
+    border: 1px solid #1e293b;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
+}
+
+html[data-theme="dark"] .modal-header h2 {
+    color: #f8fafc;
+}
+
+html[data-theme="dark"] #closeEditModal {
+    color: #94a3b8;
+}
+
+/* Modal labels */
+html[data-theme="dark"] #editTransactionForm label {
+    color: #cbd5e1;
+}
+
+/* Modal inputs */
+html[data-theme="dark"] #editTransactionForm input,
+html[data-theme="dark"] #editTransactionForm select {
+    background: #1e293b;
+    color: #f8fafc;
+    border-color: #334155;
+}
+
+html[data-theme="dark"] #editTransactionForm input:focus,
+html[data-theme="dark"] #editTransactionForm select:focus {
+    border-color: #16a34a;
+    box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.15);
+}
+
+/* Modal buttons */
+html[data-theme="dark"] #cancelEdit {
+    background: #334155;
+    color: #e2e8f0;
+}
+
+html[data-theme="dark"] #cancelEdit:hover {
+    background: #475569;
+}
+
+html[data-theme="dark"] .modal-buttons button[type="submit"] {
+    background: #16a34a;
+    color: #ffffff;
+}
+
+html[data-theme="dark"] .modal-buttons button[type="submit"]:hover {
+    background: #15803d;
+}

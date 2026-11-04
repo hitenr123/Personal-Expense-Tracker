@@ -1688,3 +1688,215 @@ input:focus {
     transition: 0.4s ease;
   }
 }
+
+
+/* ==========================================
+   DARK MODE - Expense Manager
+   ========================================== */
+
+html[data-theme="dark"] body {
+    background: linear-gradient(135deg, #020617, #0f172a);
+    color: #e2e8f0;
+}
+
+/* Main text */
+html[data-theme="dark"] .greeting h1,
+html[data-theme="dark"] .profile span,
+html[data-theme="dark"] .title h2,
+html[data-theme="dark"] .card h2,
+html[data-theme="dark"] .transaction h4,
+html[data-theme="dark"] .category-card h2,
+html[data-theme="dark"] .quick-card h2 {
+    color: #f8fafc;
+}
+
+/* Secondary text */
+html[data-theme="dark"] .greeting p,
+html[data-theme="dark"] .card h3,
+html[data-theme="dark"] .transaction small,
+html[data-theme="dark"] .footer {
+    color: #94a3b8;
+}
+
+/* Dashboard cards */
+html[data-theme="dark"] .card,
+html[data-theme="dark"] .chart-card,
+html[data-theme="dark"] .transaction-card,
+html[data-theme="dark"] .category-card,
+html[data-theme="dark"] .quick-card {
+    background: #0f172a;
+    border-color: #1e293b;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+/* Transactions */
+html[data-theme="dark"] .transaction:hover {
+    background: #1e293b;
+}
+
+/* Quick action buttons */
+html[data-theme="dark"] .actions button {
+    background: #1e293b;
+    color: #e2e8f0;
+}
+
+html[data-theme="dark"] .actions button:hover {
+    background: #16a34a;
+    color: #ffffff;
+}
+
+/* Profile hover */
+html[data-theme="dark"] .profile:hover {
+    background: #1e293b;
+}
+
+/* Menu icon and notification */
+html[data-theme="dark"] .menu-icon,
+html[data-theme="dark"] .top-right .fa-bell {
+    color: #e2e8f0;
+}
+
+/* Scrollbar */
+html[data-theme="dark"] ::-webkit-scrollbar-track {
+    background: #0f172a;
+}
+
+html[data-theme="dark"] ::-webkit-scrollbar-thumb {
+    background: #475569;
+}
+
+/* Form fields */
+html[data-theme="dark"] input,
+html[data-theme="dark"] select,
+html[data-theme="dark"] textarea {
+    background: #1e293b;
+    color: #f8fafc;
+    border-color: #475569;
+}
+
+html[data-theme="dark"] input::placeholder,
+html[data-theme="dark"] textarea::placeholder {
+    color: #94a3b8;
+}
+
+
+
+/* ==========================================
+   DARK MODE - TRANSACTIONS, EXPENSE, INCOME
+   AND BUDGETS
+========================================== */
+
+/* Page backgrounds */
+html[data-theme="dark"] body {
+    background: #020617;
+    color: #e2e8f0;
+}
+
+/* Main headings */
+html[data-theme="dark"] h1,
+html[data-theme="dark"] h2,
+html[data-theme="dark"] h3,
+html[data-theme="dark"] h4,
+html[data-theme="dark"] label {
+    color: #f1f5f9;
+}
+
+/* Paragraphs and secondary text */
+html[data-theme="dark"] p,
+html[data-theme="dark"] small,
+html[data-theme="dark"] .subtitle {
+    color: #94a3b8;
+}
+
+/* Cards and containers */
+html[data-theme="dark"] .form-card,
+html[data-theme="dark"] .expense-card,
+html[data-theme="dark"] .income-card,
+html[data-theme="dark"] .budget-card,
+html[data-theme="dark"] .transaction-card,
+html[data-theme="dark"] .table-container,
+html[data-theme="dark"] .content-card,
+html[data-theme="dark"] .summary-card,
+html[data-theme="dark"] .section-card {
+    background: #0f172a;
+    color: #e2e8f0;
+    border-color: #1e293b;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
+}
+
+/* Input fields */
+html[data-theme="dark"] input,
+html[data-theme="dark"] select,
+html[data-theme="dark"] textarea {
+    background: #1e293b;
+    color: #f8fafc;
+    border: 1px solid #334155;
+}
+
+/* Input placeholders */
+html[data-theme="dark"] input::placeholder,
+html[data-theme="dark"] textarea::placeholder {
+    color: #94a3b8;
+}
+
+/* Dropdown options */
+html[data-theme="dark"] select option {
+    background: #1e293b;
+    color: #f8fafc;
+}
+
+/* Tables */
+html[data-theme="dark"] table {
+    background: #0f172a;
+    color: #e2e8f0;
+    border-color: #334155;
+}
+
+html[data-theme="dark"] th {
+    background: #1e293b;
+    color: #f8fafc;
+}
+
+html[data-theme="dark"] td {
+    color: #cbd5e1;
+    border-color: #334155;
+}
+
+html[data-theme="dark"] tr {
+    border-color: #334155;
+}
+
+html[data-theme="dark"] tbody tr:hover {
+    background: #1e293b;
+}
+
+/* Buttons */
+html[data-theme="dark"] button {
+    color: #f8fafc;
+}
+
+html[data-theme="dark"] .btn-secondary,
+html[data-theme="dark"] .cancel-btn {
+    background: #334155;
+    color: #f8fafc;
+}
+
+/* Borders and dividers */
+html[data-theme="dark"] hr,
+html[data-theme="dark"] .divider {
+    border-color: #334155;
+}
+
+/* Budget progress backgrounds */
+html[data-theme="dark"] .progress,
+html[data-theme="dark"] .progress-bar-bg {
+    background: #334155;
+}
+
+/* File upload areas */
+html[data-theme="dark"] .upload-area,
+html[data-theme="dark"] .receipt-upload {
+    background: #1e293b;
+    border-color: #475569;
+    color: #cbd5e1;
+}
