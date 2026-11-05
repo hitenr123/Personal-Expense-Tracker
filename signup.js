@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const confirmPasswordInput = document.getElementById("confirmPassword");
 
     // Flask Backend URL
-    const API_URL = "http://127.0.0.1:5000";
+    const API_URL = "https://personal-expense-tracker-7qhy.onrender.com";
 
     // 1. Apply saved theme
     const savedTheme = localStorage.getItem("theme") || "light";
