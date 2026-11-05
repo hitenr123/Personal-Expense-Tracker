@@ -196,7 +196,19 @@ budgetForm.addEventListener("reset", function() {
 // Initial Load
 // ==========================================
 
-document.addEventListener("DOMContentLoaded", loadBudget);
+async function initializeBudgetPage() {
+    const isLoggedIn = await checkLogin();
+
+    if (!isLoggedIn) return;
+
+    await loadBudget();
+}
+
+if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initializeBudgetPage);
+} else {
+    initializeBudgetPage();
+}
 
 // Refresh budget when transactions are updated
 window.addEventListener("storage", function (event) {
