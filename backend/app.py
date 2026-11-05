@@ -1,9 +1,31 @@
-from datetime import date
-from flask import Flask, jsonify, request
+import os
+import secrets
+import hashlib
+from datetime import date, datetime, timedelta, timezone
+
+from flask import Flask, jsonify, request, session
 from flask_cors import CORS
+from werkzeug.security import generate_password_hash, check_password_hash
 from supabase_client import supabase
+from dotenv import load_dotenv
+
+
+load_dotenv()
 
 app = Flask(__name__)
+
+app.secret_key = os.getenv("FLASK_SECRET_KEY")
+
+if not app.secret_key:
+    raise ValueError("FLASK_SECRET_KEY is missing from .env")
+
+app.config.update(
+    SESSION_COOKIE_HTTPONLY=True,
+    SESSION_COOKIE_SECURE=True,
+    SESSION_COOKIE_SAMESITE="None",
+    PERMANENT_SESSION_LIFETIME=timedelta(days=7)
+)
+
 
 CORS(
     app,
@@ -15,7 +37,7 @@ CORS(
             ],
             "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
             "allow_headers": ["Content-Type", "Authorization"],
-            "supports_credentials": False
+            "supports_credentials": True
         }
     }
 )
@@ -48,6 +70,233 @@ def test_database():
             "status": "error",
             "message": str(e)
         }), 500
+
+
+# ==========================================
+# Authentication Helper Functions
+# ==========================================
+
+def hash_token(token):
+    return hashlib.sha256(token.encode()).hexdigest()
+
+
+def get_current_user():
+    token = request.cookies.get("auth_token")
+
+    if not token:
+        return None
+
+    token_hash = hash_token(token)
+
+    result = (
+        supabase.table("auth_sessions")
+        .select("user_id, expires_at")
+        .eq("token_hash", token_hash)
+        .execute()
+    )
+
+    if not result.data:
+        return None
+
+    auth_session = result.data[0]
+
+    expires_at = datetime.fromisoformat(
+        auth_session["expires_at"].replace("Z", "+00:00")
+    )
+
+    if expires_at <= datetime.now(timezone.utc):
+        supabase.table("auth_sessions").delete().eq(
+            "token_hash", token_hash
+        ).execute()
+        return None
+
+    user_result = (
+        supabase.table("app_users")
+        .select("id, full_name, email")
+        .eq("id", auth_session["user_id"])
+        .execute()
+    )
+
+    return user_result.data[0] if user_result.data else None
+
+
+# ==========================================
+# SIGNUP API
+# ==========================================
+
+@app.route("/api/signup", methods=["POST"])
+def signup():
+    data = request.get_json()
+
+    full_name = data.get("full_name", "").strip()
+    email = data.get("email", "").strip().lower()
+    password = data.get("password", "")
+
+    if not full_name or not email or not password:
+        return jsonify({
+            "status": "error",
+            "message": "All fields are required"
+        }), 400
+
+    if len(password) < 8:
+        return jsonify({
+            "status": "error",
+            "message": "Password must be at least 8 characters"
+        }), 400
+
+    existing_user = (
+        supabase.table("app_users")
+        .select("id")
+        .ilike("email", email)
+        .execute()
+    )
+
+    if existing_user.data:
+        return jsonify({
+            "status": "error",
+            "message": "Email is already registered"
+        }), 409
+
+    password_hash = generate_password_hash(password)
+
+    result = (
+        supabase.table("app_users")
+        .insert({
+            "full_name": full_name,
+            "email": email,
+            "password_hash": password_hash
+        })
+        .execute()
+    )
+
+    return jsonify({
+        "status": "success",
+        "message": "Account created successfully"
+    }), 201
+
+
+
+# ==========================================
+# LOGIN API
+# ==========================================
+
+@app.route("/api/login", methods=["POST"])
+def login():
+    data = request.get_json()
+
+    email = data.get("email", "").strip().lower()
+    password = data.get("password", "")
+
+    if not email or not password:
+        return jsonify({
+            "status": "error",
+            "message": "Email and password are required"
+        }), 400
+
+    result = (
+        supabase.table("app_users")
+        .select("id, full_name, email, password_hash")
+        .ilike("email", email)
+        .execute()
+    )
+
+    if not result.data:
+        return jsonify({
+            "status": "error",
+            "message": "Invalid email or password"
+        }), 401
+
+    user = result.data[0]
+
+    if not check_password_hash(user["password_hash"], password):
+        return jsonify({
+            "status": "error",
+            "message": "Invalid email or password"
+        }), 401
+
+    # Create a secure random login token
+    token = secrets.token_urlsafe(32)
+    token_hash = hash_token(token)
+
+    expires_at = datetime.now(timezone.utc) + timedelta(days=7)
+
+    supabase.table("auth_sessions").insert({
+        "token_hash": token_hash,
+        "user_id": user["id"],
+        "expires_at": expires_at.isoformat()
+    }).execute()
+
+    response = jsonify({
+        "status": "success",
+        "message": "Login successful",
+        "user": {
+            "id": user["id"],
+            "full_name": user["full_name"],
+            "email": user["email"]
+        }
+    })
+
+    response.set_cookie(
+        "auth_token",
+        token,
+        httponly=True,
+        secure=True,
+        samesite="None",
+        max_age=7 * 24 * 60 * 60
+    )
+
+    return response
+
+
+# ==========================================
+# LOGOUT API
+# ==========================================
+
+@app.route("/api/logout", methods=["POST"])
+def logout():
+    token = request.cookies.get("auth_token")
+
+    if token:
+        token_hash = hash_token(token)
+
+        supabase.table("auth_sessions").delete().eq(
+            "token_hash", token_hash
+        ).execute()
+
+    response = jsonify({
+        "status": "success",
+        "message": "Logged out successfully"
+    })
+
+    response.delete_cookie(
+        "auth_token",
+        httponly=True,
+        secure=True,
+        samesite="None"
+    )
+
+    return response
+
+
+
+# ==========================================
+# CHECK LOGIN API
+# ==========================================
+
+@app.route("/api/me", methods=["GET"])
+def get_profile():
+    user = get_current_user()
+
+    if not user:
+        return jsonify({
+            "status": "error",
+            "message": "Not logged in"
+        }), 401
+
+    return jsonify({
+        "status": "success",
+        "user": user
+    }), 200
 
 
 # ==========================================
