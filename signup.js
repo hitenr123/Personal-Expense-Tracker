@@ -1,4 +1,3 @@
-
 // ==========================================
 // SIGNUP PAGE JAVASCRIPT
 // ==========================================
@@ -9,6 +8,9 @@ document.addEventListener("DOMContentLoaded", () => {
     const passwordInput = document.getElementById("password");
     const confirmPasswordInput = document.getElementById("confirmPassword");
 
+    // Flask Backend URL
+    const API_URL = "http://127.0.0.1:5000";
+
     // 1. Apply saved theme
     const savedTheme = localStorage.getItem("theme") || "light";
 
@@ -17,7 +19,6 @@ document.addEventListener("DOMContentLoaded", () => {
     } else {
         document.documentElement.removeAttribute("data-theme");
     }
-
 
     // 2. Show / Hide Password
     document.querySelectorAll(".password-toggle").forEach(button => {
@@ -42,9 +43,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     });
 
-
-    // 3. Signup Form Validation
-    signupForm.addEventListener("submit", event => {
+    // 3. Signup Form Validation and API
+    signupForm.addEventListener("submit", async event => {
 
         event.preventDefault();
 
@@ -68,10 +68,50 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
-        alert("Form validation successful!");
+        const submitButton = signupForm.querySelector('button[type="submit"]');
 
-        // Actual account creation will be connected
-        // to the Flask backend in a later step.
+        if (submitButton) {
+            submitButton.disabled = true;
+            submitButton.textContent = "Creating Account...";
+        }
+
+        try {
+
+            const response = await fetch(`${API_URL}/api/signup`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    full_name: fullName,
+                    email: email,
+                    password: password
+                })
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.message || "Signup failed.");
+            }
+
+            alert("Account created successfully! Please login.");
+
+            window.location.href = "login.html";
+
+        } catch (error) {
+
+            console.error("Signup Error:", error);
+            alert(error.message || "Unable to connect to the server.");
+
+        } finally {
+
+            if (submitButton) {
+                submitButton.disabled = false;
+                submitButton.textContent = "Create Account";
+            }
+
+        }
 
     });
 
