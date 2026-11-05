@@ -3,6 +3,45 @@
 // Supabase Integration
 // ==========================================
 
+// ==========================================
+// Authentication Check
+// ==========================================
+
+const AUTH_API =
+    "https://personal-expense-tracker-7qhy.onrender.com";
+
+async function checkLogin() {
+    try {
+        const response = await fetch(`${AUTH_API}/api/me`, {
+            method: "GET",
+            credentials: "include"
+        });
+
+        if (!response.ok) {
+            localStorage.removeItem("user");
+            window.location.replace("login.html");
+            return false;
+        }
+
+        const data = await response.json();
+
+        if (data.status !== "success" || !data.user) {
+            localStorage.removeItem("user");
+            window.location.replace("login.html");
+            return false;
+        }
+
+        localStorage.setItem("user", JSON.stringify(data.user));
+
+        return true;
+
+    } catch (error) {
+        console.error("Authentication check failed:", error);
+        alert("Unable to verify your login. Please try again.");
+        return false;
+    }
+}
+
 const EXPENSE_API =
   "https://personal-expense-tracker-7qhy.onrender.com/api/expenses";
 const INCOME_API =
@@ -585,7 +624,20 @@ if (profile) {
 // Initial Dashboard Load
 // ==========================================
 
-fetchDashboardData();
+// ==========================================
+// Initial Dashboard Load
+// ==========================================
+
+async function initializeDashboard() {
+    const isLoggedIn = await checkLogin();
+
+    if (!isLoggedIn) return;
+
+    updateGlobalProfile();
+    await fetchDashboardData();
+}
+
+initializeDashboard();
 
 
 // Refresh dashboard when transactions change
