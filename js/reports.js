@@ -438,7 +438,7 @@ async function initializeReportsPage() {
 initializeReportsPage();
 
 async function registerUnicodeFont(doc) {
-  const response = await fetch("./fonts/NotoSans[wdth,wght].ttf");
+  const response = await fetch("../fonts/NotoSans[wdth,wght].ttf");
 
   if (!response.ok) {
     throw new Error("Could not load NotoSans.ttf");

@@ -1,10 +1,11 @@
+
 <!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <title>Expense Manager - Goals</title>
+    <title>Expense Manager - Settings</title>
 
     <link
       href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
@@ -16,8 +17,8 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
     />
 
-    <link rel="stylesheet" href="style.css" />
-    <link rel="stylesheet" href="income.css" />
+    <link rel="stylesheet" href="../css/style.css" />
+    <link rel="stylesheet" href="../css/settings.css" />
   </head>
 
   <body>
@@ -25,7 +26,7 @@
       <!-- Sidebar -->
       <aside class="sidebar">
         <div class="logo">
-          <img src="image\logo.png" alt="Expense Manager" />
+          <img src="../image/logo.png" alt="Expense Manager" />
 
           <div>
             <h2>Expense Manager</h2>
@@ -64,12 +65,12 @@
             Reports
           </li>
 
-          <li class="active" onclick="window.location.href = 'goals.html'">
+          <li onclick="window.location.href = 'goals.html'">
             <i class="fa-solid fa-bullseye"></i>
             Goals
           </li>
 
-          <li onclick="window.location.href = 'settings.html'">
+          <li class="active" onclick="window.location.href = 'settings.html'">
             <i class="fa-solid fa-gear"></i>
             Settings
           </li>
@@ -78,6 +79,7 @@
 
       <!-- Main -->
       <main class="main">
+        <!-- Top Bar -->
         <header class="topbar">
           <div class="menu-icon">
             <i class="fa-solid fa-bars"></i>
@@ -98,7 +100,7 @@
 
             <div class="profile">
               <div class="avatar">H</div>
-              <span>Hiten</span>
+              <span id="topProfileName">Hiten</span>
               <i class="fa-solid fa-chevron-down"></i>
             </div>
           </div>
@@ -106,80 +108,97 @@
 
         <!-- Heading -->
         <section class="greeting">
-          <h1>Financial Goals 🎯</h1>
-
-          <p>Set and track your savings goals</p>
+          <h1>Settings ⚙️</h1>
+          <p>Manage your Expense Manager preferences.</p>
         </section>
 
-        <!-- Goal Form -->
-        <section class="form-card">
+        <!-- Profile Settings -->
+        <section class="form-card settings-card">
           <div class="title">
-            <h2>Add Financial Goal</h2>
+            <h2>
+              <i class="fa-solid fa-user"></i>
+              Profile Settings
+            </h2>
           </div>
 
-          <form id="goalForm">
+          <form id="settingsForm">
             <div class="form-group">
-              <label> Goal Name <span class="required">*</span> </label>
+              <label for="profileName">
+                Your Name <span class="required">*</span>
+              </label>
 
               <input
                 type="text"
-                id="goalName"
-                placeholder="Example: Buy a Laptop"
+                id="profileName"
+                placeholder="Enter your name"
                 required
               />
             </div>
 
-            <div class="form-group amount-box">
-              <label> Target Amount <span class="required">*</span> </label>
-
-              <div class="amount-input">
-                <span>₹</span>
-
-                <input
-                  type="number"
-                  id="goalAmount"
-                  placeholder="Enter target amount"
-                  min="1"
-                  required
-                />
-              </div>
-            </div>
-
+            <!-- Currency -->
             <div class="form-group">
-              <label> Target Date </label>
+              <label for="currency">Display Currency</label>
 
-              <input type="date" id="goalDate" />
+              <select id="currency">
+                <option value="INR">₹ Indian Rupee (INR)</option>
+                <option value="USD">$ US Dollar (USD)</option>
+                <option value="EUR">€ Euro (EUR)</option>
+                <option value="GBP">£ British Pound (GBP)</option>
+              </select>
+
+              <small>
+                Your original transaction amounts will remain stored in INR.
+              </small>
             </div>
 
             <div class="button-group">
-              <button type="reset" class="reset-btn">
+              <button type="button" class="reset-btn" id="resetSettings">
                 <i class="fa-solid fa-rotate-left"></i>
                 Reset
               </button>
 
               <button type="submit" class="save-btn">
                 <i class="fa-solid fa-floppy-disk"></i>
-                Add Goal
+                Save Settings
               </button>
             </div>
           </form>
         </section>
 
-        <!-- Goals List -->
-        <section class="transaction-card">
+        <!-- Currency Information -->
+        <section class="form-card settings-card">
           <div class="title">
-            <h2>My Financial Goals</h2>
+            <h2>
+              <i class="fa-solid fa-money-bill-transfer"></i>
+              Currency Information
+            </h2>
           </div>
 
-          <div id="goalsList">
-            <!-- Goals will be added here by JavaScript -->
-          </div>
+          <p>
+            Currency conversion uses published exchange rates. Rates may differ
+            from the rates offered by banks.
+          </p>
+
+          <small id="exchangeRateStatus">
+            Exchange rates will load automatically.
+          </small>
+
+          <p class="rate-source">
+            <a
+              href="https://www.exchangerate-api.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Rates By Exchange Rate API
+            </a>
+          </p>
         </section>
       </main>
     </div>
 
-    <script src="theme.js"></script>
-    <script src="script.js"></script>
-    <script src="goals.js"></script>
+    <!-- Local JavaScript -->
+    <script src="../js/theme.js"></script>
+    <script src="../js/script.js"></script>
+    <script src="../js/settings.js"></script>
   </body>
 </html>

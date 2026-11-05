@@ -1,3 +1,4 @@
+
 <!doctype html>
 <html lang="en">
   <head>
@@ -16,9 +17,9 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
     />
 
-    <link rel="stylesheet" href="style.css" />
-    <link rel="stylesheet" href="income.css" />
-    <link rel="stylesheet" href="reports.css" />
+    <link rel="stylesheet" href="../css/style.css" />
+    <link rel="stylesheet" href="../css/income.css" />
+    <link rel="stylesheet" href="../css/reports.css" />
   </head>
 
   <body>
@@ -26,7 +27,7 @@
       <!-- Sidebar -->
       <aside class="sidebar">
         <div class="logo">
-          <img src="image\logo.png" alt="Expense Manager" />
+          <img src="../image/logo.png" alt="Expense Manager" />
 
           <div>
             <h2>Expense Manager</h2>
@@ -107,7 +108,6 @@
 
         <section class="greeting">
           <h1>Financial Reports 📊</h1>
-
           <p>Analyze your income and expenses</p>
         </section>
 
@@ -188,7 +188,7 @@
           </div>
         </section>
 
-        <!-- Download PDF Report -->
+        <!-- Download Reports -->
         <div class="report-download">
           <button type="button" id="downloadReportPDF">
             <i class="fas fa-file-pdf"></i>
@@ -275,12 +275,14 @@
       </main>
     </div>
 
+    <!-- External Libraries -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 
-    <script src="theme.js"></script>
-    <script src="script.js"></script>
-    <script src="reports.js"></script>
+    <!-- Local JavaScript -->
+    <script src="../js/theme.js"></script>
+    <script src="../js/script.js"></script>
+    <script src="../js/reports.js"></script>
   </body>
 </html>
