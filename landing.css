@@ -710,3 +710,65 @@ html[data-theme="dark"] .secondary-btn:hover {
         display: flex;
     }
 }
+
+/* ==========================================
+   Circular Theme Toggle
+========================================== */
+
+.theme-toggle {
+    width: 42px;
+    height: 42px;
+    min-width: 42px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+    border: 1px solid #e2e8f0;
+
+    background: #ffffff;
+    color: #6c5ce7;
+
+    font-size: 17px;
+    cursor: pointer;
+
+    transition: all 0.3s ease;
+}
+
+.theme-toggle:hover {
+    background: #6c5ce7;
+    color: #ffffff;
+    transform: rotate(15deg);
+}
+
+/* Responsive Theme Toggle */
+
+@media (max-width: 768px) {
+    .nav-buttons {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+
+    .theme-toggle {
+        width: 38px;
+        height: 38px;
+        min-width: 38px;
+        font-size: 15px;
+    }
+}
+
+@media (max-width: 480px) {
+    .nav-buttons {
+        gap: 7px;
+    }
+
+    .theme-toggle {
+        width: 34px;
+        height: 34px;
+        min-width: 34px;
+        font-size: 14px;
+    }
+}

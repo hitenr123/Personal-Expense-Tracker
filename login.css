@@ -422,3 +422,49 @@ html[data-theme="dark"] .input-box input::placeholder {
         margin-bottom: 25px;
     }
 }
+
+
+/* ==========================================
+   Circular Theme Toggle
+========================================== */
+
+.theme-toggle {
+    position: fixed;
+    top: 22px;
+    right: 25px;
+    z-index: 9999;
+
+    width: 42px;
+    height: 42px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+    border: 1px solid #e2e8f0;
+
+    background: #ffffff;
+    color: #6c5ce7;
+
+    font-size: 17px;
+    cursor: pointer;
+
+    transition: all 0.3s ease;
+}
+
+.theme-toggle:hover {
+    background: #6c5ce7;
+    color: #ffffff;
+    transform: rotate(15deg);
+}
+
+@media (max-width: 480px) {
+    .theme-toggle {
+        top: 14px;
+        right: 14px;
+        width: 36px;
+        height: 36px;
+        font-size: 15px;
+    }
+}

@@ -1,256 +1,260 @@
-
 <!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <title>Budget | Expense Manager</title>
 
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="budgets.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
-</head>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="budgets.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+    />
+  </head>
 
-<body>
-<div class="container">
-
-    <!-- Sidebar -->
-    <aside class="sidebar">
+  <body>
+    <div class="container">
+      <!-- Sidebar -->
+      <aside class="sidebar">
         <div class="logo">
-            <img src="image/logo.png" alt="Expense Manager">
-            <div>
-                <h2>Expense Manager</h2>
-                <span>Track • Manage • Save</span>
-            </div>
+          <img src="image/logo.png" alt="Expense Manager" />
+          <div>
+            <h2>Expense Manager</h2>
+            <span>Track • Manage • Save</span>
+          </div>
         </div>
 
         <ul class="menu">
-            <li onclick="window.location.href='dashboard.html'">
-                <i class="fa-solid fa-house"></i> Dashboard
-            </li>
-            <li onclick="window.location.href='transactions.html'">
-                <i class="fa-solid fa-arrow-right-arrow-left"></i> Transactions
-            </li>
-            <li onclick="window.location.href='expense.html'">
-                <i class="fa-solid fa-plus"></i> Add Expense
-            </li>
-            <li onclick="window.location.href='income.html'">
-                <i class="fa-solid fa-wallet"></i> Add Income
-            </li>
-            <li class="active" onclick="window.location.href='budgets.html'">
-                <i class="fa-solid fa-chart-pie"></i> Budgets
-            </li>
-            <li onclick="window.location.href='reports.html'">
-                <i class="fa-solid fa-chart-line"></i> Reports
-            </li>
-            <li onclick="window.location.href='goals.html'">
-                <i class="fa-solid fa-bullseye"></i> Goals
-            </li>
-            <li onclick="window.location.href='settings.html'">
-                <i class="fa-solid fa-gear"></i> Settings
-            </li>
+          <li onclick="window.location.href = 'dashboard.html'">
+            <i class="fa-solid fa-house"></i> Dashboard
+          </li>
+          <li onclick="window.location.href = 'transactions.html'">
+            <i class="fa-solid fa-arrow-right-arrow-left"></i> Transactions
+          </li>
+          <li onclick="window.location.href = 'expense.html'">
+            <i class="fa-solid fa-plus"></i> Add Expense
+          </li>
+          <li onclick="window.location.href = 'income.html'">
+            <i class="fa-solid fa-wallet"></i> Add Income
+          </li>
+          <li class="active" onclick="window.location.href = 'budgets.html'">
+            <i class="fa-solid fa-chart-pie"></i> Budgets
+          </li>
+          <li onclick="window.location.href = 'reports.html'">
+            <i class="fa-solid fa-chart-line"></i> Reports
+          </li>
+          <li onclick="window.location.href = 'goals.html'">
+            <i class="fa-solid fa-bullseye"></i> Goals
+          </li>
+          <li onclick="window.location.href = 'settings.html'">
+            <i class="fa-solid fa-gear"></i> Settings
+          </li>
         </ul>
-    </aside>
+      </aside>
 
-    <!-- Main Content -->
-    <main class="main">
-
+      <!-- Main Content -->
+      <main class="main">
         <!-- Topbar -->
         <header class="topbar">
-            <div class="menu-icon">
-                <i class="fa-solid fa-bars"></i>
-            </div>
+          <div class="menu-icon">
+            <i class="fa-solid fa-bars"></i>
+          </div>
 
-            <div class="top-right">
-                <i class="fa-regular fa-bell"></i>
+          <div class="top-right">
+            <i class="fa-regular fa-bell"></i>
 
-                <div class="profile">
-                    <div class="avatar">H</div>
-                    <span>Hiten</span>
-                    <i class="fa-solid fa-chevron-down"></i>
-                </div>
+            <!-- Theme Toggle -->
+            <button
+              class="theme-toggle"
+              id="themeToggle"
+              aria-label="Switch to dark mode"
+              title="Switch theme"
+            >
+              <i class="fa-solid fa-moon"></i>
+            </button>
+
+            <div class="profile">
+              <div class="avatar">H</div>
+              <span>Hiten</span>
+              <i class="fa-solid fa-chevron-down"></i>
             </div>
+          </div>
         </header>
 
         <!-- Page Header -->
         <section class="budget-page-header">
-            <div>
-                <span class="budget-eyebrow">FINANCIAL PLANNING</span>
-                <h1>Budget Overview</h1>
-                <p>Plan your spending, monitor expenses and stay on track.</p>
-            </div>
+          <div>
+            <span class="budget-eyebrow">FINANCIAL PLANNING</span>
+            <h1>Budget Overview</h1>
+            <p>Plan your spending, monitor expenses and stay on track.</p>
+          </div>
 
-            <div class="budget-month-label">
-                <i class="fa-regular fa-calendar"></i>
-                Monthly Overview
-            </div>
+          <div class="budget-month-label">
+            <i class="fa-regular fa-calendar"></i>
+            Monthly Overview
+          </div>
         </section>
 
         <!-- Summary Cards -->
         <section class="budget-summary-grid">
-
-            <div class="budget-stat-card">
-                <div class="budget-stat-top">
-                    <div class="budget-stat-icon purple">
-                        <i class="fa-solid fa-wallet"></i>
-                    </div>
-                    <span class="budget-stat-label">Monthly Budget</span>
-                </div>
-                <h2 id="monthlyBudget">₹0</h2>
-                <p>Your total spending limit</p>
+          <div class="budget-stat-card">
+            <div class="budget-stat-top">
+              <div class="budget-stat-icon purple">
+                <i class="fa-solid fa-wallet"></i>
+              </div>
+              <span class="budget-stat-label">Monthly Budget</span>
             </div>
+            <h2 id="monthlyBudget">₹0</h2>
+            <p>Your total spending limit</p>
+          </div>
 
-            <div class="budget-stat-card">
-                <div class="budget-stat-top">
-                    <div class="budget-stat-icon orange">
-                        <i class="fa-solid fa-money-bill-wave"></i>
-                    </div>
-                    <span class="budget-stat-label">Spent This Month</span>
-                </div>
-                <h2 id="budgetSpent">₹0</h2>
-                <p>Your total expenses so far</p>
+          <div class="budget-stat-card">
+            <div class="budget-stat-top">
+              <div class="budget-stat-icon orange">
+                <i class="fa-solid fa-money-bill-wave"></i>
+              </div>
+              <span class="budget-stat-label">Spent This Month</span>
             </div>
+            <h2 id="budgetSpent">₹0</h2>
+            <p>Your total expenses so far</p>
+          </div>
 
-            <div class="budget-stat-card">
-                <div class="budget-stat-top">
-                    <div class="budget-stat-icon green">
-                        <i class="fa-solid fa-piggy-bank"></i>
-                    </div>
-                    <span class="budget-stat-label">Remaining Budget</span>
-                </div>
-                <h2 id="budgetRemaining">₹0</h2>
-                <p>Amount available to spend</p>
+          <div class="budget-stat-card">
+            <div class="budget-stat-top">
+              <div class="budget-stat-icon green">
+                <i class="fa-solid fa-piggy-bank"></i>
+              </div>
+              <span class="budget-stat-label">Remaining Budget</span>
             </div>
-
+            <h2 id="budgetRemaining">₹0</h2>
+            <p>Amount available to spend</p>
+          </div>
         </section>
 
         <!-- Budget Content -->
         <section class="budget-content-grid">
-
-            <!-- Set Budget -->
-            <div class="budget-form-card">
-                <div class="budget-section-heading">
-                    <div>
-                        <h2>Set Monthly Budget</h2>
-                        <p>Define your spending limit for this month.</p>
-                    </div>
-                    <div class="budget-heading-icon">
-                        <i class="fa-solid fa-sliders"></i>
-                    </div>
-                </div>
-
-                <form id="budgetForm">
-
-                    <div class="budget-input-group">
-                        <label for="budgetAmount">
-                            Monthly Spending Limit
-                            <span class="required">*</span>
-                        </label>
-
-                        <div class="budget-amount-input">
-                            <span>₹</span>
-                            <input
-                                type="number"
-                                id="budgetAmount"
-                                placeholder="Enter your budget"
-                                min="0"
-                                required
-                            >
-                        </div>
-
-                        <small>Set a realistic limit for your monthly expenses.</small>
-                    </div>
-
-                    <div class="budget-form-actions">
-                        <button type="reset" class="reset-btn">
-                            <i class="fa-solid fa-rotate-left"></i>
-                            Reset
-                        </button>
-
-                        <button type="submit" class="save-btn">
-                            <i class="fa-solid fa-floppy-disk"></i>
-                            Save Budget
-                        </button>
-                    </div>
-
-                </form>
+          <!-- Set Budget -->
+          <div class="budget-form-card">
+            <div class="budget-section-heading">
+              <div>
+                <h2>Set Monthly Budget</h2>
+                <p>Define your spending limit for this month.</p>
+              </div>
+              <div class="budget-heading-icon">
+                <i class="fa-solid fa-sliders"></i>
+              </div>
             </div>
 
-            <!-- Spending Overview -->
-            <div class="budget-progress-card">
-                <div class="budget-section-heading">
-                    <div>
-                        <h2>Spending Overview</h2>
-                        <p>Track your monthly budget usage.</p>
-                    </div>
-                    <div class="budget-heading-icon">
-                        <i class="fa-solid fa-chart-pie"></i>
-                    </div>
+            <form id="budgetForm">
+              <div class="budget-input-group">
+                <label for="budgetAmount">
+                  Monthly Spending Limit
+                  <span class="required">*</span>
+                </label>
+
+                <div class="budget-amount-input">
+                  <span>₹</span>
+                  <input
+                    type="number"
+                    id="budgetAmount"
+                    placeholder="Enter your budget"
+                    min="0"
+                    required
+                  />
                 </div>
 
-                <div class="budget-progress-info">
-                    <span>Budget utilization</span>
-                    <strong id="budgetPercentage">0%</strong>
-                </div>
+                <small>Set a realistic limit for your monthly expenses.</small>
+              </div>
 
-                <div class="budget-progress-track">
-                    <div
-                        class="budget-progress-fill"
-                        id="budgetProgressBar"
-                        style="width: 0%">
-                    </div>
-                </div>
+              <div class="budget-form-actions">
+                <button type="reset" class="reset-btn">
+                  <i class="fa-solid fa-rotate-left"></i>
+                  Reset
+                </button>
 
-                <div class="budget-progress-footer">
-                    <span><i class="fa-solid fa-circle"></i> Expenses</span>
-                    <span><i class="fa-solid fa-circle"></i> Available</span>
-                </div>
+                <button type="submit" class="save-btn">
+                  <i class="fa-solid fa-floppy-disk"></i>
+                  Save Budget
+                </button>
+              </div>
+            </form>
+          </div>
 
-                <div class="budget-tip">
-                    <div class="budget-tip-icon">
-                        <i class="fa-solid fa-lightbulb"></i>
-                    </div>
-                    <div>
-                        <strong>Smart Spending Tip</strong>
-                        <p>Keep track of your expenses regularly to stay within your monthly budget.</p>
-                    </div>
-                </div>
+          <!-- Spending Overview -->
+          <div class="budget-progress-card">
+            <div class="budget-section-heading">
+              <div>
+                <h2>Spending Overview</h2>
+                <p>Track your monthly budget usage.</p>
+              </div>
+              <div class="budget-heading-icon">
+                <i class="fa-solid fa-chart-pie"></i>
+              </div>
             </div>
 
+            <div class="budget-progress-info">
+              <span>Budget utilization</span>
+              <strong id="budgetPercentage">0%</strong>
+            </div>
+
+            <div class="budget-progress-track">
+              <div
+                class="budget-progress-fill"
+                id="budgetProgressBar"
+                style="width: 0%"
+              ></div>
+            </div>
+
+            <div class="budget-progress-footer">
+              <span><i class="fa-solid fa-circle"></i> Expenses</span>
+              <span><i class="fa-solid fa-circle"></i> Available</span>
+            </div>
+
+            <div class="budget-tip">
+              <div class="budget-tip-icon">
+                <i class="fa-solid fa-lightbulb"></i>
+              </div>
+              <div>
+                <strong>Smart Spending Tip</strong>
+                <p>
+                  Keep track of your expenses regularly to stay within your
+                  monthly budget.
+                </p>
+              </div>
+            </div>
+          </div>
         </section>
 
         <!-- Category Budget Section -->
         <section class="budget-category-card">
-
-            <div class="budget-section-heading">
-                <div>
-                    <h2>Category-wise Budgets</h2>
-                    <p>Organize your spending limits by expense category.</p>
-                </div>
-
-                <span class="coming-soon-label">Coming Next</span>
+          <div class="budget-section-heading">
+            <div>
+              <h2>Category-wise Budgets</h2>
+              <p>Organize your spending limits by expense category.</p>
             </div>
 
-            <div class="budget-category-empty">
-                <div class="budget-empty-icon">
-                    <i class="fa-solid fa-layer-group"></i>
-                </div>
+            <span class="coming-soon-label">Coming Next</span>
+          </div>
 
-                <h3>Manage budgets by category</h3>
-                <p>
-                    Set separate spending limits for Food, Shopping,
-                    Travel, Bills and other expense categories.
-                </p>
+          <div class="budget-category-empty">
+            <div class="budget-empty-icon">
+              <i class="fa-solid fa-layer-group"></i>
             </div>
 
+            <h3>Manage budgets by category</h3>
+            <p>
+              Set separate spending limits for Food, Shopping, Travel, Bills and
+              other expense categories.
+            </p>
+          </div>
         </section>
+      </main>
+    </div>
 
-    </main>
-</div>
-
-<script src="script.js"></script>
-<script src="budget.js"></script>
-
-</body>
+    <script src="theme.js"></script>
+    <script src="script.js"></script>
+    <script src="budget.js"></script>
+  </body>
 </html>

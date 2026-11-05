@@ -87,6 +87,16 @@
           <div class="top-right">
             <i class="fa-regular fa-bell"></i>
 
+            <!-- Theme Toggle -->
+            <button
+              class="theme-toggle"
+              id="themeToggle"
+              aria-label="Switch to dark mode"
+              title="Switch theme"
+            >
+              <i class="fa-solid fa-moon"></i>
+            </button>
+
             <div class="profile">
               <div class="avatar">H</div>
               <span id="topProfileName">Hiten</span>
@@ -122,16 +132,6 @@
                 placeholder="Enter your name"
                 required
               />
-            </div>
-
-            <!-- Appearance -->
-            <div class="form-group">
-              <label for="themeSelect">Appearance</label>
-
-              <select id="themeSelect">
-                <option value="light">Light Mode</option>
-                <option value="dark">Dark Mode</option>
-              </select>
             </div>
 
             <!-- Currency -->
@@ -195,6 +195,7 @@
       </main>
     </div>
 
+    <script src="theme.js"></script>
     <script src="script.js"></script>
     <script src="settings.js"></script>
   </body>

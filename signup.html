@@ -1,168 +1,177 @@
-
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <title>Sign Up | Expense Manager</title>
 
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+    />
 
-    <link rel="stylesheet" href="signup.css">
-</head>
+    <link rel="stylesheet" href="signup.css" />
+  </head>
 
-<body>
+  <body>
+    <!-- Theme Toggle -->
+    <button
+      class="theme-toggle"
+      id="themeToggle"
+      aria-label="Switch to dark mode"
+      title="Switch theme"
+    >
+      <i class="fa-solid fa-moon"></i>
+    </button>
 
     <div class="auth-shell">
+      <!-- Left Branding Panel -->
+      <section class="brand-panel">
+        <a href="index.html" class="brand-logo">
+          <i class="fa-solid fa-wallet"></i>
+          <span>Expense Manager</span>
+        </a>
 
-        <!-- Left Branding Panel -->
-        <section class="brand-panel">
+        <div class="brand-content">
+          <span class="brand-tag">SMART FINANCIAL MANAGEMENT</span>
 
-            <a href="index.html" class="brand-logo">
-                <i class="fa-solid fa-wallet"></i>
-                <span>Expense Manager</span>
-            </a>
+          <h1>
+            Start Your Journey
+            <span>Towards Financial Freedom.</span>
+          </h1>
 
-            <div class="brand-content">
-                <span class="brand-tag">SMART FINANCIAL MANAGEMENT</span>
+          <p>
+            Take control of your money, track your expenses and build better
+            financial habits.
+          </p>
 
-                <h1>
-                    Start Your Journey
-                    <span>Towards Financial Freedom.</span>
-                </h1>
-
-                <p>
-                    Take control of your money, track your expenses
-                    and build better financial habits.
-                </p>
-
-                <div class="brand-points">
-                    <div>
-                        <i class="fa-solid fa-circle-check"></i>
-                        <span>Manage daily expenses</span>
-                    </div>
-
-                    <div>
-                        <i class="fa-solid fa-circle-check"></i>
-                        <span>Plan monthly budgets</span>
-                    </div>
-
-                    <div>
-                        <i class="fa-solid fa-circle-check"></i>
-                        <span>Achieve your saving goals</span>
-                    </div>
-                </div>
+          <div class="brand-points">
+            <div>
+              <i class="fa-solid fa-circle-check"></i>
+              <span>Manage daily expenses</span>
             </div>
 
-            <div class="brand-footer">
-                © 2026 Expense Manager
+            <div>
+              <i class="fa-solid fa-circle-check"></i>
+              <span>Plan monthly budgets</span>
             </div>
 
-        </section>
+            <div>
+              <i class="fa-solid fa-circle-check"></i>
+              <span>Achieve your saving goals</span>
+            </div>
+          </div>
+        </div>
 
+        <div class="brand-footer">© 2026 Expense Manager</div>
+      </section>
 
-        <!-- Right Signup Panel -->
-        <section class="form-panel">
+      <!-- Right Signup Panel -->
+      <section class="form-panel">
+        <div class="form-container">
+          <a href="index.html" class="back-home">
+            <i class="fa-solid fa-arrow-left"></i>
+            Back to Home
+          </a>
 
-            <div class="form-container">
+          <div class="form-heading">
+            <span>GET STARTED</span>
+            <h2>Create Your Account</h2>
+            <p>Enter your details to get started.</p>
+          </div>
 
-                <a href="index.html" class="back-home">
-                    <i class="fa-solid fa-arrow-left"></i>
-                    Back to Home
-                </a>
+          <form id="signupForm">
+            <div class="form-group">
+              <label for="fullName">Full Name</label>
 
-                <div class="form-heading">
-                    <span>GET STARTED</span>
-                    <h2>Create Your Account</h2>
-                    <p>Enter your details to get started.</p>
-                </div>
-
-                <form id="signupForm">
-
-                    <div class="form-group">
-                        <label for="fullName">Full Name</label>
-
-                        <div class="input-box">
-                            <i class="fa-regular fa-user"></i>
-                            <input
-                                type="text"
-                                id="fullName"
-                                placeholder="Enter your full name"
-                                required
-                            >
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="email">Email Address</label>
-
-                        <div class="input-box">
-                            <i class="fa-regular fa-envelope"></i>
-                            <input
-                                type="email"
-                                id="email"
-                                placeholder="Enter your email"
-                                required
-                            >
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="password">Password</label>
-
-                        <div class="input-box">
-                            <i class="fa-solid fa-lock"></i>
-                            <input
-                                type="password"
-                                id="password"
-                                placeholder="Create a password"
-                                required
-                            >
-                            <button type="button" class="password-toggle" data-target="password">
-                                <i class="fa-regular fa-eye"></i>
-                            </button>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="confirmPassword">Confirm Password</label>
-
-                        <div class="input-box">
-                            <i class="fa-solid fa-lock"></i>
-                            <input
-                                type="password"
-                                id="confirmPassword"
-                                placeholder="Confirm your password"
-                                required
-                            >
-                            <button type="button" class="password-toggle" data-target="confirmPassword">
-                                <i class="fa-regular fa-eye"></i>
-                            </button>
-                        </div>
-                    </div>
-
-                    <button type="submit" class="signup-submit">
-                        Create Account
-                        <i class="fa-solid fa-arrow-right"></i>
-                    </button>
-
-                </form>
-
-                <p class="signin-link">
-                    Already have an account?
-                    <a href="login.html">Sign In</a>
-                </p>
-
+              <div class="input-box">
+                <i class="fa-regular fa-user"></i>
+                <input
+                  type="text"
+                  id="fullName"
+                  placeholder="Enter your full name"
+                  required
+                />
+              </div>
             </div>
 
-        </section>
+            <div class="form-group">
+              <label for="email">Email Address</label>
 
+              <div class="input-box">
+                <i class="fa-regular fa-envelope"></i>
+                <input
+                  type="email"
+                  id="email"
+                  placeholder="Enter your email"
+                  required
+                />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="password">Password</label>
+
+              <div class="input-box">
+                <i class="fa-solid fa-lock"></i>
+                <input
+                  type="password"
+                  id="password"
+                  placeholder="Create a password"
+                  required
+                />
+                <button
+                  type="button"
+                  class="password-toggle"
+                  data-target="password"
+                >
+                  <i class="fa-regular fa-eye"></i>
+                </button>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="confirmPassword">Confirm Password</label>
+
+              <div class="input-box">
+                <i class="fa-solid fa-lock"></i>
+                <input
+                  type="password"
+                  id="confirmPassword"
+                  placeholder="Confirm your password"
+                  required
+                />
+                <button
+                  type="button"
+                  class="password-toggle"
+                  data-target="confirmPassword"
+                >
+                  <i class="fa-regular fa-eye"></i>
+                </button>
+              </div>
+            </div>
+
+            <button type="submit" class="signup-submit">
+              Create Account
+              <i class="fa-solid fa-arrow-right"></i>
+            </button>
+          </form>
+
+          <p class="signin-link">
+            Already have an account?
+            <a href="login.html">Sign In</a>
+          </p>
+        </div>
+      </section>
     </div>
 
+    <script src="theme.js"></script>
     <script src="signup.js"></script>
-
-</body>
+  </body>
 </html>

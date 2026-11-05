@@ -33,13 +33,11 @@ async function checkLogin() {
   }
 }
 
-
 console.log("Settings JS loaded");
 
 const settingsForm = document.getElementById("settingsForm");
 const profileNameInput = document.getElementById("profileName");
 const currencySelect = document.getElementById("currency");
-const themeSelect = document.getElementById("themeSelect");
 const topProfileName = document.getElementById("topProfileName");
 const resetSettingsBtn = document.getElementById("resetSettings");
 const exchangeRateStatus = document.getElementById("exchangeRateStatus");
@@ -53,18 +51,13 @@ function loadSettings() {
 
   const savedName =
     loggedInUser.full_name || localStorage.getItem("profileName") || "User";
+
   const savedCurrency = localStorage.getItem("currency") || "INR";
-  const savedTheme = localStorage.getItem("theme") || "light";
 
   profileNameInput.value = savedName;
   currencySelect.value = savedCurrency;
-  themeSelect.value = savedTheme;
 
   updateProfileName(savedName);
-
-  if (typeof window.applyTheme === "function") {
-    window.applyTheme(savedTheme);
-  }
 }
 
 // ==========================================
@@ -72,17 +65,14 @@ function loadSettings() {
 // ==========================================
 
 function updateProfileName(name) {
-  // Update profile name everywhere
   document.querySelectorAll("#topProfileName").forEach((element) => {
     element.textContent = name;
   });
 
-  // Update avatar initial everywhere
   document.querySelectorAll(".profile .avatar").forEach((element) => {
     element.textContent = name.charAt(0).toUpperCase();
   });
 
-  // Update dashboard greeting
   const greetingHeading = document.querySelector(".greeting h1");
 
   if (greetingHeading) {
@@ -112,8 +102,6 @@ settingsForm.addEventListener("submit", function (event) {
   event.preventDefault();
 
   const name = profileNameInput.value.trim();
-  const currency = currencySelect.value;
-  const theme = themeSelect.value;
 
   if (!name) {
     alert("Please enter your name.");
@@ -122,13 +110,8 @@ settingsForm.addEventListener("submit", function (event) {
 
   localStorage.setItem("profileName", name);
   localStorage.setItem("currency", currencySelect.value);
-  localStorage.setItem("theme", theme);
 
   updateProfileName(name);
-
-  if (typeof window.applyTheme === "function") {
-    window.applyTheme(theme);
-  }
 
   alert("Settings saved successfully!");
 
@@ -140,15 +123,14 @@ settingsForm.addEventListener("submit", function (event) {
 // ==========================================
 
 resetSettingsBtn.addEventListener("click", function () {
-  const confirmed = confirm("Reset all settings to default?");
+  const confirmed = confirm("Reset profile and currency settings to default?");
 
   if (!confirmed) return;
 
   localStorage.setItem("profileName", "Hiten");
   localStorage.setItem("currency", "INR");
-  localStorage.setItem("theme", "light");
 
-  alert("Settings restored to default.");
+  alert("Profile and currency settings restored to default.");
 
   location.reload();
 });
@@ -185,6 +167,7 @@ async function showExchangeRateStatus() {
 
     exchangeRateStatus.textContent =
       "Exchange rates loaded successfully. Example: ₹100 = " + testAmount;
+
   } catch (error) {
     exchangeRateStatus.textContent =
       "Exchange rates unavailable. Please try again later.";

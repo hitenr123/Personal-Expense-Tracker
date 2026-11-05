@@ -1971,3 +1971,36 @@ html[data-theme="dark"] .logout-btn:hover {
     background: #ef4444;
     color: #ffffff;
 }
+
+/* ===========================
+   Global Theme Toggle
+=========================== */
+
+.theme-toggle {
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    border: 1px solid var(--border-color, #e2e8f0);
+    background: var(--card-bg, #ffffff);
+    color: var(--text-color, #6c5ce7);
+    font-size: 17px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-left: 12px;
+}
+
+.theme-toggle:hover {
+    background: #6c5ce7;
+    color: #ffffff;
+    transform: rotate(15deg);
+}
+
+html[data-theme="dark"] .theme-toggle {
+    background: #1e293b;
+    border-color: #334155;
+    color: #facc15;
+}
