@@ -1,3 +1,39 @@
+// ==========================================
+// Authentication Check
+// ==========================================
+
+async function checkLogin() {
+    try {
+        const response = await fetch(`${AUTH_API}/api/me`, {
+            method: "GET",
+            credentials: "include"
+        });
+
+        if (!response.ok) {
+            localStorage.removeItem("user");
+            window.location.replace("login.html");
+            return false;
+        }
+
+        const data = await response.json();
+
+        if (data.status !== "success" || !data.user) {
+            localStorage.removeItem("user");
+            window.location.replace("login.html");
+            return false;
+        }
+
+        localStorage.setItem("user", JSON.stringify(data.user));
+
+        return true;
+
+    } catch (error) {
+        console.error("Authentication error:", error);
+        alert("Unable to verify login. Please try again.");
+        return false;
+    }
+}
+
 
 // ==========================================
 // Budget Page - Supabase Integration
