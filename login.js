@@ -1,9 +1,12 @@
-
 // ==========================================
 // LOGIN PAGE JAVASCRIPT
 // ==========================================
 
 document.addEventListener("DOMContentLoaded", () => {
+
+    const API_URL = "https://personal-expense-tracker-7qhy.onrender.com";
+
+    const loginForm = document.getElementById("loginForm");
 
     // 1. Apply Saved Theme
     const savedTheme = localStorage.getItem("theme") || "light";
@@ -13,7 +16,6 @@ document.addEventListener("DOMContentLoaded", () => {
     } else {
         document.documentElement.removeAttribute("data-theme");
     }
-
 
     // 2. Show / Hide Password
     document.querySelectorAll(".password-toggle").forEach(button => {
@@ -38,11 +40,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     });
 
-
-    // 3. Login Form Validation
-    const loginForm = document.getElementById("loginForm");
-
-    loginForm.addEventListener("submit", event => {
+    // 3. Login Form and Backend Connection
+    loginForm.addEventListener("submit", async event => {
 
         event.preventDefault();
 
@@ -60,9 +59,56 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
-        alert("Form validation successful!");
+        const submitButton = loginForm.querySelector('button[type="submit"]');
 
-        // Actual login will be connected to Flask backend later.
+        if (submitButton) {
+            submitButton.disabled = true;
+            submitButton.textContent = "Signing In...";
+        }
+
+        try {
+
+            const response = await fetch(`${API_URL}/api/login`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                credentials: "include",
+                body: JSON.stringify({
+                    email: email,
+                    password: password
+                })
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.message || "Login failed.");
+            }
+
+            // Save user information (never save the password)
+            localStorage.setItem("user", JSON.stringify(data.user));
+
+            // Remember Me preference
+            localStorage.setItem("rememberMe", rememberMe ? "true" : "false");
+
+            alert("Login successful!");
+
+            window.location.href = "index.html";
+
+        } catch (error) {
+
+            console.error("Login Error:", error);
+            alert(error.message || "Unable to connect to the server.");
+
+        } finally {
+
+            if (submitButton) {
+                submitButton.disabled = false;
+                submitButton.textContent = "Sign In";
+            }
+
+        }
 
     });
 
