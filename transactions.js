@@ -1,4 +1,3 @@
-
 // ==========================================
 // Transactions Page - Supabase Integration
 // Edit, Delete, Search and Filter
