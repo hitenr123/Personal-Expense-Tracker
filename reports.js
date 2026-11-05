@@ -1,3 +1,41 @@
+// ==========================================
+// Authentication Check
+// ==========================================
+
+async function checkLogin() {
+    try {
+        const response = await fetch(`${AUTH_API}/api/me`, {
+            method: "GET",
+            credentials: "include"
+        });
+
+        if (!response.ok) {
+            localStorage.removeItem("user");
+            window.location.replace("login.html");
+            return false;
+        }
+
+        const data = await response.json();
+
+        if (data.status !== "success" || !data.user) {
+            localStorage.removeItem("user");
+            window.location.replace("login.html");
+            return false;
+        }
+
+        localStorage.setItem("user", JSON.stringify(data.user));
+
+        return true;
+
+    } catch (error) {
+        console.error("Authentication error:", error);
+        alert("Unable to verify login. Please try again.");
+        return false;
+    }
+}
+
+
+
 const API_URL = "https://personal-expense-tracker-7qhy.onrender.com/api";
 
 let reportChart = null;
@@ -359,7 +397,23 @@ document
   .getElementById("applyReportFilter")
   .addEventListener("click", applyReportFilter);
 
-loadReports();
+
+
+// ==========================================
+// Initial Load
+// ==========================================
+
+async function initializeReportsPage() {
+    const isLoggedIn = await checkLogin();
+
+    if (!isLoggedIn) return;
+
+    await loadReports();
+}
+
+initializeReportsPage();
+
+
 
 async function registerUnicodeFont(doc) {
     const response = await fetch("./fonts/NotoSans[wdth,wght].ttf");
