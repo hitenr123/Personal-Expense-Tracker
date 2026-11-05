@@ -3,38 +3,35 @@
 // ==========================================
 
 async function checkLogin() {
-    try {
-        const response = await fetch(`${AUTH_API}/api/me`, {
-            method: "GET",
-            credentials: "include"
-        });
+  try {
+    const response = await fetch(`${AUTH_API}/api/me`, {
+      method: "GET",
+      credentials: "include",
+    });
 
-        if (!response.ok) {
-            localStorage.removeItem("user");
-            window.location.replace("login.html");
-            return false;
-        }
-
-        const data = await response.json();
-
-        if (data.status !== "success" || !data.user) {
-            localStorage.removeItem("user");
-            window.location.replace("login.html");
-            return false;
-        }
-
-        localStorage.setItem("user", JSON.stringify(data.user));
-
-        return true;
-
-    } catch (error) {
-        console.error("Authentication error:", error);
-        alert("Unable to verify login. Please try again.");
-        return false;
+    if (!response.ok) {
+      localStorage.removeItem("user");
+      window.location.replace("login.html");
+      return false;
     }
+
+    const data = await response.json();
+
+    if (data.status !== "success" || !data.user) {
+      localStorage.removeItem("user");
+      window.location.replace("login.html");
+      return false;
+    }
+
+    localStorage.setItem("user", JSON.stringify(data.user));
+
+    return true;
+  } catch (error) {
+    console.error("Authentication error:", error);
+    alert("Unable to verify login. Please try again.");
+    return false;
+  }
 }
-
-
 
 const API_URL = "https://personal-expense-tracker-7qhy.onrender.com/api";
 
@@ -45,19 +42,32 @@ let allExpenses = [];
 let currentStartDate = "";
 let currentEndDate = "";
 
-function formatCurrency(amount) {
+function formatReportCurrency(amount) {
+  const value = Number(amount) || 0;
+
+  // Use the global currency formatter from script.js
+  if (typeof window.formatCurrency === "function") {
+    return window.formatCurrency(value);
+  }
+
+  // Fallback if the global formatter is unavailable
+  const currency = localStorage.getItem("currency") || "INR";
+
   return new Intl.NumberFormat("en-IN", {
     style: "currency",
-    currency: "INR",
+    currency: currency,
     maximumFractionDigits: 2,
-  }).format(amount);
+  }).format(value);
 }
 
 function formatPDFCurrency(amount) {
-    return "₹" + Number(amount).toLocaleString("en-IN", {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2
-    });
+  return (
+    "₹" +
+    Number(amount).toLocaleString("en-IN", {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    })
+  );
 }
 
 function getLocalDate(date = new Date()) {
@@ -93,30 +103,30 @@ function getTotals(incomes, expenses) {
 function updateReportCards(incomes, expenses) {
   const totals = getTotals(incomes, expenses);
 
-  document.getElementById("reportIncome").textContent = formatCurrency(
+  document.getElementById("reportIncome").textContent = formatReportCurrency(
     totals.totalIncome,
   );
 
-  document.getElementById("reportExpense").textContent = formatCurrency(
+  document.getElementById("reportExpense").textContent = formatReportCurrency(
     totals.totalExpense,
   );
 
-  document.getElementById("reportBalance").textContent = formatCurrency(
+  document.getElementById("reportBalance").textContent = formatReportCurrency(
     totals.balance,
   );
 
   document.getElementById("reportSavings").textContent =
     totals.savingsRate.toFixed(1) + "%";
 
-  document.getElementById("summaryIncome").textContent = formatCurrency(
+  document.getElementById("summaryIncome").textContent = formatReportCurrency(
     totals.totalIncome,
   );
 
-  document.getElementById("summaryExpense").textContent = formatCurrency(
+  document.getElementById("summaryExpense").textContent = formatReportCurrency(
     totals.totalExpense,
   );
 
-  document.getElementById("summaryBalance").textContent = formatCurrency(
+  document.getElementById("summaryBalance").textContent = formatReportCurrency(
     totals.balance,
   );
 }
@@ -222,6 +232,22 @@ function updateReportChart(incomes, expenses, startDate, endDate, period) {
       scales: {
         y: {
           beginAtZero: true,
+          ticks: {
+            callback: function (value) {
+              return formatReportCurrency(value);
+            },
+          },
+        },
+      },
+      plugins: {
+        tooltip: {
+          callbacks: {
+            label: function (context) {
+              return (
+                context.dataset.label + ": " + formatReportCurrency(context.raw)
+              );
+            },
+          },
         },
       },
     },
@@ -279,7 +305,7 @@ function updateExpensePieChart(expenses) {
         tooltip: {
           callbacks: {
             label: function (context) {
-              return context.label + ": " + formatCurrency(context.raw);
+              return context.label + ": " + formatReportCurrency(context.raw);
             },
           },
         },
@@ -397,44 +423,40 @@ document
   .getElementById("applyReportFilter")
   .addEventListener("click", applyReportFilter);
 
-
-
 // ==========================================
 // Initial Load
 // ==========================================
 
 async function initializeReportsPage() {
-    const isLoggedIn = await checkLogin();
+  const isLoggedIn = await checkLogin();
 
-    if (!isLoggedIn) return;
+  if (!isLoggedIn) return;
 
-    await loadReports();
+  await loadReports();
 }
 
 initializeReportsPage();
 
-
-
 async function registerUnicodeFont(doc) {
-    const response = await fetch("./fonts/NotoSans[wdth,wght].ttf");
+  const response = await fetch("./fonts/NotoSans[wdth,wght].ttf");
 
-    if (!response.ok) {
-        throw new Error("Could not load NotoSans.ttf");
-    }
+  if (!response.ok) {
+    throw new Error("Could not load NotoSans.ttf");
+  }
 
-    const fontBuffer = await response.arrayBuffer();
-    const bytes = new Uint8Array(fontBuffer);
+  const fontBuffer = await response.arrayBuffer();
+  const bytes = new Uint8Array(fontBuffer);
 
-    let binary = "";
-    for (let i = 0; i < bytes.length; i++) {
-        binary += String.fromCharCode(bytes[i]);
-    }
+  let binary = "";
+  for (let i = 0; i < bytes.length; i++) {
+    binary += String.fromCharCode(bytes[i]);
+  }
 
-    const base64Font = btoa(binary);
+  const base64Font = btoa(binary);
 
-    doc.addFileToVFS("NotoSans[wdth,wght].ttf", base64Font);
-    doc.addFont("NotoSans[wdth,wght].ttf", "NotoSans", "normal");
-    doc.setFont("NotoSans", "normal");
+  doc.addFileToVFS("NotoSans[wdth,wght].ttf", base64Font);
+  doc.addFont("NotoSans[wdth,wght].ttf", "NotoSans", "normal");
+  doc.setFont("NotoSans", "normal");
 }
 
 async function downloadReportPDF() {
@@ -465,9 +487,13 @@ async function downloadReportPDF() {
   doc.text("Report Period: " + period.toUpperCase(), 20, 45);
   doc.text("Generated On: " + getLocalDate(), 20, 53);
 
-  doc.text("Total Income: " + formatCurrency(totals.totalIncome), 20, 70);
-  doc.text("Total Expenses: " + formatCurrency(totals.totalExpense), 20, 80);
-  doc.text("Balance: " + formatCurrency(totals.balance), 20, 90);
+  doc.text("Total Income: " + formatReportCurrency(totals.totalIncome), 20, 70);
+  doc.text(
+    "Total Expenses: " + formatReportCurrency(totals.totalExpense),
+    20,
+    80,
+  );
+  doc.text("Balance: " + formatReportCurrency(totals.balance), 20, 90);
   doc.text("Savings Rate: " + totals.savingsRate.toFixed(1) + "%", 20, 100);
 
   // Add expense category breakdown
@@ -498,7 +524,7 @@ async function downloadReportPDF() {
       y = 20;
     }
 
-    doc.text(`${category}: ${formatCurrency(amount)}`, 20, y);
+    doc.text(`${category}: ${formatReportCurrency(amount)}`, 20, y);
 
     y += 9;
   });
@@ -538,155 +564,156 @@ document
   .getElementById("downloadReportPDF")
   .addEventListener("click", downloadReportPDF);
 
-
 // Prepare filtered transactions for export
 function getReportExportData() {
-    const transactions = [
-        ...allIncomes.map(item => ({ ...item, type: "Income" })),
-        ...allExpenses.map(item => ({ ...item, type: "Expense" }))
-    ];
+  const transactions = [
+    ...allIncomes.map((item) => ({ ...item, type: "Income" })),
+    ...allExpenses.map((item) => ({ ...item, type: "Expense" })),
+  ];
 
-    return transactions
-        .filter(item => {
-            const date = item.transaction_date;
-            return date >= currentStartDate && date <= currentEndDate;
-        })
-        .sort((a, b) =>
-            a.transaction_date.localeCompare(b.transaction_date)
-        )
-        .map(item => ({
-            Type: item.type,
-            Date: item.transaction_date || "",
-            Time: item.transaction_time || "",
-            Amount: Number(item.amount) || 0,
-            Category: item.category || "",
-            "Payment Method": item.payment_method || "",
-            Account: item.account || "",
-            Notes: item.notes || ""
-        }));
+  return transactions
+    .filter((item) => {
+      const date = item.transaction_date;
+      return date >= currentStartDate && date <= currentEndDate;
+    })
+    .sort((a, b) => a.transaction_date.localeCompare(b.transaction_date))
+    .map((item) => ({
+      Type: item.type,
+      Date: item.transaction_date || "",
+      Time: item.transaction_time || "",
+      Amount: window.convertAmount
+        ? window.convertAmount(Number(item.amount) || 0)
+        : Number(item.amount) || 0,
+      Currency: localStorage.getItem("currency") || "INR",
+      Category: item.category || "",
+      "Payment Method": item.payment_method || "",
+      Account: item.account || "",
+      Notes: item.notes || "",
+    }));
 }
 
 // Download CSV
-function downloadReportCSV() {
-    const data = getReportExportData();
+async function downloadReportCSV() {
+  if (window.currencyReady) {
+    await window.currencyReady;
+  }
 
-    if (data.length === 0) {
-        alert("No transactions found for the selected period.");
-        return;
-    }
+  const data = getReportExportData();
 
-    const headers = Object.keys(data[0]);
+  if (data.length === 0) {
+    alert("No transactions found for the selected period.");
+    return;
+  }
 
-    const csvRows = [
-        headers.join(","),
-        ...data.map(row =>
-            headers.map(header =>
-                `"${String(row[header]).replace(/"/g, '""')}"`
-            ).join(",")
-        )
-    ];
+  const headers = Object.keys(data[0]);
 
-    const blob = new Blob(
-        ["\uFEFF" + csvRows.join("\n")],
-        { type: "text/csv;charset=utf-8;" }
-    );
+  const csvRows = [
+    headers.join(","),
+    ...data.map((row) =>
+      headers
+        .map((header) => `"${String(row[header]).replace(/"/g, '""')}"`)
+        .join(","),
+    ),
+  ];
 
-    const link = document.createElement("a");
-    link.href = URL.createObjectURL(blob);
-    link.download = "Expense_Report.csv";
-    link.click();
+  const blob = new Blob(["\uFEFF" + csvRows.join("\n")], {
+    type: "text/csv;charset=utf-8;",
+  });
 
-    URL.revokeObjectURL(link.href);
+  const link = document.createElement("a");
+  link.href = URL.createObjectURL(blob);
+  link.download = "Expense_Report.csv";
+  link.click();
+
+  URL.revokeObjectURL(link.href);
 }
 
 // Download Excel
-function downloadReportExcel() {
-    const data = getReportExportData();
+async function downloadReportExcel() {
+  if (window.currencyReady) {
+    await window.currencyReady;
+  }
 
-    if (data.length === 0) {
-        alert("No transactions found for the selected period.");
-        return;
-    }
+  const data = getReportExportData();
 
-    if (typeof XLSX === "undefined") {
-        alert("Excel library not loaded.");
-        return;
-    }
+  if (data.length === 0) {
+    alert("No transactions found for the selected period.");
+    return;
+  }
 
-    const workbook = XLSX.utils.book_new();
+  if (typeof XLSX === "undefined") {
+    alert("Excel library not loaded.");
+    return;
+  }
 
-    // Separate income and expenses
-    const incomeData = data.filter(item => item.Type === "Income");
-    const expenseData = data.filter(item => item.Type === "Expense");
+  const workbook = XLSX.utils.book_new();
 
-    const totalIncome = incomeData.reduce(
-        (sum, item) => sum + item.Amount, 0
-    );
+  // Separate income and expenses
+  const incomeData = data.filter((item) => item.Type === "Income");
+  const expenseData = data.filter((item) => item.Type === "Expense");
 
-    const totalExpense = expenseData.reduce(
-        (sum, item) => sum + item.Amount, 0
-    );
+  const totalIncome = incomeData.reduce((sum, item) => sum + item.Amount, 0);
 
-    const balance = totalIncome - totalExpense;
+  const totalExpense = expenseData.reduce((sum, item) => sum + item.Amount, 0);
 
-    const savingsRate = totalIncome > 0
-        ? (balance / totalIncome) * 100
-        : 0;
+  const balance = totalIncome - totalExpense;
 
-    // Sheet 1: Summary
-    const summary = [
-        ["Expense Manager Report"],
-        ["Start Date", currentStartDate],
-        ["End Date", currentEndDate],
-        [],
-        ["Particulars", "Amount"],
-        ["Total Income", totalIncome],
-        ["Total Expenses", totalExpense],
-        ["Balance", balance],
-        ["Savings Rate (%)", Number(savingsRate.toFixed(2))]
-    ];
+  const savingsRate = totalIncome > 0 ? (balance / totalIncome) * 100 : 0;
 
-    const summarySheet = XLSX.utils.aoa_to_sheet(summary);
-    XLSX.utils.book_append_sheet(workbook, summarySheet, "Summary");
+  // Sheet 1: Summary
+  const selectedCurrency = localStorage.getItem("currency") || "INR";
 
-    // Sheet 2: Income
-    const incomeSheet = XLSX.utils.json_to_sheet(incomeData);
-    XLSX.utils.book_append_sheet(workbook, incomeSheet, "Income");
+  const summary = [
+    ["Expense Manager Report"],
+    ["Start Date", currentStartDate],
+    ["End Date", currentEndDate],
+    ["Selected Currency", selectedCurrency],
+    [],
+    ["Particulars", "Amount", "Currency"],
+    ["Total Income", totalIncome, selectedCurrency],
+    ["Total Expenses", totalExpense, selectedCurrency],
+    ["Balance", balance, selectedCurrency],
+    ["Savings Rate (%)", Number(savingsRate.toFixed(2)), ""],
+  ];
 
-    // Sheet 3: Expenses
-    const expensesSheet = XLSX.utils.json_to_sheet(expenseData);
-    XLSX.utils.book_append_sheet(workbook, expensesSheet, "Expenses");
+  const summarySheet = XLSX.utils.aoa_to_sheet(summary);
+  XLSX.utils.book_append_sheet(workbook, summarySheet, "Summary");
 
-    // Sheet 4: Category Breakdown
-    const categoryTotals = {};
+  // Sheet 2: Income
+  const incomeSheet = XLSX.utils.json_to_sheet(incomeData);
+  XLSX.utils.book_append_sheet(workbook, incomeSheet, "Income");
 
-    expenseData.forEach(item => {
-        const category = item.Category || "Other";
-        categoryTotals[category] =
-            (categoryTotals[category] || 0) + item.Amount;
-    });
+  // Sheet 3: Expenses
+  const expensesSheet = XLSX.utils.json_to_sheet(expenseData);
+  XLSX.utils.book_append_sheet(workbook, expensesSheet, "Expenses");
 
-    const categoryData = Object.entries(categoryTotals).map(
-        ([category, amount]) => ({
-            Category: category,
-            Total: amount
-        })
-    );
+  // Sheet 4: Category Breakdown
+  const categoryTotals = {};
 
-    const categorySheet = XLSX.utils.json_to_sheet(categoryData);
-    XLSX.utils.book_append_sheet(
-        workbook,
-        categorySheet,
-        "Category Breakdown"
-    );
+  expenseData.forEach((item) => {
+    const category = item.Category || "Other";
+    categoryTotals[category] = (categoryTotals[category] || 0) + item.Amount;
+  });
 
-    // Download workbook
-    XLSX.writeFile(workbook, "Expense_Report.xlsx");
+  const categoryData = Object.entries(categoryTotals).map(
+    ([category, amount]) => ({
+      Category: category,
+      Total: amount,
+    }),
+  );
+
+  const categorySheet = XLSX.utils.json_to_sheet(categoryData);
+  XLSX.utils.book_append_sheet(workbook, categorySheet, "Category Breakdown");
+
+  // Download workbook
+  XLSX.writeFile(workbook, "Expense_Report.xlsx");
 }
 
 // Button events
-document.getElementById("downloadReportCSV")
-    .addEventListener("click", downloadReportCSV);
+document
+  .getElementById("downloadReportCSV")
+  .addEventListener("click", downloadReportCSV);
 
-document.getElementById("downloadReportExcel")
-    .addEventListener("click", downloadReportExcel);
+document
+  .getElementById("downloadReportExcel")
+  .addEventListener("click", downloadReportExcel);
