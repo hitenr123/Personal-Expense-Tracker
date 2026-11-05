@@ -7,39 +7,37 @@
 // Authentication Check
 // ==========================================
 
-const AUTH_API =
-    "https://personal-expense-tracker-7qhy.onrender.com";
+const AUTH_API = "https://personal-expense-tracker-7qhy.onrender.com";
 
 async function checkLogin() {
-    try {
-        const response = await fetch(`${AUTH_API}/api/me`, {
-            method: "GET",
-            credentials: "include"
-        });
+  try {
+    const response = await fetch(`${AUTH_API}/api/me`, {
+      method: "GET",
+      credentials: "include",
+    });
 
-        if (!response.ok) {
-            localStorage.removeItem("user");
-            window.location.replace("login.html");
-            return false;
-        }
-
-        const data = await response.json();
-
-        if (data.status !== "success" || !data.user) {
-            localStorage.removeItem("user");
-            window.location.replace("login.html");
-            return false;
-        }
-
-        localStorage.setItem("user", JSON.stringify(data.user));
-
-        return true;
-
-    } catch (error) {
-        console.error("Authentication check failed:", error);
-        alert("Unable to verify your login. Please try again.");
-        return false;
+    if (!response.ok) {
+      localStorage.removeItem("user");
+      window.location.replace("login.html");
+      return false;
     }
+
+    const data = await response.json();
+
+    if (data.status !== "success" || !data.user) {
+      localStorage.removeItem("user");
+      window.location.replace("login.html");
+      return false;
+    }
+
+    localStorage.setItem("user", JSON.stringify(data.user));
+
+    return true;
+  } catch (error) {
+    console.error("Authentication check failed:", error);
+    alert("Unable to verify your login. Please try again.");
+    return false;
+  }
 }
 
 const EXPENSE_API =
@@ -57,7 +55,6 @@ let categoryChartInstance = null;
 // Currency
 // ==========================================
 
-
 // ==========================================
 // Currency Conversion System
 // ==========================================
@@ -66,81 +63,73 @@ let exchangeRates = null;
 let exchangeRateReady = false;
 
 function getCurrency() {
-    return localStorage.getItem("currency") || "INR";
+  return localStorage.getItem("currency") || "INR";
 }
 
 const currencyLocales = {
-    INR: "en-IN",
-    USD: "en-US",
-    EUR: "de-DE",
-    GBP: "en-GB"
+  INR: "en-IN",
+  USD: "en-US",
+  EUR: "de-DE",
+  GBP: "en-GB",
 };
 
 function convertAmount(amount) {
-    const value = Number(amount || 0);
-    const currency = getCurrency();
+  const value = Number(amount || 0);
+  const currency = getCurrency();
 
-    if (currency === "INR") return value;
+  if (currency === "INR") return value;
 
-    if (!exchangeRateReady || !exchangeRates) {
-        return value;
-    }
+  if (!exchangeRateReady || !exchangeRates) {
+    return value;
+  }
 
-    return value * (exchangeRates[currency] || 1);
+  return value * (exchangeRates[currency] || 1);
 }
 
 function formatCurrency(amount) {
-    const currency = getCurrency();
+  const currency = getCurrency();
 
-    // If rates are unavailable, show INR rather than a wrong conversion.
-    const displayCurrency =
-        currency === "INR" || !exchangeRateReady ? "INR" : currency;
+  // If rates are unavailable, show INR rather than a wrong conversion.
+  const displayCurrency =
+    currency === "INR" || !exchangeRateReady ? "INR" : currency;
 
-    const convertedAmount =
-        displayCurrency === "INR"
-            ? Number(amount || 0)
-            : convertAmount(amount);
+  const convertedAmount =
+    displayCurrency === "INR" ? Number(amount || 0) : convertAmount(amount);
 
-    return new Intl.NumberFormat(
-        currencyLocales[displayCurrency] || "en-IN",
-        {
-            style: "currency",
-            currency: displayCurrency,
-            maximumFractionDigits: 2
-        }
-    ).format(convertedAmount);
+  return new Intl.NumberFormat(currencyLocales[displayCurrency] || "en-IN", {
+    style: "currency",
+    currency: displayCurrency,
+    maximumFractionDigits: 2,
+  }).format(convertedAmount);
 }
 
 async function loadExchangeRates() {
-    if (getCurrency() === "INR") {
-        exchangeRateReady = true;
-        return;
+  if (getCurrency() === "INR") {
+    exchangeRateReady = true;
+    return;
+  }
+
+  try {
+    const response = await fetch("https://open.er-api.com/v6/latest/INR");
+
+    if (!response.ok) {
+      throw new Error("Could not fetch exchange rates");
     }
 
-    try {
-        const response = await fetch(
-            "https://open.er-api.com/v6/latest/INR"
-        );
+    const data = await response.json();
 
-        if (!response.ok) {
-            throw new Error("Could not fetch exchange rates");
-        }
-
-        const data = await response.json();
-
-        if (data.result !== "success" || !data.rates) {
-            throw new Error("Invalid exchange rate data");
-        }
-
-        exchangeRates = data.rates;
-        exchangeRateReady = true;
-
-        window.dispatchEvent(new Event("currencyRatesReady"));
-
-    } catch (error) {
-        console.error("Currency conversion error:", error);
-        exchangeRateReady = false;
+    if (data.result !== "success" || !data.rates) {
+      throw new Error("Invalid exchange rate data");
     }
+
+    exchangeRates = data.rates;
+    exchangeRateReady = true;
+
+    window.dispatchEvent(new Event("currencyRatesReady"));
+  } catch (error) {
+    console.error("Currency conversion error:", error);
+    exchangeRateReady = false;
+  }
 }
 
 window.currencyReady = loadExchangeRates();
@@ -148,7 +137,6 @@ window.currencyReady = loadExchangeRates();
 window.getCurrency = getCurrency;
 window.formatCurrency = formatCurrency;
 window.convertAmount = convertAmount;
-
 
 // ==========================================
 // Sidebar Toggle
@@ -200,7 +188,7 @@ if (dateElement) {
 // ==========================================
 
 async function fetchDashboardData() {
-    await window.currencyReady;
+  await window.currencyReady;
   try {
     const [expenseResponse, incomeResponse] = await Promise.all([
       fetch(EXPENSE_API),
@@ -629,26 +617,25 @@ if (profile) {
 // ==========================================
 
 async function initializeDashboard() {
-    const isLoggedIn = await checkLogin();
+  const isLoggedIn = await checkLogin();
 
-    if (!isLoggedIn) return;
+  if (!isLoggedIn) return;
 
-    updateGlobalProfile();
-    await fetchDashboardData();
+  updateGlobalProfile();
+  await fetchDashboardData();
 }
 
 initializeDashboard();
 
-
 // Refresh dashboard when transactions change
 window.addEventListener("storage", function (event) {
-    if (event.key === "transactionsUpdated") {
-        fetchDashboardData();
-    }
+  if (event.key === "transactionsUpdated") {
+    fetchDashboardData();
+  }
 });
 
 window.addEventListener("transactionsUpdated", function () {
-    fetchDashboardData();
+  fetchDashboardData();
 });
 
 // ==========================================
@@ -656,53 +643,95 @@ window.addEventListener("transactionsUpdated", function () {
 // ==========================================
 
 function updateGlobalProfile() {
-    const savedName = localStorage.getItem("profileName") || "Hiten";
+  const loggedInUser = JSON.parse(localStorage.getItem("user") || "{}");
 
-    // Update profile name
-    document.querySelectorAll("#topProfileName").forEach(element => {
-        element.textContent = savedName;
-    });
+  const savedName =
+    loggedInUser.full_name || localStorage.getItem("profileName") || "User";
 
-    // Update avatar initial
-    document.querySelectorAll(".profile .avatar").forEach(element => {
-        element.textContent = savedName.charAt(0).toUpperCase();
-    });
+  // Update profile name
+  document.querySelectorAll("#topProfileName").forEach((element) => {
+    element.textContent = savedName;
+  });
 
-    // Update dashboard greeting
-    const greetingHeading = document.querySelector(".greeting h1");
+  // Update avatar initial
+  document.querySelectorAll(".profile .avatar").forEach((element) => {
+    element.textContent = savedName.charAt(0).toUpperCase();
+  });
 
-    if (greetingHeading) {
-        const hour = new Date().getHours();
+  // Update dashboard greeting
+  const greetingHeading = document.querySelector(".greeting h1");
 
-        let greeting = "Good Evening";
+  if (greetingHeading) {
+    const hour = new Date().getHours();
 
-        if (hour < 12) {
-            greeting = "Good Morning";
-        } else if (hour < 17) {
-            greeting = "Good Afternoon";
-        }
+    let greeting = "Good Evening";
 
-        greetingHeading.textContent = `${greeting}, ${savedName}`;
+    if (hour < 12) {
+      greeting = "Good Morning";
+    } else if (hour < 17) {
+      greeting = "Good Afternoon";
     }
+
+    greetingHeading.textContent = `${greeting}, ${savedName}`;
+  }
 }
 
 document.addEventListener("DOMContentLoaded", updateGlobalProfile);
-
-
 
 // ==========================================
 // Global Theme System
 // ==========================================
 
 function applyTheme(theme) {
-    const selectedTheme = theme === "dark" ? "dark" : "light";
+  const selectedTheme = theme === "dark" ? "dark" : "light";
 
-    document.documentElement.setAttribute("data-theme", selectedTheme);
+  document.documentElement.setAttribute("data-theme", selectedTheme);
 
-    localStorage.setItem("theme", selectedTheme);
+  localStorage.setItem("theme", selectedTheme);
 }
 
 window.applyTheme = applyTheme;
 
 // Apply saved theme on every page
 applyTheme(localStorage.getItem("theme") || "light");
+
+
+// ==========================================
+// Logout Functionality
+// ==========================================
+
+const logoutBtn = document.getElementById("logoutBtn");
+
+if (logoutBtn) {
+    logoutBtn.addEventListener("click", async () => {
+
+        const confirmLogout = confirm("Are you sure you want to logout?");
+
+        if (!confirmLogout) return;
+
+        try {
+            const response = await fetch(
+                "https://personal-expense-tracker-7qhy.onrender.com/api/logout",
+                {
+                    method: "POST",
+                    credentials: "include"
+                }
+            );
+
+            if (!response.ok) {
+                throw new Error("Logout failed.");
+            }
+
+            localStorage.removeItem("user");
+            localStorage.removeItem("profileName");
+            localStorage.removeItem("rememberMe");
+
+            window.location.replace("login.html");
+
+        } catch (error) {
+            console.error("Logout Error:", error);
+            alert("Unable to logout. Please try again.");
+        }
+
+    });
+}
