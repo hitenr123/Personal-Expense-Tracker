@@ -8,9 +8,6 @@
 // Authentication Check
 // ==========================================
 
-const AUTH_API =
-    "https://personal-expense-tracker-7qhy.onrender.com";
-
 async function checkLogin() {
     try {
         const response = await fetch(`${AUTH_API}/api/me`, {
