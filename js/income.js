@@ -6,7 +6,7 @@ async function checkLogin() {
   try {
     const response = await fetch(`${AUTH_API}/api/me`, {
       method: "GET",
-      credentials: "include",
+      credentials: "include"
     });
 
     if (!response.ok) {
@@ -26,6 +26,7 @@ async function checkLogin() {
     localStorage.setItem("user", JSON.stringify(data.user));
 
     return true;
+
   } catch (error) {
     console.error("Authentication error:", error);
     alert("Unable to verify login. Please try again.");
@@ -58,8 +59,6 @@ const todayIncome = document.getElementById("todayIncome");
 const monthIncome = document.getElementById("monthIncome");
 const totalIncomeElement = document.getElementById("totalIncome");
 const highestIncome = document.getElementById("highestIncome");
-const quickMonthIncome = document.getElementById("quickMonthIncome");
-const incomeGrowth = document.getElementById("incomeGrowth");
 
 // Store income records fetched from the backend
 let incomes = [];
@@ -133,82 +132,35 @@ function updateIncomeSummary() {
   const currentMonth = currentDate.getMonth();
   const currentYear = currentDate.getFullYear();
 
-  const previousMonthDate = new Date(
-    currentYear,
-    currentMonth - 1,
-    1
-  );
-
-  const previousMonth = previousMonthDate.getMonth();
-  const previousYear = previousMonthDate.getFullYear();
-
   // Today's income
   const todayTotal = incomes
-    .filter(income => income.date === today)
+    .filter((income) => income.date === today)
     .reduce((total, income) => total + income.amount, 0);
 
-  // Current month's income
+  // This month's income
   const monthTotal = incomes
-    .filter(income => {
+    .filter((income) => {
       const date = new Date(income.date + "T00:00:00");
 
       return (
-        date.getMonth() === currentMonth &&
-        date.getFullYear() === currentYear
-      );
-    })
-    .reduce((total, income) => total + income.amount, 0);
-
-  // Previous month's income
-  const previousMonthTotal = incomes
-    .filter(income => {
-      const date = new Date(income.date + "T00:00:00");
-
-      return (
-        date.getMonth() === previousMonth &&
-        date.getFullYear() === previousYear
+        date.getMonth() === currentMonth && date.getFullYear() === currentYear
       );
     })
     .reduce((total, income) => total + income.amount, 0);
 
   // Total income
-  const total = incomes.reduce(
-    (sum, income) => sum + income.amount,
-    0
-  );
+  const total = incomes.reduce((sum, income) => sum + income.amount, 0);
 
   // Highest income
-  const highest = incomes.length
-    ? Math.max(...incomes.map(income => income.amount))
-    : 0;
+  const highest =
+    incomes.length > 0
+      ? Math.max(...incomes.map((income) => income.amount))
+      : 0;
 
-  // Calculate growth
-  let growthText;
-
-  if (previousMonthTotal === 0) {
-    growthText = monthTotal > 0 ? "New" : "0%";
-  } else {
-    const growth =
-      ((monthTotal - previousMonthTotal) / previousMonthTotal) * 100;
-
-    growthText =
-      `${growth > 0 ? "+" : ""}${growth.toFixed(1)}%`;
-  }
-
-  // Update bottom summary
   todayIncome.textContent = formatCurrency(todayTotal);
   monthIncome.textContent = formatCurrency(monthTotal);
   totalIncomeElement.textContent = formatCurrency(total);
   highestIncome.textContent = formatCurrency(highest);
-
-  // Update top quick statistics
-  if (quickMonthIncome) {
-    quickMonthIncome.textContent = formatCurrency(monthTotal);
-  }
-
-  if (incomeGrowth) {
-    incomeGrowth.textContent = growthText;
-  }
 }
 
 // ==========================================
@@ -290,31 +242,7 @@ async function initializeIncomePage() {
 
   if (!isLoggedIn) return;
 
-  updateIncomeProfile();
-
   await getIncomes();
 }
 
 initializeIncomePage();
-
-
-// ==========================================
-// Update Profile Information
-// ==========================================
-
-function updateIncomeProfile() {
-  const user = JSON.parse(localStorage.getItem("user") || "{}");
-
-  const name = user.full_name || user.name || "User";
-
-  const profileName = document.getElementById("profileName");
-  const profileAvatar = document.getElementById("profileAvatar");
-
-  if (profileName) {
-    profileName.textContent = name;
-  }
-
-  if (profileAvatar) {
-    profileAvatar.textContent = name.charAt(0).toUpperCase();
-  }
-}
