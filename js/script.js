@@ -138,6 +138,29 @@ window.getCurrency = getCurrency;
 window.formatCurrency = formatCurrency;
 window.convertAmount = convertAmount;
 
+
+// ==========================================
+// Global Currency Symbol Updater
+// ==========================================
+
+function updateCurrencySymbols() {
+  const formattedZero = formatCurrency(0);
+
+  const symbol = formattedZero.replace(
+    /[\d.,\s\u00A0\u202F-]/g,
+    ""
+  );
+
+  document.querySelectorAll("[data-currency-symbol]").forEach((element) => {
+    element.textContent = symbol;
+  });
+}
+
+window.updateCurrencySymbols = updateCurrencySymbols;
+
+window.addEventListener("currencyRatesReady", updateCurrencySymbols);
+
+
 // ==========================================
 // Sidebar Toggle
 // ==========================================

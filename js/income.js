@@ -1,40 +1,4 @@
 // ==========================================
-// Authentication Check
-// ==========================================
-
-async function checkLogin() {
-  try {
-    const response = await fetch(`${AUTH_API}/api/me`, {
-      method: "GET",
-      credentials: "include"
-    });
-
-    if (!response.ok) {
-      localStorage.removeItem("user");
-      window.location.replace("login.html");
-      return false;
-    }
-
-    const data = await response.json();
-
-    if (data.status !== "success" || !data.user) {
-      localStorage.removeItem("user");
-      window.location.replace("login.html");
-      return false;
-    }
-
-    localStorage.setItem("user", JSON.stringify(data.user));
-
-    return true;
-
-  } catch (error) {
-    console.error("Authentication error:", error);
-    alert("Unable to verify login. Please try again.");
-    return false;
-  }
-}
-
-// ==========================================
 // Income Page - Supabase Integration
 // ==========================================
 
@@ -59,6 +23,8 @@ const todayIncome = document.getElementById("todayIncome");
 const monthIncome = document.getElementById("monthIncome");
 const totalIncomeElement = document.getElementById("totalIncome");
 const highestIncome = document.getElementById("highestIncome");
+const quickMonthIncome = document.getElementById("quickMonthIncome");
+const incomeGrowth = document.getElementById("incomeGrowth");
 
 // Store income records fetched from the backend
 let incomes = [];
@@ -83,6 +49,27 @@ function setDefaultDateTime() {
 }
 
 setDefaultDateTime();
+
+// ==========================================
+// Update Profile Information
+// ==========================================
+
+function updateIncomeProfile() {
+  const user = JSON.parse(localStorage.getItem("user") || "{}");
+
+  const name = user.full_name || localStorage.getItem("profileName") || "User";
+
+  const profileName = document.getElementById("profileName");
+  const profileAvatar = document.getElementById("profileAvatar");
+
+  if (profileName) {
+    profileName.textContent = name;
+  }
+
+  if (profileAvatar) {
+    profileAvatar.textContent = name.charAt(0).toUpperCase();
+  }
+}
 
 // ==========================================
 // Fetch Incomes From Supabase
@@ -132,12 +119,15 @@ function updateIncomeSummary() {
   const currentMonth = currentDate.getMonth();
   const currentYear = currentDate.getFullYear();
 
-  // Today's income
+  const previousMonthDate = new Date(currentYear, currentMonth - 1, 1);
+
+  const previousMonth = previousMonthDate.getMonth();
+  const previousYear = previousMonthDate.getFullYear();
+
   const todayTotal = incomes
     .filter((income) => income.date === today)
     .reduce((total, income) => total + income.amount, 0);
 
-  // This month's income
   const monthTotal = incomes
     .filter((income) => {
       const date = new Date(income.date + "T00:00:00");
@@ -148,19 +138,50 @@ function updateIncomeSummary() {
     })
     .reduce((total, income) => total + income.amount, 0);
 
-  // Total income
+  const previousMonthTotal = incomes
+    .filter((income) => {
+      const date = new Date(income.date + "T00:00:00");
+
+      return (
+        date.getMonth() === previousMonth && date.getFullYear() === previousYear
+      );
+    })
+    .reduce((total, income) => total + income.amount, 0);
+
   const total = incomes.reduce((sum, income) => sum + income.amount, 0);
 
-  // Highest income
   const highest =
     incomes.length > 0
       ? Math.max(...incomes.map((income) => income.amount))
       : 0;
 
-  todayIncome.textContent = formatCurrency(todayTotal);
-  monthIncome.textContent = formatCurrency(monthTotal);
-  totalIncomeElement.textContent = formatCurrency(total);
-  highestIncome.textContent = formatCurrency(highest);
+  // Calculate monthly growth
+  let growth = "0%";
+
+  if (previousMonthTotal === 0 && monthTotal > 0) {
+    growth = "New";
+  } else if (previousMonthTotal > 0) {
+    const percentage =
+      ((monthTotal - previousMonthTotal) / previousMonthTotal) * 100;
+
+    growth = `${percentage > 0 ? "+" : ""}${percentage.toFixed(1)}%`;
+  }
+
+  // Bottom summary cards
+  if (todayIncome) todayIncome.textContent = formatCurrency(todayTotal);
+  if (monthIncome) monthIncome.textContent = formatCurrency(monthTotal);
+  if (totalIncomeElement)
+    totalIncomeElement.textContent = formatCurrency(total);
+  if (highestIncome) highestIncome.textContent = formatCurrency(highest);
+
+  // Top quick statistics
+  if (quickMonthIncome) {
+    quickMonthIncome.textContent = formatCurrency(monthTotal);
+  }
+
+  if (incomeGrowth) {
+    incomeGrowth.textContent = growth;
+  }
 }
 
 // ==========================================
@@ -233,6 +254,7 @@ incomeForm.addEventListener("submit", async function (event) {
   }
 });
 
+
 // ==========================================
 // Initial Load
 // ==========================================
@@ -241,6 +263,12 @@ async function initializeIncomePage() {
   const isLoggedIn = await checkLogin();
 
   if (!isLoggedIn) return;
+
+  updateIncomeProfile();
+
+  await window.currencyReady;
+
+  updateCurrencySymbols();
 
   await getIncomes();
 }
