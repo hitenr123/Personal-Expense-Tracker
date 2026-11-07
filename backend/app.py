@@ -304,9 +304,18 @@ def get_profile():
 # Save Expense
 # ==========================================
 
+
 @app.route("/api/expenses", methods=["POST"])
 def add_expense():
     try:
+        user = get_current_user()
+
+        if not user:
+            return jsonify({
+                "status": "error",
+                "message": "Please log in first"
+            }), 401
+
         data = request.get_json()
 
         if not data:
@@ -321,6 +330,7 @@ def add_expense():
             return jsonify({"error": "Category and date are required"}), 400
 
         expense = {
+            "user_id": user["id"],
             "amount": amount,
             "type": "expense",
             "category": data.get("category"),
@@ -357,12 +367,22 @@ def add_expense():
 # Get Expenses
 # ==========================================
 
+
 @app.route("/api/expenses", methods=["GET"])
 def get_expenses():
     try:
+        user = get_current_user()
+
+        if not user:
+            return jsonify({
+                "status": "error",
+                "message": "Please log in first"
+            }), 401
+
         response = (
             supabase.table("transactions")
             .select("*")
+            .eq("user_id", user["id"])
             .eq("type", "expense")
             .order("transaction_date", desc=True)
             .execute()
@@ -384,9 +404,18 @@ def get_expenses():
 # Save Income
 # ==========================================
 
+
 @app.route("/api/income", methods=["POST"])
 def add_income():
     try:
+        user = get_current_user()
+
+        if not user:
+            return jsonify({
+                "status": "error",
+                "message": "Please log in first"
+            }), 401
+
         data = request.get_json()
 
         if not data:
@@ -403,6 +432,7 @@ def add_income():
             }), 400
 
         income = {
+            "user_id": user["id"],
             "amount": amount,
             "type": "income",
             "category": data.get("category"),
@@ -440,12 +470,22 @@ def add_income():
 # Get Income
 # ==========================================
 
+
 @app.route("/api/income", methods=["GET"])
 def get_income():
     try:
+        user = get_current_user()
+
+        if not user:
+            return jsonify({
+                "status": "error",
+                "message": "Please log in first"
+            }), 401
+
         response = (
             supabase.table("transactions")
             .select("*")
+            .eq("user_id", user["id"])
             .eq("type", "income")
             .order("transaction_date", desc=True)
             .execute()
@@ -849,16 +889,26 @@ def get_budget_month_range(month_value=None):
 # Get Monthly Budget and Spending
 # ==========================================
 
+
 @app.route("/api/budget", methods=["GET"])
 def get_budget():
     try:
+        user = get_current_user()
+
+        if not user:
+            return jsonify({
+                "status": "error",
+                "message": "Please log in first"
+            }), 401
+
         month = request.args.get("month")
         month_start, next_month = get_budget_month_range(month)
 
-        # Get saved monthly budget
+        # Get the user's overall monthly budget
         budget_response = (
             supabase.table("budgets")
             .select("*")
+            .eq("user_id", user["id"])
             .eq("category", "Overall")
             .eq("month", month_start)
             .limit(1)
@@ -877,19 +927,22 @@ def get_budget():
             else 0
         )
 
-        # Get expenses for the selected month
+        # Get the user's expenses for the selected month
         expense_response = (
             supabase.table("transactions")
-            .select("amount")
+            .select("amount, category")
+            .eq("user_id", user["id"])
             .eq("type", "expense")
             .gte("transaction_date", month_start)
             .lt("transaction_date", next_month)
             .execute()
         )
 
+        expenses = expense_response.data
+
         spent = sum(
             float(expense.get("amount", 0))
-            for expense in expense_response.data
+            for expense in expenses
         )
 
         remaining = max(budget_amount - spent, 0)
@@ -900,6 +953,50 @@ def get_budget():
             else 0
         )
 
+        # Get category-wise budgets for the selected month
+        category_response = (
+            supabase.table("budgets")
+            .select("*")
+            .eq("user_id", user["id"])
+            .neq("category", "Overall")
+            .eq("month", month_start)
+            .execute()
+        )
+
+        category_budgets = []
+
+        for category_budget in category_response.data:
+            category_name = category_budget["category"]
+            category_amount = float(category_budget["amount"])
+
+            # Calculate spending for this category
+            category_spent = sum(
+                float(expense.get("amount", 0))
+                for expense in expenses
+                if expense.get("category") == category_name
+            )
+
+            category_remaining = max(
+                category_amount - category_spent, 0
+            )
+
+            category_percentage = (
+                round(
+                    (category_spent / category_amount) * 100, 2
+                )
+                if category_amount > 0
+                else 0
+            )
+
+            category_budgets.append({
+                "id": category_budget["id"],
+                "category": category_name,
+                "amount": category_amount,
+                "spent": category_spent,
+                "remaining": category_remaining,
+                "percentage": category_percentage
+            })
+
         return jsonify({
             "status": "success",
             "data": {
@@ -908,7 +1005,8 @@ def get_budget():
                 "remaining": remaining,
                 "percentage": percentage,
                 "month": month_start,
-                "budget_id": budget_data["id"] if budget_data else None
+                "budget_id": budget_data["id"] if budget_data else None,
+                "category_budgets": category_budgets
             }
         })
 
@@ -919,13 +1017,23 @@ def get_budget():
         }), 500
 
 
+
 # ==========================================
 # Save or Update Monthly Budget
 # ==========================================
 
+
 @app.route("/api/budget", methods=["POST"])
 def save_budget():
     try:
+        user = get_current_user()
+
+        if not user:
+            return jsonify({
+                "status": "error",
+                "message": "Please log in first"
+            }), 401
+
         data = request.get_json()
 
         if not data:
@@ -942,10 +1050,11 @@ def save_budget():
             data.get("month")
         )
 
-        # Check whether this month's budget already exists
+        # Check this user's existing monthly budget
         existing = (
             supabase.table("budgets")
             .select("id")
+            .eq("user_id", user["id"])
             .eq("category", "Overall")
             .eq("month", month_start)
             .limit(1)
@@ -953,21 +1062,21 @@ def save_budget():
         )
 
         budget_record = {
+            "user_id": user["id"],
             "category": "Overall",
             "amount": amount,
             "month": month_start
         }
 
         if existing.data:
-            # Update existing budget
             response = (
                 supabase.table("budgets")
                 .update(budget_record)
                 .eq("id", existing.data[0]["id"])
+                .eq("user_id", user["id"])
                 .execute()
             )
         else:
-            # Insert new budget
             response = (
                 supabase.table("budgets")
                 .insert(budget_record)
@@ -990,6 +1099,282 @@ def save_budget():
             "status": "error",
             "message": str(e)
         }), 500
+        
+        
+
+@app.route("/api/budget/categories", methods=["GET"])
+def get_category_budgets():
+    try:
+        user = get_current_user()
+
+        if not user:
+            return jsonify({
+                "status": "error",
+                "message": "Please log in first"
+            }), 401
+
+        month = request.args.get("month")
+        month_start, next_month = get_budget_month_range(month)
+
+        response = (
+            supabase.table("budgets")
+            .select("*")
+            .eq("user_id", user["id"])
+            .neq("category", "Overall")
+            .eq("month", month_start)
+            .execute()
+        )
+
+        expense_response = (
+            supabase.table("transactions")
+            .select("amount, category")
+            .eq("user_id", user["id"])
+            .eq("type", "expense")
+            .gte("transaction_date", month_start)
+            .lt("transaction_date", next_month)
+            .execute()
+        )
+
+        expenses = expense_response.data
+        category_budgets = []
+
+        for budget in response.data:
+            category = budget["category"]
+            amount = float(budget["amount"])
+
+            spent = sum(
+                float(expense.get("amount", 0))
+                for expense in expenses
+                if expense.get("category") == category
+            )
+
+            category_budgets.append({
+                "id": budget["id"],
+                "category": category,
+                "amount": amount,
+                "spent": spent,
+                "remaining": max(amount - spent, 0),
+                "percentage": round((spent / amount) * 100, 2)
+                if amount > 0 else 0
+            })
+
+        return jsonify({
+            "status": "success",
+            "data": category_budgets
+        })
+
+    except Exception as e:
+        return jsonify({
+            "status": "error",
+            "message": str(e)
+        }), 500
+
+
+
+
+
+@app.route("/api/budget/categories", methods=["POST"])
+def save_category_budget():
+    try:
+        user = get_current_user()
+
+        if not user:
+            return jsonify({
+                "status": "error",
+                "message": "Please log in first"
+            }), 401
+
+        data = request.get_json()
+
+        if not data:
+            return jsonify({"error": "No budget data provided"}), 400
+
+        category = data.get("category")
+        amount = float(data.get("amount", 0))
+
+        if not category or category == "Overall":
+            return jsonify({
+                "error": "Please select a valid category"
+            }), 400
+
+        if amount <= 0:
+            return jsonify({
+                "error": "Budget must be greater than zero"
+            }), 400
+
+        month_start, _ = get_budget_month_range(
+            data.get("month")
+        )
+
+        # Check whether this category budget already exists
+        existing = (
+            supabase.table("budgets")
+            .select("id")
+            .eq("user_id", user["id"])
+            .eq("category", category)
+            .eq("month", month_start)
+            .limit(1)
+            .execute()
+        )
+
+        budget_record = {
+            "user_id": user["id"],
+            "category": category,
+            "amount": amount,
+            "month": month_start
+        }
+
+        if existing.data:
+            response = (
+                supabase.table("budgets")
+                .update(budget_record)
+                .eq("id", existing.data[0]["id"])
+                .eq("user_id", user["id"])
+                .execute()
+            )
+        else:
+            response = (
+                supabase.table("budgets")
+                .insert(budget_record)
+                .execute()
+            )
+
+        return jsonify({
+            "status": "success",
+            "message": "Category budget saved successfully!",
+            "data": response.data
+        }), 201
+
+    except ValueError:
+        return jsonify({
+            "error": "Invalid budget amount or month"
+        }), 400
+
+    except Exception as e:
+        return jsonify({
+            "status": "error",
+            "message": str(e)
+        }), 500
+
+
+
+
+@app.route("/api/budget/categories/<budget_id>", methods=["PUT"])
+def update_category_budget(budget_id):
+    try:
+        user = get_current_user()
+
+        if not user:
+            return jsonify({
+                "status": "error",
+                "message": "Please log in first"
+            }), 401
+
+        data = request.get_json()
+
+        if not data:
+            return jsonify({"error": "No budget data provided"}), 400
+
+        amount = float(data.get("amount", 0))
+
+        if amount <= 0:
+            return jsonify({
+                "error": "Budget must be greater than zero"
+            }), 400
+
+        # Verify that this category budget belongs to the user
+        existing = (
+            supabase.table("budgets")
+            .select("id")
+            .eq("id", budget_id)
+            .eq("user_id", user["id"])
+            .neq("category", "Overall")
+            .limit(1)
+            .execute()
+        )
+
+        if not existing.data:
+            return jsonify({
+                "status": "error",
+                "message": "Category budget not found"
+            }), 404
+
+        response = (
+            supabase.table("budgets")
+            .update({"amount": amount})
+            .eq("id", budget_id)
+            .eq("user_id", user["id"])
+            .execute()
+        )
+
+        return jsonify({
+            "status": "success",
+            "message": "Category budget updated successfully!",
+            "data": response.data
+        })
+
+    except ValueError:
+        return jsonify({
+            "error": "Invalid budget amount"
+        }), 400
+
+    except Exception as e:
+        return jsonify({
+            "status": "error",
+            "message": str(e)
+        }), 500
+
+
+
+
+@app.route("/api/budget/categories/<budget_id>", methods=["DELETE"])
+def delete_category_budget(budget_id):
+    try:
+        user = get_current_user()
+
+        if not user:
+            return jsonify({
+                "status": "error",
+                "message": "Please log in first"
+            }), 401
+
+        # Verify ownership and prevent deletion of Overall budget
+        existing = (
+            supabase.table("budgets")
+            .select("id")
+            .eq("id", budget_id)
+            .eq("user_id", user["id"])
+            .neq("category", "Overall")
+            .limit(1)
+            .execute()
+        )
+
+        if not existing.data:
+            return jsonify({
+                "status": "error",
+                "message": "Category budget not found"
+            }), 404
+
+        response = (
+            supabase.table("budgets")
+            .delete()
+            .eq("id", budget_id)
+            .eq("user_id", user["id"])
+            .execute()
+        )
+
+        return jsonify({
+            "status": "success",
+            "message": "Category budget deleted successfully!"
+        })
+
+    except Exception as e:
+        return jsonify({
+            "status": "error",
+            "message": str(e)
+        }), 500
+
+
 
 
 if __name__ == "__main__":

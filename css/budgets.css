@@ -532,3 +532,247 @@ html[data-theme="dark"] .budget-form-actions .save-btn:hover {
     justify-content: center;
     align-items: center;
 }
+
+
+/* ==========================================
+   CATEGORY-WISE BUDGET FORM
+========================================== */
+
+.category-budget-form {
+    display: grid;
+    grid-template-columns: 1fr 1fr auto;
+    align-items: end;
+    gap: 18px;
+    margin-bottom: 28px;
+}
+
+.category-budget-form .budget-input-group select {
+    width: 100%;
+    height: 55px;
+    padding: 0 15px;
+    border: 1px solid #e2e8f0;
+    border-radius: 11px;
+    background: #f8fafc;
+    color: #172033;
+    font-family: inherit;
+    font-size: 13px;
+    outline: none;
+}
+
+.category-budget-form .budget-input-group select:focus {
+    border-color: #16a34a;
+    box-shadow: 0 0 0 3px rgba(22, 163, 74, .1);
+}
+
+.category-budget-form .save-btn {
+    min-height: 55px;
+    padding: 0 20px;
+    border: none;
+    border-radius: 10px;
+    background: #16a34a;
+    color: white;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+    transition: .25s ease;
+}
+
+.category-budget-form .save-btn:hover {
+    background: #15803d;
+    transform: translateY(-2px);
+}
+
+/* ==========================================
+   CATEGORY BUDGET LIST
+========================================== */
+
+.category-budget-list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+}
+
+.category-budget-loading {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 25px;
+    color: #94a3b8;
+    font-size: 13px;
+}
+
+/* Individual category card */
+
+.category-budget-item {
+    padding: 20px;
+    border: 1px solid #e8edf3;
+    border-radius: 13px;
+    background: #ffffff;
+    transition: .25s ease;
+}
+
+.category-budget-item:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 7px 18px rgba(0, 0, 0, .05);
+}
+
+.category-budget-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 18px;
+}
+
+.category-budget-name {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+}
+
+.category-budget-icon {
+    width: 42px;
+    height: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 11px;
+    background: #ecfdf5;
+    color: #16a34a;
+    font-size: 17px;
+}
+
+.category-budget-name h3 {
+    font-size: 14px;
+    color: #172033;
+}
+
+.category-budget-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.category-budget-actions button {
+    width: 32px;
+    height: 32px;
+    border: none;
+    border-radius: 8px;
+    background: #f1f5f9;
+    color: #64748b;
+    cursor: pointer;
+    transition: .2s;
+}
+
+.category-budget-actions .edit-category-budget:hover {
+    background: #dbeafe;
+    color: #2563eb;
+}
+
+.category-budget-actions .delete-category-budget:hover {
+    background: #fee2e2;
+    color: #dc2626;
+}
+
+.category-budget-amounts {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 12px;
+    font-size: 12px;
+    color: #64748b;
+}
+
+.category-budget-amounts strong {
+    color: #172033;
+    font-size: 13px;
+}
+
+.category-budget-progress-track {
+    height: 9px;
+    background: #e2e8f0;
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+.category-budget-progress-fill {
+    height: 100%;
+    width: 0;
+    background: #16a34a;
+    border-radius: 20px;
+    transition: width .4s ease;
+}
+
+.category-budget-progress-fill.over-budget {
+    background: #ef4444;
+}
+
+.category-budget-footer {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    margin-top: 12px;
+    font-size: 11px;
+    color: #64748b;
+}
+
+/* ==========================================
+   CATEGORY BUDGET DARK MODE
+========================================== */
+
+html[data-theme="dark"] .category-budget-form .budget-input-group select {
+    background: #1e293b;
+    border-color: #334155;
+    color: #f8fafc;
+}
+
+html[data-theme="dark"] .category-budget-item {
+    background: #1e293b;
+    border-color: #334155;
+}
+
+html[data-theme="dark"] .category-budget-name h3,
+html[data-theme="dark"] .category-budget-amounts strong {
+    color: #f8fafc;
+}
+
+html[data-theme="dark"] .category-budget-actions button {
+    background: #334155;
+    color: #e2e8f0;
+}
+
+html[data-theme="dark"] .category-budget-progress-track {
+    background: #475569;
+}
+
+/* ==========================================
+   RESPONSIVE CATEGORY BUDGETS
+========================================== */
+
+@media (max-width: 800px) {
+    .category-budget-form {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .category-budget-form .save-btn {
+        grid-column: 1 / -1;
+    }
+}
+
+@media (max-width: 600px) {
+    .category-budget-form,
+    .category-budget-list {
+        grid-template-columns: 1fr;
+    }
+
+    .category-budget-form .save-btn {
+        grid-column: auto;
+    }
+
+    .category-budget-item {
+        padding: 16px;
+    }
+}

@@ -232,26 +232,56 @@
         </section>
 
         <!-- Category Budget Section -->
+        <!-- Category Budget Section -->
         <section class="budget-category-card">
           <div class="budget-section-heading">
             <div>
               <h2>Category-wise Budgets</h2>
-              <p>Organize your spending limits by expense category.</p>
+              <p>Set and monitor separate spending limits for each category.</p>
             </div>
-
-            <span class="coming-soon-label">Coming Next</span>
           </div>
 
-          <div class="budget-category-empty">
-            <div class="budget-empty-icon">
-              <i class="fa-solid fa-layer-group"></i>
+          <!-- Add Category Budget Form -->
+          <form id="categoryBudgetForm" class="category-budget-form">
+            <div class="budget-input-group">
+              <label for="categoryBudgetCategory">Select Category</label>
+              <select id="categoryBudgetCategory" required>
+                <option value="">Choose category</option>
+                <option value="Food">Food</option>
+                <option value="Shopping">Shopping</option>
+                <option value="Transport">Transport</option>
+                <option value="Bills">Bills</option>
+                <option value="Healthcare">Healthcare</option>
+                <option value="Entertainment">Entertainment</option>
+                <option value="Education">Education</option>
+                <option value="Other">Other</option>
+              </select>
             </div>
 
-            <h3>Manage budgets by category</h3>
-            <p>
-              Set separate spending limits for Food, Shopping, Travel, Bills and
-              other expense categories.
-            </p>
+            <div class="budget-input-group">
+              <label for="categoryBudgetAmount">Budget Limit</label>
+              <div class="budget-amount-input">
+                <span data-currency-symbol>₹</span>
+                <input
+                  type="number"
+                  id="categoryBudgetAmount"
+                  placeholder="Enter amount"
+                  min="0.01"
+                  step="0.01"
+                  required
+                />
+              </div>
+            </div>
+
+            <button type="submit" class="save-btn">
+              <i class="fa-solid fa-plus"></i>
+              Add Category Budget
+            </button>
+          </form>
+
+          <!-- Category Budget List -->
+          <div id="categoryBudgetList" class="category-budget-list">
+            <p class="category-budget-loading">Loading category budgets...</p>
           </div>
         </section>
       </main>
