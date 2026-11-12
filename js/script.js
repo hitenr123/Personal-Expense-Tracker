@@ -210,16 +210,27 @@ if (dateElement) {
 // Fetch Dashboard Data from Supabase
 // ==========================================
 
+
 async function fetchDashboardData() {
   await window.currencyReady;
+
   try {
     const [expenseResponse, incomeResponse] = await Promise.all([
-      fetch(EXPENSE_API),
-      fetch(INCOME_API),
+      fetch(EXPENSE_API, {
+        method: "GET",
+        credentials: "include",
+      }),
+
+      fetch(INCOME_API, {
+        method: "GET",
+        credentials: "include",
+      }),
     ]);
 
     if (!expenseResponse.ok || !incomeResponse.ok) {
-      throw new Error("Unable to fetch dashboard data.");
+      throw new Error(
+        `API Error - Expenses: ${expenseResponse.status}, Income: ${incomeResponse.status}`,
+      );
     }
 
     const expenseResult = await expenseResponse.json();
@@ -250,11 +261,12 @@ async function fetchDashboardData() {
     updateOverviewChart();
     updateCategoryChart();
     updateRecentTransactions();
+
   } catch (error) {
     console.error("Dashboard loading error:", error);
 
     alert(
-      "Unable to load dashboard data. Please check whether Flask is running.",
+      "Unable to load dashboard data. Please check your login session and backend connection.",
     );
   }
 }

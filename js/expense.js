@@ -10,7 +10,7 @@ async function checkLogin() {
   try {
     const response = await fetch(`${AUTH_API}/api/me`, {
       method: "GET",
-      credentials: "include"
+      credentials: "include",
     });
 
     if (!response.ok) {
@@ -30,14 +30,12 @@ async function checkLogin() {
     localStorage.setItem("user", JSON.stringify(data.user));
 
     return true;
-
   } catch (error) {
     console.error("Authentication error:", error);
     alert("Unable to verify login. Please try again.");
     return false;
   }
 }
-
 
 const API_URL =
   "https://personal-expense-tracker-7qhy.onrender.com/api/expenses";
@@ -118,9 +116,13 @@ categorySelect.addEventListener("change", updateLiveSummary);
 paymentSelect.addEventListener("change", updateLiveSummary);
 
 // Fetch expenses from Supabase through Flask
+
 async function updateExpenseSummary() {
   try {
-    const response = await fetch(API_URL);
+    const response = await fetch(API_URL, {
+      method: "GET",
+      credentials: "include",
+    });
 
     if (!response.ok) {
       throw new Error("Could not fetch expenses");
@@ -153,7 +155,10 @@ async function updateExpenseSummary() {
       nowMonth.getMonth() + 1,
     ).padStart(2, "0")}`;
 
-    const budgetResponse = await fetch(`${BUDGET_API_URL}?month=${month}`);
+    const budgetResponse = await fetch(`${BUDGET_API_URL}?month=${month}`, {
+      method: "GET",
+      credentials: "include",
+    });
 
     if (!budgetResponse.ok) {
       throw new Error("Could not fetch budget");
@@ -164,7 +169,6 @@ async function updateExpenseSummary() {
 
     todayExpense.textContent = formatMoney(todayTotal);
     monthExpense.textContent = formatMoney(monthTotal);
-
     remainingBudget.textContent = formatMoney(remaining);
   } catch (error) {
     console.error("Summary error:", error);
@@ -208,6 +212,7 @@ form.addEventListener("submit", async function (e) {
   try {
     const response = await fetch(API_URL, {
       method: "POST",
+      credentials: "include",
       headers: {
         "Content-Type": "application/json",
       },
