@@ -86,6 +86,7 @@ async function apiRequest(url, options = {}) {
 
     const response = await fetch(url, {
         ...options,
+        credentials: "include",
         headers
     });
 
