@@ -390,8 +390,14 @@ function applyReportFilter() {
 async function loadReports() {
   try {
     const [incomeResponse, expenseResponse] = await Promise.all([
-      fetch(`${API_URL}/income`),
-      fetch(`${API_URL}/expenses`),
+      fetch(`${API_URL}/income`, {
+        method: "GET",
+        credentials: "include",
+      }),
+      fetch(`${API_URL}/expenses`, {
+        method: "GET",
+        credentials: "include",
+      }),
     ]);
 
     if (!incomeResponse.ok || !expenseResponse.ok) {
