@@ -6,7 +6,7 @@ async function checkLogin() {
   try {
     const response = await fetch(`${AUTH_API}/api/me`, {
       method: "GET",
-      credentials: "include"
+      credentials: "include",
     });
 
     if (!response.ok) {
@@ -25,7 +25,6 @@ async function checkLogin() {
 
     localStorage.setItem("user", JSON.stringify(data.user));
     return true;
-
   } catch (error) {
     console.error("Authentication error:", error);
     alert("Unable to verify login. Please try again.");
@@ -127,7 +126,9 @@ resetSettingsBtn.addEventListener("click", function () {
 
   if (!confirmed) return;
 
-  localStorage.setItem("profileName", "Hiten");
+  const loggedInUser = JSON.parse(localStorage.getItem("user") || "{}");
+
+  localStorage.setItem("profileName", loggedInUser.full_name || "User");
   localStorage.setItem("currency", "INR");
 
   alert("Profile and currency settings restored to default.");
@@ -167,7 +168,6 @@ async function showExchangeRateStatus() {
 
     exchangeRateStatus.textContent =
       "Exchange rates loaded successfully. Example: ₹100 = " + testAmount;
-
   } catch (error) {
     exchangeRateStatus.textContent =
       "Exchange rates unavailable. Please try again later.";
