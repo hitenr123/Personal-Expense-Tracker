@@ -3,38 +3,35 @@
 // ==========================================
 
 async function checkLogin() {
-    try {
-        const response = await fetch(`${AUTH_API}/api/me`, {
-            method: "GET",
-            credentials: "include"
-        });
+  try {
+    const response = await fetch(`${AUTH_API}/api/me`, {
+      method: "GET",
+      credentials: "include",
+    });
 
-        if (!response.ok) {
-            localStorage.removeItem("user");
-            window.location.replace("login.html");
-            return false;
-        }
-
-        const data = await response.json();
-
-        if (data.status !== "success" || !data.user) {
-            localStorage.removeItem("user");
-            window.location.replace("login.html");
-            return false;
-        }
-
-        localStorage.setItem("user", JSON.stringify(data.user));
-
-        return true;
-
-    } catch (error) {
-        console.error("Authentication error:", error);
-        alert("Unable to verify login. Please try again.");
-        return false;
+    if (!response.ok) {
+      localStorage.removeItem("user");
+      window.location.replace("login.html");
+      return false;
     }
+
+    const data = await response.json();
+
+    if (data.status !== "success" || !data.user) {
+      localStorage.removeItem("user");
+      window.location.replace("login.html");
+      return false;
+    }
+
+    localStorage.setItem("user", JSON.stringify(data.user));
+
+    return true;
+  } catch (error) {
+    console.error("Authentication error:", error);
+    alert("Unable to verify login. Please try again.");
+    return false;
+  }
 }
-
-
 
 const API_URL = "https://personal-expense-tracker-7qhy.onrender.com/api";
 
@@ -50,111 +47,114 @@ let goals = [];
 let currentSavings = 0;
 let editingGoalId = null;
 
-
 // ==========================================
 // Fetch Goals from Supabase
 // ==========================================
 
 async function getGoals() {
-    try {
-        const response = await fetch(`${API_URL}/goals`);
-        const result = await response.json();
+  try {
+    const response = await fetch(`${API_URL}/goals`, {
+      method: "GET",
+      credentials: "include",
+    });
+    const result = await response.json();
 
-        if (!response.ok) {
-            throw new Error(result.error || "Unable to fetch goals");
-        }
-
-        goals = result.data || [];
-        return goals;
-
-    } catch (error) {
-        console.error("Goal loading error:", error);
-        alert("Unable to load goals. Check whether Flask is running.");
-        return [];
+    if (!response.ok) {
+      throw new Error(result.error || "Unable to fetch goals");
     }
-}
 
+    goals = result.data || [];
+    return goals;
+  } catch (error) {
+    console.error("Goal loading error:", error);
+    alert("Unable to load goals. Check whether Flask is running.");
+    return [];
+  }
+}
 
 // ==========================================
 // Calculate Current Savings
 // ==========================================
 
 async function getCurrentSavings() {
-    try {
-        const [incomeRes, expenseRes] = await Promise.all([
-            fetch(`${API_URL}/income`),
-            fetch(`${API_URL}/expenses`)
-        ]);
+  try {
+    const [incomeRes, expenseRes] = await Promise.all([
+      fetch(`${API_URL}/income`, {
+        method: "GET",
+        credentials: "include",
+      }),
+      fetch(`${API_URL}/expenses`, {
+        method: "GET",
+        credentials: "include",
+      }),
+    ]);
 
-        if (!incomeRes.ok || !expenseRes.ok) {
-            throw new Error("Failed to fetch income or expenses");
-        }
-
-        const incomeData = await incomeRes.json();
-        const expenseData = await expenseRes.json();
-
-        const totalIncome = (incomeData.data || []).reduce(
-            (sum, item) => sum + Number(item.amount || 0),
-            0
-        );
-
-        const totalExpense = (expenseData.data || []).reduce(
-            (sum, item) => sum + Number(item.amount || 0),
-            0
-        );
-
-        const currentSavings = totalIncome - totalExpense;
-
-        // Debugging values
-
-        return Math.max(0, currentSavings);
-
-    } catch (error) {
-        console.error("Error calculating savings:", error);
-        return 0;
+    if (!incomeRes.ok || !expenseRes.ok) {
+      throw new Error("Failed to fetch income or expenses");
     }
-}
 
+    const incomeData = await incomeRes.json();
+    const expenseData = await expenseRes.json();
+
+    const totalIncome = (incomeData.data || []).reduce(
+      (sum, item) => sum + Number(item.amount || 0),
+      0,
+    );
+
+    const totalExpense = (expenseData.data || []).reduce(
+      (sum, item) => sum + Number(item.amount || 0),
+      0,
+    );
+
+    const currentSavings = totalIncome - totalExpense;
+
+    // Debugging values
+
+    return Math.max(0, currentSavings);
+  } catch (error) {
+    console.error("Error calculating savings:", error);
+    return 0;
+  }
+}
 
 // ==========================================
 // Update Overall Goal Summary
 // ==========================================
 
 function updateGoalSummary() {
-    const totalTarget = goals.reduce(
-        (total, goal) => total + Number(goal.target_amount || 0), 0
-    );
+  const totalTarget = goals.reduce(
+    (total, goal) => total + Number(goal.target_amount || 0),
+    0,
+  );
 
-    const progress = totalTarget > 0
-        ? Math.min((currentSavings / totalTarget) * 100, 100)
-        : 0;
+  const progress =
+    totalTarget > 0 ? Math.min((currentSavings / totalTarget) * 100, 100) : 0;
 
-    if (typeof goalTarget !== "undefined") {
-        goalTarget.textContent = formatCurrency(totalTarget);
-    }
+  if (typeof goalTarget !== "undefined") {
+    goalTarget.textContent = formatCurrency(totalTarget);
+  }
 
-    if (typeof goalSavings !== "undefined") {
-        goalSavings.textContent = formatCurrency(currentSavings);
-    }
+  if (typeof goalSavings !== "undefined") {
+    goalSavings.textContent = formatCurrency(currentSavings);
+  }
 
-    if (typeof goalProgress !== "undefined") {
-        goalProgress.textContent = progress.toFixed(1) + "%";
-    }
+  if (typeof goalProgress !== "undefined") {
+    goalProgress.textContent = progress.toFixed(1) + "%";
+  }
 }
-
 
 // ==========================================
 // Display Goals
 // ==========================================
 
 async function displayGoals() {
-    goalsList.innerHTML = "";
+  goalsList.innerHTML = "";
 
-    // Fetch the latest savings from Supabase data
-    currentSavings = await getCurrentSavings();
+  // Fetch the latest savings from Supabase data
+  currentSavings = await getCurrentSavings();
 
-    if (goals.length === 0) {
-        goalsList.innerHTML = `
+  if (goals.length === 0) {
+    goalsList.innerHTML = `
             <div class="no-goals">
                 <i class="fa-solid fa-bullseye"></i>
                 <h3>No Goals Yet</h3>
@@ -162,32 +162,28 @@ async function displayGoals() {
             </div>
         `;
 
-        updateGoalSummary();
-        return;
-    }
+    updateGoalSummary();
+    return;
+  }
 
-    goals.forEach(goal => {
-        const target = Number(goal.target_amount || 0);
+  goals.forEach((goal) => {
+    const target = Number(goal.target_amount || 0);
 
-        const progress = target > 0
-            ? Math.min((currentSavings / target) * 100, 100)
-            : 0;
+    const progress =
+      target > 0 ? Math.min((currentSavings / target) * 100, 100) : 0;
 
-        const targetDate = goal.target_date
-            ? new Date(goal.target_date + "T00:00:00").toLocaleDateString(
-                "en-IN",
-                {
-                    day: "2-digit",
-                    month: "short",
-                    year: "numeric"
-                }
-            )
-            : "No target date";
+    const targetDate = goal.target_date
+      ? new Date(goal.target_date + "T00:00:00").toLocaleDateString("en-IN", {
+          day: "2-digit",
+          month: "short",
+          year: "numeric",
+        })
+      : "No target date";
 
-        const goalCard = document.createElement("div");
-        goalCard.className = "goal-card";
+    const goalCard = document.createElement("div");
+    goalCard.className = "goal-card";
 
-        goalCard.innerHTML = `
+    goalCard.innerHTML = `
             <div class="goal-header">
                 <div class="goal-icon">
                     <i class="fa-solid fa-bullseye"></i>
@@ -239,158 +235,148 @@ async function displayGoals() {
             </div>
         `;
 
-        goalCard.querySelector(".goal-title h3").textContent =
-            goal.goal_name;
+    goalCard.querySelector(".goal-title h3").textContent = goal.goal_name;
 
-        goalCard.querySelector(".edit-goal").addEventListener(
-            "click", () => editGoal(goal.id)
-        );
+    goalCard
+      .querySelector(".edit-goal")
+      .addEventListener("click", () => editGoal(goal.id));
 
-        goalCard.querySelector(".remove-goal").addEventListener(
-            "click", () => removeGoal(goal.id)
-        );
+    goalCard
+      .querySelector(".remove-goal")
+      .addEventListener("click", () => removeGoal(goal.id));
 
-        goalsList.appendChild(goalCard);
-    });
+    goalsList.appendChild(goalCard);
+  });
 
-    updateGoalSummary();
+  updateGoalSummary();
 }
-
 
 // ==========================================
 // Load All Goal Data
 // ==========================================
 
 async function loadGoals() {
-    await Promise.all([
-        getGoals(),
-        getCurrentSavings()
-    ]);
+  await Promise.all([getGoals(), getCurrentSavings()]);
 
-    displayGoals();
+  displayGoals();
 }
-
 
 // ==========================================
 // Add or Update Goal
 // ==========================================
 
-goalForm.addEventListener("submit", async function(event) {
-    event.preventDefault();
+goalForm.addEventListener("submit", async function (event) {
+  event.preventDefault();
 
-    const name = goalNameInput.value.trim();
-    const amount = Number(goalAmountInput.value);
-    const date = goalDateInput.value;
+  const name = goalNameInput.value.trim();
+  const amount = Number(goalAmountInput.value);
+  const date = goalDateInput.value;
 
-    if (!name || !Number.isFinite(amount) || amount <= 0) {
-        alert("Please enter a valid goal.");
-        return;
+  if (!name || !Number.isFinite(amount) || amount <= 0) {
+    alert("Please enter a valid goal.");
+    return;
+  }
+
+  const goalData = {
+    name: name,
+    amount: amount,
+    date: date,
+  };
+
+  try {
+    const isEditing = editingGoalId !== null;
+
+    const url = isEditing
+      ? `${API_URL}/goals/${editingGoalId}`
+      : `${API_URL}/goals`;
+
+    const response = await fetch(url, {
+      method: isEditing ? "PUT" : "POST",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(goalData),
+    });
+
+    const result = await response.json();
+
+    if (!response.ok) {
+      throw new Error(result.error || "Failed to save goal");
     }
 
-    const goalData = {
-        name: name,
-        amount: amount,
-        date: date
-    };
+    alert(
+      isEditing ? "Goal updated successfully!" : "Goal added successfully!",
+    );
 
-    try {
-        const isEditing = editingGoalId !== null;
+    editingGoalId = null;
+    goalForm.reset();
 
-        const url = isEditing
-            ? `${API_URL}/goals/${editingGoalId}`
-            : `${API_URL}/goals`;
-
-        const response = await fetch(url, {
-            method: isEditing ? "PUT" : "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(goalData)
-        });
-
-        const result = await response.json();
-
-        if (!response.ok) {
-            throw new Error(result.error || "Failed to save goal");
-        }
-
-        alert(isEditing
-            ? "Goal updated successfully!"
-            : "Goal added successfully!"
-        );
-
-        editingGoalId = null;
-        goalForm.reset();
-
-        await loadGoals();
-
-    } catch (error) {
-        console.error("Goal save error:", error);
-        alert("Unable to save goal: " + error.message);
-    }
+    await loadGoals();
+  } catch (error) {
+    console.error("Goal save error:", error);
+    alert("Unable to save goal: " + error.message);
+  }
 });
-
 
 // ==========================================
 // Edit Goal
 // ==========================================
 
 function editGoal(id) {
-    const goal = goals.find(goal => goal.id === id);
+  const goal = goals.find((goal) => goal.id === id);
 
-    if (!goal) return;
+  if (!goal) return;
 
-    editingGoalId = id;
+  editingGoalId = id;
 
-    goalNameInput.value = goal.goal_name;
-    goalAmountInput.value = goal.target_amount;
-    goalDateInput.value = goal.target_date || "";
+  goalNameInput.value = goal.goal_name;
+  goalAmountInput.value = goal.target_amount;
+  goalDateInput.value = goal.target_date || "";
 
-    goalNameInput.focus();
+  goalNameInput.focus();
 }
-
 
 // ==========================================
 // Remove Goal
 // ==========================================
 
 async function removeGoal(id) {
-    if (!confirm("Are you sure you want to remove this goal?")) {
-        return;
+  if (!confirm("Are you sure you want to remove this goal?")) {
+    return;
+  }
+
+  try {
+    const response = await fetch(`${API_URL}/goals/${id}`, {
+      method: "DELETE",
+      credentials: "include",
+    });
+
+    const result = await response.json();
+
+    if (!response.ok) {
+      throw new Error(result.error || "Failed to delete goal");
     }
 
-    try {
-        const response = await fetch(`${API_URL}/goals/${id}`, {
-            method: "DELETE"
-        });
+    alert("Goal removed successfully!");
 
-        const result = await response.json();
-
-        if (!response.ok) {
-            throw new Error(result.error || "Failed to delete goal");
-        }
-
-        alert("Goal removed successfully!");
-
-        await loadGoals();
-
-    } catch (error) {
-        console.error("Goal deletion error:", error);
-        alert("Unable to remove goal: " + error.message);
-    }
+    await loadGoals();
+  } catch (error) {
+    console.error("Goal deletion error:", error);
+    alert("Unable to remove goal: " + error.message);
+  }
 }
-
 
 // ==========================================
 // Initial Load
 // ==========================================
 
 async function initializeGoalsPage() {
-    const isLoggedIn = await checkLogin();
+  const isLoggedIn = await checkLogin();
 
-    if (!isLoggedIn) return;
+  if (!isLoggedIn) return;
 
-    await loadGoals();
+  await loadGoals();
 }
 
 initializeGoalsPage();
