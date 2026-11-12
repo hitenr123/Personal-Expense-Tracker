@@ -789,6 +789,7 @@ html[data-theme="dark"] .category-budget-progress-track {
     border-radius: 20px;
     overflow: hidden;
     margin-top: 14px;
+    margin-bottom: 8px;
 }
 
 .category-budget-progress-bar {
