@@ -77,7 +77,10 @@ function updateIncomeProfile() {
 
 async function getIncomes() {
   try {
-    const response = await fetch(API_URL);
+    const response = await fetch(API_URL, {
+      method: "GET",
+      credentials: "include",
+    });
 
     const result = await response.json();
 
@@ -228,6 +231,7 @@ incomeForm.addEventListener("submit", async function (event) {
   try {
     const response = await fetch(API_URL, {
       method: "POST",
+      credentials: "include",
       headers: {
         "Content-Type": "application/json",
       },
@@ -253,7 +257,6 @@ incomeForm.addEventListener("submit", async function (event) {
     alert("Unable to save income: " + error.message);
   }
 });
-
 
 // ==========================================
 // Initial Load
